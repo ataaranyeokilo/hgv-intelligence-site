@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { SampleDownloadForm } from "@/components/sections/SampleDownloadForm";
 
 export function SampleDownload() {
   return (
@@ -13,16 +13,10 @@ export function SampleDownload() {
           is laid out — field names, formatting, and the level of detail your
           sales team can expect every Monday.
         </p>
-        <div className="mt-10">
-          <Link
-            href="/#sample"
-            className="inline-flex items-center rounded-sm bg-white px-6 py-3 text-sm font-medium text-neutral-900 hover:bg-neutral-100"
-          >
-            Download Sample
-          </Link>
-        </div>
+        <SampleDownloadForm />
         <p className="mt-6 text-sm text-neutral-400">
-          Sample download will be wired up in a later release.
+          We&apos;ll use your email to send the sample and may follow up about
+          weekly reports. You can unsubscribe at any time.
         </p>
       </div>
     </section>
