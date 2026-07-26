@@ -1,7 +1,5 @@
 "use server";
 
-import { randomBytes } from "node:crypto";
-
 import { createClient } from "@/lib/supabase/server";
 
 export type SubmitSampleLeadResult = "success" | "error";
@@ -9,7 +7,13 @@ export type SubmitSampleLeadResult = "success" | "error";
 const TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
 
 function generateDownloadToken(): string {
-  return randomBytes(32).toString("base64url");
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  let binary = "";
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
 function logDevDownloadLink(token: string): void {

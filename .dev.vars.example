@@ -1,0 +1,7 @@
+# Copy to .dev.vars for `npm run preview` / Wrangler local dev.
+# Same values as .env.local for Supabase.
+
+NEXTJS_ENV=development
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_SITE_URL=http://localhost:8787
