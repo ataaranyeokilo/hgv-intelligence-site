@@ -22,7 +22,7 @@ Storage:
 
 Deployment:
 
-* Vercel
+* Cloudflare Workers (OpenNext via `@opennextjs/cloudflare`, Wrangler)
 
 Email:
 
