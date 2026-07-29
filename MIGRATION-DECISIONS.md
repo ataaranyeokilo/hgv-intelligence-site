@@ -22,18 +22,26 @@ The `.open-next/` output is gitignored; CI generates it on every build.
 
 ### Worker environment variables
 
-Set in the Cloudflare dashboard (Worker → Settings → Variables):
+Full variable matrix: [STACK.md](STACK.md) → **Environment configuration**.
+
+**Build-time (Workers Builds / `npm run build:cloudflare`)**
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `NEXT_PUBLIC_SITE_URL` (production canonical URL)
-- `SUPABASE_SERVICE_ROLE_KEY` (secret)
-- `RESEND_API_KEY` (secret)
-- `EMAIL_FROM`
-- `NOTIFY_EMAIL` (optional)
-- `ADMIN_EMAIL` — sole administrator allowed to use `/admin` (server)
+- `NEXT_PUBLIC_SITE_URL`
 
-After changing Build/Deploy commands or variables, retry the deployment from the dashboard.
+These must be available when OpenNext runs the Next production build so client bundles and SSR see correct values.
+
+**Runtime (Worker → Variables and secrets, Production)**
+
+- Plain: same `NEXT_PUBLIC_*` as build, plus `EMAIL_FROM`, optional `NOTIFY_EMAIL`, `ADMIN_EMAIL`
+- Encrypted secrets: `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`
+
+**Rules**
+
+- Do not put secrets in [wrangler.jsonc](wrangler.jsonc). Use Cloudflare **Encrypted** variables or `wrangler secret put` for CLI deploys.
+- `NEXT_PUBLIC_SITE_URL` in wrangler `vars` is the committed production canonical URL; keep it aligned with the dashboard when the domain changes.
+- After changing build/deploy commands or any variable, retry deployment from the dashboard.
 
 ## Data and storage
 
@@ -56,7 +64,7 @@ After changing Build/Deploy commands or variables, retry the deployment from the
 
 1. `npm run build` — Next.js production build (local / Node host).
 2. `npm run build:cloudflare` — OpenNext Worker bundle (must end with `Worker saved in .open-next/worker.js`).
-3. Copy Supabase values into `.dev.vars` (see `.dev.vars.example`) then `npm run preview` — smoke `/` and `/download/sample`.
+3. Copy values into `.dev.vars` (see [.dev.vars.example](.dev.vars.example)) using the same **names** as production; set local `NEXT_PUBLIC_SITE_URL` (e.g. `http://localhost:8787`). Then `npm run preview` — smoke `/` and `/download/sample`.
 4. `npm run verify:baseline` — Supabase RPC path (requires applied migrations + valid `.env.local`).
 
 ## Rollback

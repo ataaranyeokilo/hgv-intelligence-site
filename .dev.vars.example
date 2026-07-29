@@ -1,5 +1,6 @@
-# Copy to .dev.vars for `npm run preview` / Wrangler local dev.
-# Same values as .env.local for Supabase.
+# For `npm run preview` / Wrangler local dev only. See STACK.md → Environment configuration.
+# Copy to .dev.vars (gitignored). Use the same variable names as Cloudflare Production; use local URLs for NEXT_PUBLIC_SITE_URL.
+# NEXTJS_ENV is preview-only — not used on Cloudflare Workers.
 
 NEXTJS_ENV=development
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co

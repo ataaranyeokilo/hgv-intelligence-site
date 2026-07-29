@@ -15,7 +15,11 @@ The site is **not** a SaaS product. It exists to:
 
 ## Free intelligence reports
 
-Published reports are listed on **`/intelligence`** (general intelligence grid plus weekly pitch) and detailed at `/intelligence/[slug]`. Weekly vs general split uses the admin **category** field (contains `weekly`) until a dedicated report type exists in the schema. On `/intelligence`, preview cards, the sample download button, and latest weekly **View report** open an email verification modal; published library cards still link to the article page.
+Published reports are listed on **`/intelligence`** (general intelligence grid plus weekly pitch) and detailed at `/intelligence/[slug]`. Weekly vs general split uses the admin **category** field (contains `weekly`) until a dedicated report type exists in the schema.
+
+On **`/intelligence`**, the sample download button, weekly **View report**, and placeholder cards open the **email verification modal**. Published library cards link to the article page; **Download full report** on the article opens the same modal.
+
+Legacy URL `/download/intelligence/[slug]` redirects to `/intelligence/[slug]?download=1` (opens the modal).
 
 ## Paid weekly reports
 
@@ -25,21 +29,21 @@ Weekly Excel files with new UK HGV operator leads (company, fleet, licence, enri
 
 | Route | Purpose |
 | ----- | ------- |
-| `/` | Home — hero (Browse Intelligence; **See Weekly Reports** → `/intelligence#weekly-reports`), featured carousel, weekly highlights, sample download CTA (`#weekly-reports`) |
-| `/intelligence` | **Report library:** opens on explore grid (no hero), weekly pitch (intro + latest card), sample preview, download CTA (`#sample-download`) |
-| `/intelligence/[slug]` | Individual report article |
+| `/` | Home — hero, featured intelligence carousel, weekly highlights, sample download CTA (`#weekly-reports`) |
+| `/intelligence` | Report library (explore grid), weekly pitch, sample preview, sample CTA (`#sample-download`) |
+| `/intelligence/[slug]` | Report article; download via modal (`?download=1` auto-opens modal) |
 | `/weekly-reports` | Redirects to `/intelligence#sample-download` (legacy URL) |
+| `/download/sample` | Legacy: token → verify; else → `/intelligence#sample-download` |
+| `/download/verify` | Email verification → signed file download |
 | `/about` | Trust |
 | `/contact` | Contact form |
 | `/admin` | Private CMS (single administrator) |
 
-Download verification: `/download/verify?token=…` (and `/download/intelligence/[slug]` for per-report email capture).
-
 # Customer journey
 
-Home → Intelligence library → Report detail → Download (email) → Verification → File download → Contact / sales follow-up.
+Home → Intelligence library → Report detail → Download (email modal) → Verification email → File download → Contact / sales follow-up.
 
-Sample Excel download is on the **home page** (`#weekly-reports`) and on **`/intelligence`** (`#sample-download`).
+Sample Excel: **home** (`#weekly-reports`) and **`/intelligence`** (`#sample-download`).
 
 # Admin
 
@@ -49,7 +53,7 @@ Admin can:
 
 - create / edit / publish intelligence reports (with file uploads to Supabase Storage)
 - upload the weekly sample Excel file
-- edit homepage market snapshot statistics
+- edit market snapshot statistics (stored in Postgres; **not shown on the public homepage** today)
 
 No customer accounts, public sign-up, or password reset UI (unless added later).
 
