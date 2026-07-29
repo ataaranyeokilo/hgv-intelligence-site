@@ -18,6 +18,12 @@
 
 - Cloudflare Workers via `@opennextjs/cloudflare` and Wrangler
 
+**Cloudflare production environment**
+
+Configure **Workers & Pages → hgv-intelligence-site → Settings → Variables and secrets** (Production). Missing Supabase vars commonly cause **500** on every route because middleware and pages expect them.
+
+Minimum: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SITE_URL` (your Workers URL), `SUPABASE_SERVICE_ROLE_KEY` (secret), `ADMIN_EMAIL`, `RESEND_API_KEY` (secret), `EMAIL_FROM`. Redeploy after saving. Match names in `.dev.vars.example`.
+
 **Email**
 
 - Resend (verification links, quote/contact notifications)

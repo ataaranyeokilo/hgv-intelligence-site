@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { hasSupabaseEnv } from "@/lib/env";
 
 import type {
   IntelligenceReport,
@@ -26,6 +27,10 @@ function mapReportRow(row: Record<string, unknown>): IntelligenceReport {
 export async function listPublishedReports(): Promise<
   IntelligenceReportListItem[]
 > {
+  if (!hasSupabaseEnv()) {
+    return [];
+  }
+
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -46,6 +51,10 @@ export async function listPublishedReports(): Promise<
 export async function getPublishedReportBySlug(
   slug: string,
 ): Promise<IntelligenceReport | null> {
+  if (!hasSupabaseEnv()) {
+    return null;
+  }
+
   const supabase = await createClient();
 
   const { data, error } = await supabase

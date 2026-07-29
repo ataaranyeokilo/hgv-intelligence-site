@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { hasSupabaseEnv } from "@/lib/env";
 
 import { marketSnapshotStats as fallbackStats } from "@/lib/market-snapshot";
 
@@ -13,6 +14,10 @@ export type MarketSnapshotResult = {
 };
 
 export async function getMarketSnapshotStats(): Promise<MarketSnapshotResult> {
+  if (!hasSupabaseEnv()) {
+    return { stats: fallbackStats, isFallback: true };
+  }
+
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("market_snapshot_stats")
