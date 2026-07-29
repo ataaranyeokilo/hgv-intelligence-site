@@ -11,7 +11,7 @@ export function Navbar() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  if (pathname.startsWith("/admin")) {
+  if (pathname?.startsWith("/admin")) {
     return null;
   }
 
@@ -42,7 +42,9 @@ export function Navbar() {
         >
           <ul className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
             {mainNavItems.map((item) => {
-              const active = isNavItemActive(pathname, item.href);
+              const active = pathname
+                ? isNavItemActive(pathname, item.href)
+                : false;
               return (
                 <li key={item.href}>
                   <Link

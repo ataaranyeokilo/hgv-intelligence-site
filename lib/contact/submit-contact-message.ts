@@ -1,5 +1,7 @@
 "use server";
 
+import { getNotifyEmail } from "@/lib/env";
+import { sendResendEmail } from "@/lib/email/resend-client";
 import { createClient } from "@/lib/supabase/server";
 
 export type SubmitContactMessageResult = "success" | "error";
@@ -21,23 +23,12 @@ export async function submitContactMessage(input: {
     return "error";
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM;
-  const to = process.env.NOTIFY_EMAIL ?? "hello@hgvintelligence.co.uk";
-
-  if (apiKey && from) {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        subject: "New contact message — HGV Intelligence",
-        text: `From: ${input.fullName} <${input.email}>\n\n${input.message}`,
-      }),
+  const notifyTo = getNotifyEmail();
+  if (notifyTo) {
+    await sendResendEmail({
+      to: notifyTo,
+      subject: "New contact message — HGV Intelligence",
+      text: `From: ${input.fullName} <${input.email}>\n\n${input.message}`,
     });
   }
 

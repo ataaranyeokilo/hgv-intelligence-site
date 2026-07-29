@@ -63,7 +63,7 @@ Black and white, minimal, large typography, whitespace, card layouts, mobile res
 
 # Stack (summary)
 
-Next.js (App Router), TypeScript, Tailwind, Supabase (Postgres, Storage, Auth), Cloudflare Workers via OpenNext, Resend for transactional email.
+Next.js (App Router), TypeScript, Tailwind, Supabase (Postgres, Storage, Auth), Cloudflare Workers via OpenNext. Transactional email: **Resend** using **`RESEND_API_KEY`** (secret) and **`EMAIL_FROM`** (sender address on Cloudflare).
 
 See [STACK.md](STACK.md) and [MIGRATION-DECISIONS.md](MIGRATION-DECISIONS.md) for deployment and env details.
 

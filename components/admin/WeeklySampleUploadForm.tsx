@@ -23,7 +23,8 @@ export function WeeklySampleUploadForm() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setMessage(null);
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
 
     startTransition(async () => {
       const result = await uploadWeeklySampleFile(formData);
@@ -33,7 +34,7 @@ export function WeeklySampleUploadForm() {
       }
       setCurrentPath(result.path);
       setMessage("Sample file updated.");
-      event.currentTarget.reset();
+      form.reset();
     });
   }
 

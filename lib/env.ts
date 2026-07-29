@@ -1,21 +1,29 @@
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+function readSupabaseUrl(): string | undefined {
+  return process.env.NEXT_PUBLIC_SUPABASE_URL;
+}
+
+function readSupabaseAnonKey(): string | undefined {
+  return process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+}
 
 export function getSupabaseEnv() {
-  if (!supabaseUrl || !supabaseAnonKey) {
+  const url = readSupabaseUrl();
+  const anonKey = readSupabaseAnonKey();
+
+  if (!url || !anonKey) {
     throw new Error(
       "Missing Supabase env vars. Copy .env.local.example to .env.local and add your project credentials.",
     );
   }
 
   return {
-    url: supabaseUrl,
-    anonKey: supabaseAnonKey,
+    url,
+    anonKey,
   };
 }
 
 export function hasSupabaseEnv(): boolean {
-  return Boolean(supabaseUrl && supabaseAnonKey);
+  return Boolean(readSupabaseUrl() && readSupabaseAnonKey());
 }
 
 export function getConfiguredAdminEmail(): string | null {
@@ -25,6 +33,11 @@ export function getConfiguredAdminEmail(): string | null {
 
 export function isAdminEmailConfigured(): boolean {
   return Boolean(getConfiguredAdminEmail());
+}
+
+export function getNotifyEmail(): string | null {
+  const email = process.env.NOTIFY_EMAIL?.trim();
+  return email || null;
 }
 
 export function isConfiguredAdminEmail(email: string | undefined | null): boolean {
