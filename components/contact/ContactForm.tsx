@@ -18,17 +18,23 @@ export function ContactForm() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setResult(null);
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
 
     startTransition(async () => {
-      const next = await submitContactMessage({
-        fullName: String(formData.get("fullName") ?? ""),
-        email: String(formData.get("email") ?? ""),
-        message: String(formData.get("message") ?? ""),
-      });
-      setResult(next);
-      if (next === "success") {
-        event.currentTarget.reset();
+      try {
+        const next = await submitContactMessage({
+          fullName: String(formData.get("fullName") ?? ""),
+          email: String(formData.get("email") ?? ""),
+          message: String(formData.get("message") ?? ""),
+        });
+        setResult(next);
+        if (next === "success") {
+          form.reset();
+        }
+      } catch (cause) {
+        console.error("[ContactForm] submit failed:", cause);
+        setResult("error");
       }
     });
   }

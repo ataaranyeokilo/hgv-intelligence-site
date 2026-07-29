@@ -43,13 +43,18 @@ export function DownloadEmailForm({
     setResult(null);
 
     startTransition(async () => {
-      const next = await submitDownloadLead({
-        email,
-        source,
-        reportId,
-        emailSubject,
-      });
-      setResult(next);
+      try {
+        const next = await submitDownloadLead({
+          email,
+          source,
+          reportId,
+          emailSubject,
+        });
+        setResult(next);
+      } catch (cause) {
+        console.error("[DownloadEmailForm] submit failed:", cause);
+        setResult("error");
+      }
     });
   }
 
