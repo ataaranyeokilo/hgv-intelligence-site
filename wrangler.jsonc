@@ -18,6 +18,7 @@
     }
   ],
   // Non-secret runtime vars only. Never commit API keys or service role here.
+  // Email: RESEND_API_KEY → Cloudflare Encrypted (or wrangler secret put); EMAIL_FROM → plain variable in dashboard (not in git).
   // Full matrix: STACK.md → Environment configuration.
   "vars": {
     "NEXT_PUBLIC_SITE_URL": "https://hgv-intelligence-site.ataaranyeokilo.workers.dev"

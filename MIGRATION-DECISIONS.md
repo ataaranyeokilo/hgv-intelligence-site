@@ -36,6 +36,7 @@ These must be available when OpenNext runs the Next production build so client b
 
 - Plain: same `NEXT_PUBLIC_*` as build, plus `EMAIL_FROM`, optional `NOTIFY_EMAIL`, `ADMIN_EMAIL`
 - Encrypted secrets: `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`
+- **Resend:** `RESEND_API_KEY` + `EMAIL_FROM` required for production download emails; see [STACK.md](STACK.md) → **Resend** (onboarding sender vs verified domain).
 
 **Rules**
 

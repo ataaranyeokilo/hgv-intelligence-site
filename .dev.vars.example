@@ -8,6 +8,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 NEXT_PUBLIC_SITE_URL=http://localhost:8787
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 RESEND_API_KEY=
-EMAIL_FROM=HGV Intelligence <hello@hgvintelligence.co.uk>
-NOTIFY_EMAIL=hello@hgvintelligence.co.uk
+# Resend onboarding: onboarding@resend.dev — production: verified-domain sender (see .env.local.example)
+EMAIL_FROM=
+NOTIFY_EMAIL=
 ADMIN_EMAIL=admin@example.com

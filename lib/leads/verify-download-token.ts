@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { hasSupabaseEnv } from "@/lib/env";
 
 export type VerifyDownloadTokenResult =
   | { status: "invalid" }
@@ -15,28 +16,43 @@ export async function verifyDownloadToken(
     return { status: "invalid" };
   }
 
-  const supabase = await createClient();
-  const { data, error } = await supabase.rpc("verify_download_token", {
-    p_token: token.trim(),
-  });
-
-  if (error || !data || !Array.isArray(data) || data.length === 0) {
+  if (!hasSupabaseEnv()) {
+    console.error("[verifyDownloadToken] Missing Supabase environment variables");
     return { status: "invalid" };
   }
 
-  const row = data[0] as {
-    success?: boolean;
-    storage_path?: string | null;
-    lead_source?: string | null;
-  };
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc("verify_download_token", {
+      p_token: token.trim(),
+    });
 
-  if (!row.success || !row.storage_path) {
+    if (error) {
+      console.error("[verifyDownloadToken] RPC error:", error.message);
+      return { status: "invalid" };
+    }
+
+    if (!data || !Array.isArray(data) || data.length === 0) {
+      return { status: "invalid" };
+    }
+
+    const row = data[0] as {
+      success?: boolean;
+      storage_path?: string | null;
+      lead_source?: string | null;
+    };
+
+    if (!row.success || !row.storage_path) {
+      return { status: "invalid" };
+    }
+
+    return {
+      status: "success",
+      storagePath: row.storage_path,
+      source: row.lead_source ?? "unknown",
+    };
+  } catch (cause) {
+    console.error("[verifyDownloadToken] uncaught:", cause);
     return { status: "invalid" };
   }
-
-  return {
-    status: "success",
-    storagePath: row.storage_path,
-    source: row.lead_source ?? "unknown",
-  };
 }
