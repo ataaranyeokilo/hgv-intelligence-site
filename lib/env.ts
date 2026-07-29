@@ -17,3 +17,20 @@ export function getSupabaseEnv() {
 export function hasSupabaseEnv(): boolean {
   return Boolean(supabaseUrl && supabaseAnonKey);
 }
+
+export function getConfiguredAdminEmail(): string | null {
+  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  return email || null;
+}
+
+export function isAdminEmailConfigured(): boolean {
+  return Boolean(getConfiguredAdminEmail());
+}
+
+export function isConfiguredAdminEmail(email: string | undefined | null): boolean {
+  const configured = getConfiguredAdminEmail();
+  if (!configured || !email) {
+    return false;
+  }
+  return email.trim().toLowerCase() === configured;
+}

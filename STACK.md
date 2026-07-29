@@ -2,101 +2,67 @@
 
 # Stack
 
-Frontend:
+**Frontend**
 
-* Next.js
-* TypeScript
-* Tailwind CSS
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
 
-Backend:
+**Backend / data**
 
-* Supabase
+- Supabase PostgreSQL (reports, leads, enquiries, market stats)
+- Supabase Storage (intelligence PDFs, hero images, weekly sample Excel)
+- Supabase Auth (single admin only)
 
-Database:
+**Deployment**
 
-* PostgreSQL via Supabase
+- Cloudflare Workers via `@opennextjs/cloudflare` and Wrangler
 
-Storage:
+**Email**
 
-* Supabase Storage
+- Resend (verification links, quote/contact notifications)
 
-Deployment:
+# Public app behaviour
 
-* Cloudflare Workers (OpenNext via `@opennextjs/cloudflare`, Wrangler)
+- Marketing pages are Server Components where practical; forms use Server Actions.
+- `/intelligence` — combined weekly sales + free report library; `/weekly-reports` redirects to `#sample-download` on the same page.
+- Published intelligence reports are read with the Supabase **anon** key and RLS.
+- Download flow: email → Postgres lead + token → Resend verification link → verify RPC → **signed Storage URL** (service role, server-only).
 
-Email:
+# Admin behaviour
 
-* Resend later
+- Session via Supabase Auth + `@supabase/ssr` middleware cookie refresh.
+- Only the email in `ADMIN_EMAIL` may access `/admin/*`.
+- Mutations and Storage uploads use `SUPABASE_SERVICE_ROLE_KEY` on the server after the admin session check.
 
-# Why
+# Environment variables (essential)
 
-This stack is:
+| Variable | Scope |
+| -------- | ----- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Public |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public |
+| `NEXT_PUBLIC_SITE_URL` | Public (verification links) |
+| `ADMIN_EMAIL` | Server — sole administrator |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server secret |
+| `RESEND_API_KEY` | Server secret |
+| `EMAIL_FROM` | Server |
+| `NOTIFY_EMAIL` | Server (optional) |
 
-* fast to build with
-* simple to maintain
-* cheap for MVPs
-* easy to deploy
-* well documented
-* good with Cursor and AI workflows
+# Local development
 
-# Frontend Rules
+- Run the app with `npm run dev` (Turbopack).
+- **Do not run `npm run build` while `npm run dev` is running** — both use `.next` and the dev server can 500 / show a blank page (missing manifest files).
+- After route or layout changes, or if the browser shows a blank page after a build: stop dev, then `npm run dev:clean` (deletes `.next` and starts dev) or `rm -rf .next && npm run dev`.
 
-Keep the frontend:
+# Code style
 
-* clean
-* responsive
-* simple
-* professional
+- Small components, clear naming, minimal dependencies.
+- No microservices; no unnecessary abstractions.
+- Ship small vertical slices; keep Cloudflare build green (`npm run build:cloudflare`).
 
-Avoid:
+# Storage buckets (Supabase dashboard)
 
-* animation-heavy UI
-* bloated component systems
-* unnecessary libraries
+- `intelligence-downloads` — report files and hero images (private)
+- `weekly-reports` — sample Excel (private)
 
-# Backend Rules
-
-Keep backend logic simple.
-
-The MVP only needs:
-
-* email capture
-* report uploads
-* report downloads
-* basic analytics
-
-Do not build:
-
-* microservices
-* complex APIs
-* enterprise architecture
-* unnecessary abstractions
-
-# Code Style
-
-Prefer:
-
-* readable code
-* small components
-* clear naming
-* modular structure
-* small safe changes
-
-Avoid:
-
-* giant files
-* magic helper functions everywhere
-* premature optimisation
-* overengineering
-
-# Deployment
-
-Deploy early.
-
-Keep changes:
-
-* small
-* reversible
-* easy to debug
-
-The goal is fast reliable iteration, not perfect architecture.
+See [supabase/STORAGE.md](supabase/STORAGE.md).

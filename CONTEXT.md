@@ -2,166 +2,69 @@
 
 # What we are building
 
-A simple website for a UK HGV lead/data business.
+A B2B marketing website for **HGV Intelligence** — a UK HGV operator data business.
 
-The business has two sides:
+The site is **not** a SaaS product. It exists to:
 
-1. Free quarterly and yearly industry reports
-2. Paid weekly Excel lead reports# CONTEXT.md
+- establish credibility
+- publish free intelligence reports
+- capture leads
+- convert visitors into enquiries for paid weekly Excel lead reports
 
-# What we are building
+# Product offer
 
-A simple website for a UK HGV lead/data business.
+## Free intelligence reports
 
-The business sells fresh weekly Excel lead reports for transport-industry sales teams.
+Published reports are listed on **`/intelligence`** (general intelligence grid plus weekly pitch) and detailed at `/intelligence/[slug]`. Weekly vs general split uses the admin **category** field (contains `weekly`) until a dedicated report type exists in the schema. On `/intelligence`, preview cards, the sample download button, and latest weekly **View report** open an email verification modal; published library cards still link to the article page.
 
-The website also publishes free quarterly and yearly reports to build trust and show industry knowledge.
+## Paid weekly reports
 
-# Paid reports
+Weekly Excel files with new UK HGV operator leads (company, fleet, licence, enriched contacts). Enquiries via **`/contact`** — no checkout on the site.
 
-Weekly reports include:
+# Site structure
 
-* new HGV operators
-* fresh company data
-* enriched phone numbers
-* Excel download format
+| Route | Purpose |
+| ----- | ------- |
+| `/` | Home — hero (Browse Intelligence; **See Weekly Reports** → `/intelligence#weekly-reports`), featured carousel, weekly highlights, sample download CTA (`#weekly-reports`) |
+| `/intelligence` | **Report library:** opens on explore grid (no hero), weekly pitch (intro + latest card), sample preview, download CTA (`#sample-download`) |
+| `/intelligence/[slug]` | Individual report article |
+| `/weekly-reports` | Redirects to `/intelligence#sample-download` (legacy URL) |
+| `/about` | Trust |
+| `/contact` | Contact form |
+| `/admin` | Private CMS (single administrator) |
 
-Target customers:
+Download verification: `/download/verify?token=…` (and `/download/intelligence/[slug]` for per-report email capture).
 
-* fuel companies
-* insurance companies
-* vehicle finance teams
-* fleet service providers
-* transport sales teams
+# Customer journey
 
-# Website Structure
+Home → Intelligence library → Report detail → Download (email) → Verification → File download → Contact / sales follow-up.
 
-The MVP is mainly a single scrolling landing page.
+Sample Excel download is on the **home page** (`#weekly-reports`) and on **`/intelligence`** (`#sample-download`).
 
-Sections:
+# Admin
 
-* Hero
-* What the business does
-* Free reports
-* Weekly leads
-* Sample download CTA
-* Pricing
-* About
-* Contact/footer
+One Supabase Auth user, matched to `ADMIN_EMAIL` on the server.
 
-Later we may add:
+Admin can:
 
-* sample report page
-* admin upload page
+- create / edit / publish intelligence reports (with file uploads to Supabase Storage)
+- upload the weekly sample Excel file
+- edit homepage market snapshot statistics
 
-# MVP
+No customer accounts, public sign-up, or password reset UI (unless added later).
 
-Keep the MVP small.
+# Design direction
 
-Needed now:
+Black and white, minimal, large typography, whitespace, card layouts, mobile responsive, fast loading. Reference feel: Linear, Vercel, Stripe docs — professionalism through simplicity.
 
-* landing page
-* clean responsive design
-* sample download CTA
-* simple navigation
-* placeholder content
-* admin upload later
+# Stack (summary)
 
-Not needed now:
+Next.js (App Router), TypeScript, Tailwind, Supabase (Postgres, Storage, Auth), Cloudflare Workers via OpenNext, Resend for transactional email.
 
-* customer dashboard
-* auth system
-* payment system
-* CRM
-* complex automation
-* AI features
+See [STACK.md](STACK.md) and [MIGRATION-DECISIONS.md](MIGRATION-DECISIONS.md) for deployment and env details.
 
-# Basic Flow
+# Rules
 
-User visits site → sees value → enters email → downloads sample Excel report → business follows up later.
-
-# Design Direction
-
-The website should feel:
-
-* clean
-* black and white
-* minimal
-* modern
-* typography focused
-* simple to navigate
-
-Use lots of whitespace.
-
-Keep the UI lightweight and responsive.
-
-# Rule
-
-Keep this simple, clear, and easy to maintain.
-
-
-# Free reports
-
-These are public on the website.
-
-They show:
-
-* industry numbers
-* trends
-* charts
-* useful market insight
-
-Their job is to build trust and show that the business understands the transport industry.
-
-# Paid reports
-
-Customers pay for fresh weekly HGV operator leads.
-
-These reports include:
-
-* new HGV operators
-* fresh weekly company data
-* enriched phone numbers
-* Excel download format
-
-Target customers:
-
-* fuel companies
-* insurance companies
-* vehicle finance teams
-* fleet service providers
-* transport sales teams
-
-# MVP
-
-Build only what helps launch fast.
-
-Needed now:
-
-* Home
-* Industry Reports
-* Weekly Leads
-* Pricing
-* About
-* Contact
-* Sample Download
-* Simple Admin Upload
-
-Not needed now:
-
-* customer dashboard
-* login system
-* CRM
-* payment system
-* complex automation
-* AI features
-
-# Basic flow
-
-User visits site → sees value → enters email → downloads sample Excel report → email is saved → business follows up.
-
-Admin uploads the latest report each week.
-
-# Rule
-
-Keep this small, clear, and easy to change.
+- Keep copy short; one clear purpose per page.
+- Prefer small, deployable changes.
+- Do not overbuild CRM, payments, or customer dashboards on this site.
