@@ -27,6 +27,11 @@ Set in the Cloudflare dashboard (Worker → Settings → Variables):
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `NEXT_PUBLIC_SITE_URL` (production canonical URL)
+- `SUPABASE_SERVICE_ROLE_KEY` (secret)
+- `RESEND_API_KEY` (secret)
+- `EMAIL_FROM`
+- `NOTIFY_EMAIL` (optional)
+- `ADMIN_EMAIL` — sole administrator allowed to use `/admin` (server)
 
 After changing Build/Deploy commands or variables, retry the deployment from the dashboard.
 
@@ -43,9 +48,9 @@ After changing Build/Deploy commands or variables, retry the deployment from the
 
 | Topic | Decision | Rationale |
 | ----- | -------- | ----------- |
-| Resend / email | **Add before public launch** (not blocking CF deploy) | UI promises email; dev-only console link today. |
+| Resend / email | **Add before public launch** (not blocking CF deploy) | Verification links for downloads; enquiry notifications. |
 | Turnstile | **Post-MVP** unless abuse appears | No CAPTCHA in repo. |
-| Auth / dashboard | **Out of scope** | Per CONTEXT.md. |
+| Auth / admin | **In scope (Phase 2)** | Single Supabase Auth admin; protected `/admin` routes. |
 
 ## Verification checklist
 
