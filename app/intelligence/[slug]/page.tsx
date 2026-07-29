@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { ButtonLink } from "@/components/ui/Button";
+import { IntelligenceReportDownloadActions } from "@/components/intelligence/IntelligenceReportDownloadActions";
 import { categoryBadgeLabel, pageContainerClass } from "@/lib/layout";
 import { getPublishedReportBySlug } from "@/lib/reports/queries";
 
 type ReportPageProps = {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ download?: string }>;
 };
 
 function formatPublishDate(isoDate: string): string {
@@ -34,8 +35,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function IntelligenceReportPage({ params }: ReportPageProps) {
+export default async function IntelligenceReportPage({
+  params,
+  searchParams,
+}: ReportPageProps) {
   const { slug } = await params;
+  const { download } = await searchParams;
   const report = await getPublishedReportBySlug(slug);
 
   if (!report) {
@@ -80,14 +85,11 @@ export default async function IntelligenceReportPage({ params }: ReportPageProps
               </ul>
             </div>
           ) : null}
-          <div className="mt-12 flex flex-wrap gap-4">
-            <ButtonLink href={`/download/intelligence/${slug}`}>
-              Download full report
-            </ButtonLink>
-            <ButtonLink href="/intelligence" variant="secondary">
-              Back to Intelligence
-            </ButtonLink>
-          </div>
+          <IntelligenceReportDownloadActions
+            reportId={report.id}
+            title={report.title}
+            autoOpenDownload={download === "1"}
+          />
         </div>
       </article>
       <div className={`${pageContainerClass} py-8`}>

@@ -55,7 +55,7 @@ export function AboutHero() {
                 View Intelligence
               </ButtonLink>
               <ButtonLink
-                href="/weekly-reports"
+                href="/intelligence#sample-download"
                 variant="secondary"
                 className="w-full sm:w-auto"
               >

@@ -16,5 +16,10 @@
       "binding": "WORKER_SELF_REFERENCE",
       "service": "hgv-intelligence-site"
     }
-  ]
+  ],
+  // Non-secret runtime vars only. Never commit API keys or service role here.
+  // Full matrix: STACK.md → Environment configuration.
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://hgv-intelligence-site.ataaranyeokilo.workers.dev"
+  }
 }
