@@ -6,8 +6,8 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <FeaturedIntelligenceSection />
       <HomeHeroWeeklyHighlights />
+      <FeaturedIntelligenceSection />
       <HomeSampleCta />
     </>
   );
