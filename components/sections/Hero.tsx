@@ -8,26 +8,30 @@ export function Hero() {
       <div className={`${pageContainerClass} py-16 sm:py-24`}>
         <div className="max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
-            UK HGV Operator Data
+            UK Transport Industry Intelligence
           </p>
           <h1 className="mt-4 max-w-xl text-4xl font-semibold leading-[1.1] tracking-tight text-neutral-900 sm:text-5xl">
-            Fresh weekly HGV operator leads, delivered in Excel
+            Where market signals become intelligence.
           </h1>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg">
-            We compile newly registered operators into structured weekly Excel
-            reports — built for transport sales teams who need consistent,
-            actionable lead data without manual research.
+            We analyse regulatory activity, operator movements and industry
+            trends to uncover the changes shaping the UK transport sector.
+          </p>
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg">
+            Our intelligence helps businesses understand the market earlier,
+            make informed decisions and identify new opportunities with
+            confidence.
           </p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <ButtonLink href="/intelligence" className="w-full sm:w-auto">
-              Browse Intelligence
+              Explore Latest Intelligence →
             </ButtonLink>
             <ButtonLink
-              href="/intelligence#weekly-reports"
+              href="/intelligence#sample-download"
               variant="secondary"
               className="w-full sm:w-auto"
             >
-              See Weekly Reports
+              See Weekly Reports →
             </ButtonLink>
           </div>
         </div>
