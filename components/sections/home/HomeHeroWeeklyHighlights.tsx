@@ -1,34 +1,22 @@
-import {
-  IconBuilding,
-  IconChart,
-  IconDocument,
-  IconMapPin,
-} from "@/components/ui/icons";
+import { IconClock, IconFuel, IconShield } from "@/components/ui/icons";
 import { pageContainerClass } from "@/lib/layout";
 
 const sideFeatures = [
   {
-    title: "Official Regulatory Sources",
-    description:
-      "Every insight begins with verified Traffic Commissioner activity.",
-    Icon: IconBuilding,
+    title: "Every Monday",
+    description: "New leads from the previous seven days.",
+    Icon: IconClock,
   },
   {
-    title: "Independent Analysis",
+    title: "Accurate & Enriched",
     description:
-      "We turn market signals into clear, objective intelligence.",
-    Icon: IconChart,
+      "Direct-dial numbers where available, deduplicated records and consistent formatting.",
+    Icon: IconShield,
   },
   {
-    title: "UK-wide Coverage",
-    description: "Monitoring activity across the entire UK transport sector.",
-    Icon: IconMapPin,
-  },
-  {
-    title: "Published Intelligence",
-    description:
-      "Quarterly and annual reports covering the latest market trends.",
-    Icon: IconDocument,
+    title: "Excel-first Delivery",
+    description: "Ready to import into CRM or dialling software.",
+    Icon: IconFuel,
   },
 ];
 
@@ -36,7 +24,7 @@ export function HomeHeroWeeklyHighlights() {
   return (
     <section className="border-b border-neutral-200">
       <div className={`${pageContainerClass} py-10 sm:py-12`}>
-        <ul className="grid gap-8 md:grid-cols-2 md:gap-10 lg:grid-cols-4">
+        <ul className="grid gap-8 md:grid-cols-3 md:gap-10">
           {sideFeatures.map(({ title, description, Icon }) => (
             <li key={title} className="flex gap-4">
               <span className="mt-0.5 text-neutral-700">
