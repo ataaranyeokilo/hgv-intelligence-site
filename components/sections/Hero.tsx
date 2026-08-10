@@ -1,27 +1,85 @@
 import { ButtonLink } from "@/components/ui/Button";
 import { WeeklySampleDownloadBlock } from "@/components/download/WeeklySampleDownloadBlock";
+import {
+  IconChart,
+  IconDocumentChecklist,
+  IconTarget,
+  IconUsersNetwork,
+} from "@/components/ui/icons";
 import { pageContainerClass } from "@/lib/layout";
+
+type IntroIcon = (props: { className?: string }) => React.ReactElement;
+
+const intelligencePoints = [
+  {
+    Icon: IconDocumentChecklist,
+    text: "We monitor and analyse HGV Operator Licence filings to identify the earliest signals of fleet growth, business expansion and new market activity.",
+  },
+  {
+    Icon: IconChart,
+    text: "Through our free reports, we publish original statistics, regional analysis and expert commentary, revealing where the transport industry is growing and going.",
+  },
+  {
+    Icon: IconUsersNetwork,
+    text: "For businesses in the transport supply chain, we provide enriched intelligence products that help you connect with new and expanding operators at the perfect time.",
+  },
+  {
+    Icon: IconTarget,
+    text: "By combining regulatory data, movement indicators and commercial analysis, we turn public information into actionable intelligence.",
+  },
+];
+
+function IntroIconCircle({ Icon }: { Icon: IntroIcon }) {
+  return (
+    <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-fleetSignal text-fleetSignal sm:h-[4.5rem] sm:w-[4.5rem] lg:h-20 lg:w-20">
+      <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
+    </span>
+  );
+}
 
 export function Hero() {
   return (
-    <section id="what-we-do" className="border-b border-neutral-200 scroll-mt-20">
-      <div className={`${pageContainerClass} py-16 sm:py-24`}>
-        <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
-            UK Transport Industry Intelligence
-          </p>
-          <h1 className="mt-4 max-w-xl text-4xl font-semibold leading-[1.1] tracking-tight text-neutral-900 sm:text-5xl">
-            Where market signals become intelligence.
+    <section
+      id="what-we-do"
+      className="scroll-mt-20 border-b border-neutral-200 bg-white"
+    >
+      <div className={`${pageContainerClass} py-16 sm:py-20 lg:py-24`}>
+        <div className="max-w-4xl">
+          <h1 className="text-3xl font-semibold leading-tight text-neutral-900 sm:text-4xl lg:text-5xl">
+            Welcome to{" "}
+            <span className="font-bold text-fleetSignal">Fleet Signal,</span>
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg">
-            We analyse regulatory activity, operator movements and industry
-            trends to uncover the changes shaping the UK transport sector.
+          <p className="mt-3 max-w-2xl text-xl leading-snug text-neutral-900 sm:text-2xl lg:mt-4">
+            the leading source of intelligence and insight into the UK&apos;s
+            transport industry.
           </p>
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg">
-            Our intelligence helps businesses understand the market earlier,
-            make informed decisions and identify new opportunities with
-            confidence.
+
+          <hr className="mt-8 border-t-2 border-fleetSignal sm:mt-10" />
+
+          <ul className="divide-y divide-neutral-200">
+            {intelligencePoints.map(({ Icon, text }) => (
+              <li
+                key={text}
+                className="flex items-center gap-5 py-8 sm:gap-6 sm:py-10 lg:gap-8"
+              >
+                <IntroIconCircle Icon={Icon} />
+                <p className="text-base leading-relaxed text-neutral-900 sm:text-lg">
+                  {text}
+                </p>
+              </li>
+            ))}
+          </ul>
+
+          <hr className="border-t-2 border-fleetSignal" />
+
+          <p className="mt-8 max-w-3xl text-xs font-medium uppercase leading-relaxed tracking-[0.18em] text-neutral-900 sm:mt-10 sm:text-sm">
+            Because understanding the market,
+            <br className="hidden sm:block" />{" "}
+            <span className="text-fleetSignal">
+              starts with reading the signals.
+            </span>
           </p>
+
           <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <ButtonLink href="/intelligence" className="w-full sm:w-auto">
               Explore Latest Intelligence →

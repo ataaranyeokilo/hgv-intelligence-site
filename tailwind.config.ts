@@ -6,7 +6,13 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        fleetSignal: {
+          DEFAULT: "#2563EB",
+        },
+      },
+    },
   },
   plugins: [],
 };

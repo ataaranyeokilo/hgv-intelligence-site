@@ -216,3 +216,56 @@ export function IconFuel({ className = "h-6 w-6" }: IconProps) {
     </svg>
   );
 }
+
+export function IconDocumentChecklist({ className = "h-6 w-6" }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M8 4h7l3 3v13H8V4z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path d="M15 4v3h3" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M10 11h6M10 14h4" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="17" cy="17" r="3" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M15.5 17l1 1 2-2"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function IconUsersNetwork({ className = "h-6 w-6" }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="7" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="6" cy="11" r="2" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="18" cy="11" r="2" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M8.5 18c0-2.2 1.6-3.5 3.5-3.5s3.5 1.3 3.5 3.5M4 18c0-1.7 1.3-2.8 2.5-2.8M20 18c0-1.7-1.3-2.8-2.5-2.8"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function IconTarget({ className = "h-6 w-6" }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="7" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="12" cy="12" r="2" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M12 3v2M12 19v2M3 12h2M19 12h2"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
