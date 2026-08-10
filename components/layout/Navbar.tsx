@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import { isNavItemActive, mainNavItems } from "@/lib/navigation";
 import { pageContainerClass } from "@/lib/layout";
+import { SiteLogo } from "@/components/layout/SiteLogo";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -18,11 +19,8 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-10 border-b border-neutral-200 bg-white/95 backdrop-blur-sm">
       <div className={`${pageContainerClass} flex items-center justify-between gap-4 py-5`}>
-        <Link
-          href="/"
-          className="text-base font-semibold tracking-tight text-neutral-900"
-        >
-          HGV Intelligence
+        <Link href="/" className="inline-flex shrink-0 items-center">
+          <SiteLogo className="h-12 w-auto sm:h-14" />
         </Link>
 
         <button

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { mainNavItems } from "@/lib/navigation";
 import { pageContainerClass } from "@/lib/layout";
+import { SiteLogo } from "@/components/layout/SiteLogo";
 
 export function Footer() {
   const pathname = usePathname();
@@ -24,7 +25,7 @@ export function Footer() {
       <div className={`${pageContainerClass} py-14`}>
         <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr_1fr]">
           <div>
-            <p className="font-semibold text-neutral-900">HGV Intelligence</p>
+            <SiteLogo variant="footer" className="h-14 w-auto sm:h-16" />
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-neutral-600">
               Weekly HGV operator leads and free industry reports for UK
               transport sales teams.
