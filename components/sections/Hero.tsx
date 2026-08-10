@@ -41,40 +41,45 @@ export function Hero() {
   return (
     <section
       id="what-we-do"
-      className="scroll-mt-20 border-b border-neutral-200 bg-white"
+      className="relative scroll-mt-20 border-b border-neutral-200 bg-cover bg-[70%_center] bg-no-repeat"
+      style={{ backgroundImage: "url('/images/hero-background.jpg')" }}
     >
       <div
-        className={`${pageContainerClass} pb-10 pt-14 sm:pb-12 sm:pt-16 lg:pb-12 lg:pt-[4.5rem]`}
+        className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent"
+        aria-hidden="true"
+      />
+      <div
+        className={`relative z-10 ${pageContainerClass} pb-10 pt-14 sm:pb-12 sm:pt-16 lg:pb-12 lg:pt-[4.5rem]`}
       >
         <div className="max-w-[800px]">
-          <h1 className="text-[1.875rem] font-semibold leading-tight text-neutral-900 sm:text-[2.125rem] lg:text-[2.75rem]">
+          <h1 className="text-[1.875rem] font-semibold leading-tight text-white sm:text-[2.125rem] lg:text-[2.75rem]">
             Welcome to{" "}
             <span className="font-bold text-fleetSignal">Fleet Signal,</span>
           </h1>
-          <p className="mt-2 max-w-[34rem] text-xl leading-snug text-neutral-900 sm:text-[1.375rem] lg:mt-3">
+          <p className="mt-2 max-w-[34rem] text-xl leading-snug text-white sm:text-[1.375rem] lg:mt-3">
             the leading source of intelligence and insight into the UK&apos;s
             transport industry.
           </p>
 
-          <hr className="mt-6 border-t border-fleetSignal sm:mt-7" />
+          <hr className="mt-6 border-t border-white sm:mt-7" />
 
-          <ul className="divide-y divide-neutral-200">
+          <ul className="divide-y divide-white/80">
             {intelligencePoints.map(({ Icon, text }) => (
               <li
                 key={text}
                 className="flex items-center gap-6 py-5 sm:gap-7 sm:py-6"
               >
                 <IntroIconCircle Icon={Icon} />
-                <p className="min-w-0 flex-1 text-base leading-[1.55] text-neutral-900">
+                <p className="min-w-0 flex-1 text-base leading-[1.55] text-white">
                   {text}
                 </p>
               </li>
             ))}
           </ul>
 
-          <hr className="border-t border-fleetSignal" />
+          <hr className="border-t border-white" />
 
-          <p className="mt-7 max-w-[800px] pt-6 text-xs font-medium uppercase leading-relaxed tracking-[0.18em] text-neutral-900 sm:mt-8 sm:pt-7 sm:text-sm">
+          <p className="mt-7 max-w-[800px] pt-6 text-xs font-medium uppercase leading-relaxed tracking-[0.18em] text-white sm:mt-8 sm:pt-7 sm:text-sm">
             Because understanding the market,
             <br className="hidden sm:block" />{" "}
             <span className="text-fleetSignal">
@@ -89,7 +94,7 @@ export function Hero() {
             <ButtonLink
               href="/intelligence#sample-download"
               variant="secondary"
-              className="w-full sm:w-auto"
+              className="w-full !border-white !text-white hover:!bg-white/10 sm:w-auto"
             >
               See Weekly Reports →
             </ButtonLink>
