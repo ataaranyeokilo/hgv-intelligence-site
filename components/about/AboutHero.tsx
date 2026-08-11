@@ -55,11 +55,11 @@ export function AboutHero() {
                 View Intelligence
               </ButtonLink>
               <ButtonLink
-                href="/intelligence#sample-download"
+                href="/research"
                 variant="secondary"
                 className="w-full sm:w-auto"
               >
-                See Weekly Reports
+                Explore Free Research
               </ButtonLink>
             </div>
           </div>

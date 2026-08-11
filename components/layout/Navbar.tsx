@@ -17,7 +17,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-10 border-b border-neutral-200 bg-white/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white">
       <div className={`${pageContainerClass} flex items-center justify-between gap-4 py-5`}>
         <Link href="/" className="inline-flex shrink-0 items-center">
           <SiteLogo className="h-12 w-auto sm:h-14" />
@@ -36,9 +36,9 @@ export function Navbar() {
         <nav
           id="main-navigation"
           aria-label="Main navigation"
-          className={`${menuOpen ? "flex" : "hidden"} absolute left-0 right-0 top-full flex-col gap-2 border-b border-neutral-200 bg-white px-6 py-4 sm:static sm:flex sm:flex-row sm:border-0 sm:bg-transparent sm:p-0`}
+          className={`${menuOpen ? "flex" : "hidden"} absolute left-0 right-0 top-full flex-col gap-2 border-b border-neutral-200 bg-white px-6 py-4 sm:static sm:mr-4 sm:flex sm:flex-row sm:border-0 sm:bg-transparent sm:p-0`}
         >
-          <ul className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
+          <ul className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-10 sm:gap-y-2">
             {mainNavItems.map((item) => {
               const active = pathname
                 ? isNavItemActive(pathname, item.href)
@@ -47,7 +47,7 @@ export function Navbar() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`text-sm ${
+                    className={`text-sm sm:text-base ${
                       active
                         ? "font-medium text-neutral-900 underline decoration-neutral-900 decoration-2 underline-offset-4"
                         : "text-neutral-600 hover:text-neutral-900"
