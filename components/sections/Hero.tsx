@@ -88,13 +88,16 @@ export function Hero() {
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <ButtonLink href="/intelligence" className="w-full sm:w-auto">
+            <ButtonLink
+              href="/intelligence"
+              className="w-full !bg-fleetSignal !text-white hover:!bg-blue-700 sm:w-auto"
+            >
               Explore Paid Intelligence →
             </ButtonLink>
             <ButtonLink
               href="/research"
               variant="secondary"
-              className="w-full !border-white !text-white hover:!bg-white/10 sm:w-auto"
+              className="w-full !border-white !bg-white !text-neutral-900 hover:!bg-neutral-100 sm:w-auto"
             >
               Explore Free Research →
             </ButtonLink>
