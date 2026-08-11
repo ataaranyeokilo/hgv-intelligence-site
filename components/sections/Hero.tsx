@@ -41,7 +41,7 @@ export function Hero() {
   return (
     <section
       id="what-we-do"
-      className="relative scroll-mt-20 border-b border-neutral-200 bg-cover bg-[70%_center] bg-no-repeat"
+      className="relative scroll-mt-20 border-b border-neutral-200 bg-cover bg-[70%_top] bg-no-repeat"
       style={{ backgroundImage: "url('/images/hero-background.jpg')" }}
     >
       <div
@@ -49,7 +49,7 @@ export function Hero() {
         aria-hidden="true"
       />
       <div
-        className={`relative z-10 ${pageContainerClass} pb-10 pt-14 sm:pb-12 sm:pt-16 lg:pb-12 lg:pt-[4.5rem]`}
+        className={`relative z-10 ${pageContainerClass} pb-10 pt-14 sm:pb-12 sm:pt-16 lg:pb-6 lg:pt-8`}
       >
         <div className="max-w-[800px]">
           <h1 className="text-[1.875rem] font-semibold leading-tight text-white sm:text-[2.125rem] lg:text-[2.75rem]">
@@ -79,7 +79,7 @@ export function Hero() {
 
           <hr className="border-t border-white" />
 
-          <p className="mt-7 max-w-[800px] pt-6 text-xs font-medium uppercase leading-relaxed tracking-[0.18em] text-white sm:mt-8 sm:pt-7 sm:text-sm">
+          <p className="mt-7 max-w-[800px] pt-6 text-xs font-medium uppercase leading-relaxed tracking-[0.18em] text-white sm:mt-8 sm:pt-7 sm:text-sm lg:mt-5 lg:pt-0">
             Because understanding the market,
             <br className="hidden sm:block" />{" "}
             <span className="text-fleetSignal">
@@ -87,7 +87,7 @@ export function Hero() {
             </span>
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:mt-5">
             <ButtonLink
               href="/intelligence"
               className="w-full !bg-fleetSignal !text-white hover:!bg-blue-700 sm:w-auto"
