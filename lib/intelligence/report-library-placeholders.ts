@@ -35,4 +35,32 @@ export const reportLibraryPlaceholders: ReportLibraryPlaceholder[] = [
       "A quarterly breakdown of operator registrations and activity by UK region.",
     dateLabel: "April 2026",
   },
+  {
+    badge: "Weekly operators",
+    title: "Weekly HGV Operator Registrations",
+    summary:
+      "Newly registered operators from the previous seven days, structured for sales and outreach teams.",
+    dateLabel: "March 2026",
+  },
+  {
+    badge: "Licence trends",
+    title: "Operator Licence Trends Report 2026",
+    summary:
+      "How licence types, vehicle authorisations and renewal patterns are shifting across the UK fleet.",
+    dateLabel: "March 2026",
+  },
+  {
+    badge: "Sector outlook",
+    title: "UK Transport Sector Outlook 2026",
+    summary:
+      "Commercial signals across haulage, logistics and supply-chain operators shaping the year ahead.",
+    dateLabel: "February 2026",
+  },
+  {
+    badge: "Contact enrichment",
+    title: "New Operator Contact Enrichment",
+    summary:
+      "How enriched direct-dial contacts improve connect rates for transport sales teams.",
+    dateLabel: "February 2026",
+  },
 ];
