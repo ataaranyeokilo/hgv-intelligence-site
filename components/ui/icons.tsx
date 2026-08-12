@@ -1,5 +1,8 @@
 type IconProps = { className?: string };
 
+/** Icons whose secondary detail can be tinted separately from the outline. */
+type AccentIconProps = IconProps & { accentClassName?: string };
+
 /** Keeps default dimensions when callers only pass layout/colour classes. */
 function iconClassName(defaultSize: string, className?: string) {
   if (!className) return defaultSize;
@@ -266,6 +269,112 @@ export function IconTarget({ className = "h-6 w-6" }: IconProps) {
         strokeWidth="1.5"
         strokeLinecap="round"
       />
+    </svg>
+  );
+}
+
+export function IconRadar({
+  className = "h-6 w-6",
+  accentClassName,
+}: AccentIconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M19 7.5a8 8 0 10-2.5 11.9"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M15.5 10.4a4.5 4.5 0 10-1.6 6.2"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <circle cx="12" cy="13" r="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <g className={accentClassName}>
+        <path
+          d="M12 13l7.5-7.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+        <path
+          d="M14.75 5.5h4.75v4.75"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  );
+}
+
+export function IconCalendarWeek({
+  className = "h-6 w-6",
+  accentClassName,
+}: AccentIconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect
+        x="3"
+        y="5"
+        width="18"
+        height="16"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path d="M3 9.5h18" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M8 3v3M16 3v3"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        className={accentClassName}
+        d="M7 13h2M11 13h2M15 13h2M7 17h2M11 17h2"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+/** Bullseye with a dart, for "sales-ready" messaging. */
+export function IconTargetArrow({
+  className = "h-6 w-6",
+  accentClassName,
+}: AccentIconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="11" cy="13" r="8" stroke="currentColor" strokeWidth="1.5" />
+      <circle
+        cx="11"
+        cy="13"
+        r="4.75"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <circle cx="11" cy="13" r="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <g className={accentClassName}>
+        <path
+          d="M11 13l8.5-8.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+        <path
+          d="M15 4.5h5v5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
     </svg>
   );
 }

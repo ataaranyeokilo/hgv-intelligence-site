@@ -25,7 +25,7 @@ export async function FeaturedIntelligenceSection() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl">
-              Explore our intelligence
+              Explore our research
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-neutral-600 sm:text-base">
               Browse the latest published reports across different categories.
