@@ -57,7 +57,7 @@ export function Hero() {
             <span className="font-bold text-fleetSignal">Fleet Signal,</span>
           </h1>
           <p className="mt-2 max-w-[34rem] text-xl leading-snug text-white sm:text-[1.375rem] lg:mt-3">
-            the leading source of intelligence and insight into the UK&apos;s
+            The leading source of intelligence and insight into the UK&apos;s
             transport industry.
           </p>
 
