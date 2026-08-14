@@ -21,11 +21,11 @@ export function Footer() {
   ];
 
   return (
-    <footer className="border-t border-neutral-200 bg-neutral-50">
+    <footer className="border-t border-neutral-200 bg-white">
       <div className={`${pageContainerClass} py-14`}>
         <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr_1fr]">
           <div>
-            <SiteLogo variant="footer" className="h-14 w-auto sm:h-16" />
+            <SiteLogo className="h-10 w-auto sm:h-12" />
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-neutral-600">
               Weekly HGV operator leads and free industry reports for UK
               transport sales teams.
