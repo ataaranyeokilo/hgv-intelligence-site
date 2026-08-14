@@ -6,19 +6,24 @@ import type { IntelligenceReportListItem } from "@/lib/reports/types";
 
 type ExploreAllIntelligenceReportsProps = {
   generalReports: IntelligenceReportListItem[];
+  headingAs?: "h1" | "h2";
   showPlaceholders: boolean;
 };
 
 export function ExploreAllIntelligenceReports({
   generalReports,
+  headingAs: Heading = "h1",
   showPlaceholders,
 }: ExploreAllIntelligenceReportsProps) {
   return (
-    <section className="border-b border-neutral-200">
+    <section
+      id="research-reports"
+      className="scroll-mt-20 border-b border-neutral-200"
+    >
       <div className={`${pageContainerClass} py-12 sm:py-14`}>
-        <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl">
+        <Heading className="text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl">
           Explore all intelligence reports
-        </h1>
+        </Heading>
         <p className="mt-3 max-w-2xl text-sm text-neutral-600 sm:text-base">
           Browse the latest published reports across different categories.
         </p>

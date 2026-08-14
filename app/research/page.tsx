@@ -1,21 +1,28 @@
 import type { Metadata } from "next";
 
-import { PageHeader } from "@/components/layout/PageHeader";
-import { Section } from "@/components/layout/Section";
+import { ExploreAllIntelligenceReports } from "@/components/intelligence/ExploreAllIntelligenceReports";
+import { ResearchHero } from "@/components/sections/ResearchHero";
+import { partitionPublishedReports } from "@/lib/reports/classify";
+import { listPublishedReports } from "@/lib/reports/queries";
 
 export const metadata: Metadata = {
   title: "Research",
-  description: "Research from HGV Intelligence.",
+  description:
+    "Browse the latest published HGV reports across different categories.",
 };
 
-export default function ResearchPage() {
+export default async function ResearchPage() {
+  const reports = await listPublishedReports();
+  const { general } = partitionPublishedReports(reports);
+
   return (
     <>
-      <PageHeader
-        title="Research"
-        description="Research content coming soon."
+      <ResearchHero />
+      <ExploreAllIntelligenceReports
+        generalReports={general}
+        headingAs="h2"
+        showPlaceholders={reports.length === 0}
       />
-      <Section>{null}</Section>
     </>
   );
 }
