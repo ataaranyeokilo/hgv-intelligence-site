@@ -344,6 +344,142 @@ export function IconCalendarWeek({
   );
 }
 
+export function IconSearchChart({
+  className = "h-6 w-6",
+  accentClassName,
+}: AccentIconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="10" cy="10" r="6.5" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M15 15l6 6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <g className={accentClassName}>
+        <path
+          d="M7.5 13V10M10 13V8M12.5 13v-3.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+      </g>
+    </svg>
+  );
+}
+
+export function IconDocumentSearch({
+  className = "h-6 w-6",
+  accentClassName,
+}: AccentIconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M7 3h7l5 5v13H7V3z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path d="M14 3v6h6" stroke="currentColor" strokeWidth="1.5" />
+      <g className={accentClassName}>
+        <circle cx="15.5" cy="16" r="2.75" stroke="currentColor" strokeWidth="1.5" />
+        <path
+          d="M17.5 18l2.5 2.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+      </g>
+    </svg>
+  );
+}
+
+export function IconClipboardChart({
+  className = "h-6 w-6",
+  accentClassName,
+}: AccentIconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect
+        x="6"
+        y="5"
+        width="12"
+        height="16"
+        rx="1.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <rect
+        x="9"
+        y="3"
+        width="6"
+        height="3.5"
+        rx="1"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <circle cx="12" cy="14" r="4" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        className={accentClassName}
+        d="M12 14V10A4 4 0 0115.46 16.47L12 14z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+export function IconTrendChart({
+  className = "h-6 w-6",
+  accentClassName,
+}: AccentIconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M4 19V5M4 19h16" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M7 16v-2M10 16V11M13 16V9M16 16V7"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <g className={accentClassName}>
+        <path
+          d="M7 13.5l3-3 3-1 5-4.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M15.5 5h4v4"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  );
+}
+
+export function IconArrowUpRight({ className }: IconProps) {
+  return (
+    <svg
+      className={iconClassName("h-3.5 w-3.5", className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M7 17L17 7M10 7h7v7"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 /** Bullseye with a dart, for "sales-ready" messaging. */
 export function IconTargetArrow({
   className = "h-6 w-6",
