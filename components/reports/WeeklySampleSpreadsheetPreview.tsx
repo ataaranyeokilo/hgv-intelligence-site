@@ -2,13 +2,12 @@ import { IconFile } from "@/components/ui/icons";
 
 const columns = [
   { key: "company", label: "Company Name", redacted: true },
-  { key: "trading", label: "Trading Style", redacted: true },
+  { key: "phone", label: "Phone Number", redacted: false },
   { key: "licence", label: "Licence Number", redacted: true },
   { key: "type", label: "Operator Type", redacted: true },
   { key: "registered", label: "Date Registered", redacted: false },
   { key: "vehicles", label: "Vehicle Count", redacted: false },
   { key: "postcode", label: "Postcode", redacted: false },
-  { key: "phone", label: "Phone Number", redacted: false },
 ] as const;
 
 const visibleRows = [
