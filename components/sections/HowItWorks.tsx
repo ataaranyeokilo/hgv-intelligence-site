@@ -1,4 +1,4 @@
-import { Section } from "@/components/layout/Section";
+import { pageContainerClass } from "@/lib/layout";
 
 export type HowItWorksStep = {
   title: string;
@@ -50,11 +50,11 @@ function StepCard({
 }) {
   return (
     <div className="flex max-w-xs flex-col items-center text-center lg:max-w-none lg:flex-1 lg:items-start lg:text-left">
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-sm font-medium text-white">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-sm font-medium text-fleetSignal">
         {index + 1}
       </span>
-      <p className="mt-4 font-medium text-neutral-900">{title}</p>
-      <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+      <p className="mt-4 font-medium text-white">{title}</p>
+      <p className="mt-2 text-sm leading-relaxed text-blue-100/80">
         {description}
       </p>
     </div>
@@ -73,9 +73,20 @@ export function HowItWorks({
   showHeading = true,
 }: HowItWorksProps) {
   return (
-    <Section id={id}>
+    <section
+      id={id}
+      className="scroll-mt-20"
+      style={{
+        backgroundColor: "#010512",
+        backgroundImage: [
+          "radial-gradient(60% 180% at 100% 0%, rgba(30,111,240,0.7) 0%, rgba(1,72,206,0.4) 32%, rgba(1,35,119,0.14) 55%, transparent 72%)",
+          "linear-gradient(90deg, #010512 0%, #010719 45%, #001240 72%, #012377 88%, #0033A1 100%)",
+        ].join(", "),
+      }}
+    >
+      <div className={`${pageContainerClass} py-12 sm:py-14`}>
       {showHeading ? (
-        <h2 className="text-xl font-semibold text-neutral-900">How it works</h2>
+        <h2 className="text-xl font-semibold text-white">How it works</h2>
       ) : null}
       <div
         className={`flex flex-col items-center gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-4 ${showHeading ? "mt-10" : "mt-0"}`}
@@ -85,13 +96,13 @@ export function HowItWorks({
             {index > 0 ? (
               <>
                 <span
-                  className="text-xl text-neutral-300 lg:hidden"
+                  className="text-xl text-white/30 lg:hidden"
                   aria-hidden
                 >
                   ↓
                 </span>
                 <span
-                  className="hidden shrink-0 self-center px-1 text-2xl font-light text-neutral-300 lg:inline"
+                  className="hidden shrink-0 self-center px-1 text-2xl font-light text-white/30 lg:inline"
                   aria-hidden
                 >
                   →
@@ -106,6 +117,7 @@ export function HowItWorks({
           </div>
         ))}
       </div>
-    </Section>
+      </div>
+    </section>
   );
 }

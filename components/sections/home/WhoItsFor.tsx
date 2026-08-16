@@ -45,7 +45,7 @@ export function WhoItsFor() {
             key={label}
             className="flex flex-col items-center rounded-sm border border-neutral-200 bg-neutral-50 px-4 py-6 text-center"
           >
-            <Icon className="h-7 w-7 text-neutral-800" />
+            <Icon className="h-7 w-7 text-fleetSignal" />
             <p className="mt-4 text-sm font-semibold text-neutral-900">{label}</p>
             <p className="mt-2 text-xs leading-relaxed text-neutral-600">
               {description}

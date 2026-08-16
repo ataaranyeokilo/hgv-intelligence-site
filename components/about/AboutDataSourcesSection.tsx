@@ -8,7 +8,7 @@ export function AboutDataSourcesSection() {
         className={`${pageContainerClass} flex flex-col gap-10 py-14 sm:py-16 lg:flex-row lg:items-center lg:gap-16`}
       >
         <div className="flex shrink-0 justify-center lg:justify-start">
-          <span className="flex h-32 w-32 items-center justify-center rounded-full border border-neutral-200 bg-neutral-50 text-neutral-800 sm:h-40 sm:w-40">
+          <span className="flex h-32 w-32 items-center justify-center rounded-full border border-neutral-200 bg-neutral-50 text-fleetSignal sm:h-40 sm:w-40">
             <IconBuilding className="h-14 w-14 sm:h-16 sm:w-16" />
           </span>
         </div>

@@ -27,7 +27,7 @@ export function AboutCustomersReceiveSection() {
               {checklistItems.map((item) => (
                 <li key={item} className="flex items-start gap-3 text-sm text-neutral-800">
                   <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-neutral-300 bg-white">
-                    <IconCheck className="h-3 w-3 text-neutral-900" />
+                    <IconCheck className="h-3 w-3 text-fleetSignal" />
                   </span>
                   {item}
                 </li>
@@ -46,7 +46,10 @@ export function AboutCustomersReceiveSection() {
               report.
             </p>
             <div className="mt-6 flex flex-col gap-3">
-              <ButtonLink href="/intelligence" className="w-full text-center">
+              <ButtonLink
+                href="/intelligence"
+                className="w-full !bg-fleetSignal text-center !text-white hover:!bg-blue-700"
+              >
                 View Intelligence
               </ButtonLink>
               <ButtonLink

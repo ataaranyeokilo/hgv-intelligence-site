@@ -8,14 +8,14 @@ export function AboutStorySection() {
           <div className="lg:pr-12">
             <h2 className="text-xl font-semibold text-neutral-900">Who we are</h2>
             <p className="mt-4 text-base leading-relaxed text-neutral-600">
-              HGV Intelligence helps businesses selling into the UK transport
+              Fleet Signal helps businesses selling into the UK transport
               industry discover newly registered operators through structured
               commercial data.
             </p>
           </div>
           <div className="lg:pl-12">
             <h2 className="text-xl font-semibold text-neutral-900">
-              Why we built HGV Intelligence
+              Why we built Fleet Signal
             </h2>
             <p className="mt-4 text-base leading-relaxed text-neutral-600">
               Sales teams spend too much time collecting, cleaning and
