@@ -32,7 +32,7 @@ export async function FeaturedIntelligenceSection() {
             </p>
           </div>
           <Link
-            href="/intelligence"
+            href="/research"
             className="shrink-0 text-sm font-medium text-neutral-900 hover:text-neutral-600"
           >
             View all →
