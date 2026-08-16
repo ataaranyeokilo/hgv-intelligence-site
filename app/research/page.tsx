@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { ExploreAllIntelligenceReports } from "@/components/intelligence/ExploreAllIntelligenceReports";
+import { IntelligenceDownloadProvider } from "@/components/intelligence/IntelligenceDownloadProvider";
 import { ResearchHero } from "@/components/sections/ResearchHero";
 import { partitionPublishedReports } from "@/lib/reports/classify";
 import { listPublishedReports } from "@/lib/reports/queries";
@@ -18,11 +19,13 @@ export default async function ResearchPage() {
   return (
     <>
       <ResearchHero />
-      <ExploreAllIntelligenceReports
-        generalReports={general}
-        headingAs="h2"
-        showPlaceholders={reports.length === 0}
-      />
+      <IntelligenceDownloadProvider>
+        <ExploreAllIntelligenceReports
+          generalReports={general}
+          headingAs="h2"
+          showPlaceholders={reports.length === 0}
+        />
+      </IntelligenceDownloadProvider>
     </>
   );
 }
