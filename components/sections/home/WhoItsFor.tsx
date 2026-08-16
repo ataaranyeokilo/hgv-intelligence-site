@@ -37,9 +37,9 @@ const audiences = [
 
 export function WhoItsFor() {
   return (
-    <Section id="who-its-for">
+    <Section id="who-its-for" compact>
       <h2 className="text-xl font-semibold text-neutral-900">Who it&apos;s for</h2>
-      <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
         {audiences.map(({ label, description, Icon }) => (
           <div
             key={label}

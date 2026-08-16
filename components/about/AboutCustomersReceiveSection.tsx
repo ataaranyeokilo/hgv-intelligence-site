@@ -17,11 +17,11 @@ const checklistItems = [
 export function AboutCustomersReceiveSection() {
   return (
     <section className="border-b border-neutral-200">
-      <div className={`${pageContainerClass} py-14 sm:py-16`}>
+      <div className={`${pageContainerClass} py-8 sm:py-10`}>
         <h2 className="text-xl font-semibold text-neutral-900">
           What customers receive
         </h2>
-        <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)_minmax(0,0.75fr)] lg:items-start lg:gap-8">
+        <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)_minmax(0,0.75fr)] lg:items-start lg:gap-8">
           <div>
             <ul className="space-y-4">
               {checklistItems.map((item) => (
@@ -46,11 +46,14 @@ export function AboutCustomersReceiveSection() {
               report.
             </p>
             <div className="mt-6 flex flex-col gap-3">
-              <ButtonLink href="/intelligence" className="w-full text-center">
+              <ButtonLink
+                href="/intelligence"
+                className="w-full !bg-fleetSignal text-center !text-white hover:!bg-blue-700"
+              >
                 View Intelligence
               </ButtonLink>
               <ButtonLink
-                href="#weekly-reports"
+                href="/intelligence#sample-download"
                 variant="secondary"
                 className="w-full text-center"
               >

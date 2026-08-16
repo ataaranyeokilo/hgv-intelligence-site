@@ -73,12 +73,12 @@ export function HowItWorks({
   showHeading = true,
 }: HowItWorksProps) {
   return (
-    <Section id={id}>
+    <Section id={id} compact>
       {showHeading ? (
         <h2 className="text-xl font-semibold text-neutral-900">How it works</h2>
       ) : null}
       <div
-        className={`flex flex-col items-center gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-4 ${showHeading ? "mt-10" : "mt-0"}`}
+        className={`flex flex-col items-center gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-4 ${showHeading ? "mt-6" : "mt-0"}`}
       >
         {steps.map((step, index) => (
           <div key={`${step.title}-${index}`} className="contents">

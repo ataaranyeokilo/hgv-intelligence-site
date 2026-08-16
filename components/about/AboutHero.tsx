@@ -36,21 +36,21 @@ const sideFeatures = [
 export function AboutHero() {
   return (
     <section className="border-b border-neutral-200">
-      <div className={`${pageContainerClass} py-16 sm:py-24`}>
-        <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
+      <div className={`${pageContainerClass} py-8 sm:py-10`}>
+        <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
               About HGV Intelligence
             </p>
-            <h1 className="mt-4 max-w-xl text-4xl font-semibold leading-[1.1] tracking-tight text-neutral-900 sm:text-5xl">
+            <h1 className="mt-2 max-w-xl text-3xl font-semibold leading-[1.1] tracking-tight text-neutral-900 sm:text-4xl">
               HGV operator data built for commercial teams
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg">
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg">
               We turn official UK HGV operator information into structured
               reports that help sales teams identify relevant transport
               businesses faster.
             </p>
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <ButtonLink href="/intelligence" className="w-full sm:w-auto">
                 View Intelligence
               </ButtonLink>
@@ -65,7 +65,7 @@ export function AboutHero() {
           </div>
           <ul className="divide-y divide-neutral-200 border-t border-neutral-200 lg:border-l lg:border-t-0 lg:pl-10">
             {sideFeatures.map(({ title, description, Icon }) => (
-              <li key={title} className="flex gap-4 py-6 first:pt-8 lg:first:pt-6">
+              <li key={title} className="flex gap-4 py-3 first:pt-3">
                 <span className="mt-0.5 text-neutral-700">
                   <Icon className="h-5 w-5" />
                 </span>
