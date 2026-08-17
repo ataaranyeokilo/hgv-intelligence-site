@@ -461,6 +461,26 @@ export function IconTrendChart({
   );
 }
 
+/** Tailless down caret; rotate 180deg when a parent details element is open. */
+export function IconChevron({ className }: IconProps) {
+  return (
+    <svg
+      className={iconClassName("h-4 w-4", className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M6 9l6 6 6-6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function IconArrowUpRight({ className }: IconProps) {
   return (
     <svg

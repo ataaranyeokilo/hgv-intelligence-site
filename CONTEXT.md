@@ -36,6 +36,7 @@ Weekly Excel files with new UK HGV operator leads (company, fleet, licence, enri
 | `/download/sample` | Legacy: token → verify; else → `/intelligence#sample-download` |
 | `/download/verify` | Email verification → signed file download |
 | `/about` | Trust |
+| `/faqs` | Frequently asked questions |
 | `/contact` | Contact form |
 | `/admin` | Private CMS (single administrator) |
 

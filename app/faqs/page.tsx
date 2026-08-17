@@ -1,21 +1,19 @@
 import type { Metadata } from "next";
 
-import { PageHeader } from "@/components/layout/PageHeader";
-import { Section } from "@/components/layout/Section";
+import { FaqsAccordion } from "@/components/faqs/FaqsAccordion";
+import { FaqsHero } from "@/components/faqs/FaqsHero";
 
 export const metadata: Metadata = {
   title: "FAQs",
-  description: "Frequently asked questions about HGV Intelligence.",
+  description:
+    "Common questions about Fleet Signal — what we monitor, who it is for, and how free and paid reports differ.",
 };
 
 export default function FaqsPage() {
   return (
     <>
-      <PageHeader
-        title="FAQs"
-        description="Frequently asked questions coming soon."
-      />
-      <Section>{null}</Section>
+      <FaqsHero />
+      <FaqsAccordion />
     </>
   );
 }
