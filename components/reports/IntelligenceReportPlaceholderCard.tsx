@@ -47,7 +47,7 @@ export function IntelligenceReportPlaceholderCard({
         </span>
         <Icon className="h-5 w-5 shrink-0 text-neutral-600" aria-hidden />
       </div>
-      <p className="mt-3 inline-flex rounded-sm border border-neutral-200 bg-neutral-50 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-neutral-500 shadow-soft">
+      <p className="mt-3 inline-flex self-start rounded-sm border border-neutral-200 bg-neutral-50 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-neutral-500 shadow-soft">
         {item.badge}
       </p>
       <h2 className="mt-2 text-base font-semibold leading-snug text-neutral-900">
