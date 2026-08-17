@@ -39,9 +39,9 @@ export function IntelligenceReportCard({ report }: IntelligenceReportCardProps) 
   const badge = formatReportCategoryBadge(report.category);
 
   return (
-    <article className="flex h-full flex-col rounded-sm border border-neutral-200 bg-white p-5">
+    <article className="flex h-full flex-col rounded-sm border border-neutral-200 bg-white p-5 shadow-soft">
       <div className="flex items-start justify-between gap-3">
-        <span className="inline-flex rounded-sm border border-neutral-200 bg-neutral-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-neutral-600">
+        <span className="inline-flex rounded-sm border border-neutral-200 bg-neutral-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-neutral-600 shadow-soft">
           {badge}
         </span>
         <Icon className="h-5 w-5 shrink-0 text-neutral-600" aria-hidden />

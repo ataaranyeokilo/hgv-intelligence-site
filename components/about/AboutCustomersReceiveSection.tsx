@@ -48,14 +48,14 @@ export function AboutCustomersReceiveSection() {
             <div className="mt-6 flex flex-col gap-3">
               <ButtonLink
                 href="/intelligence"
-                className="w-full !bg-fleetSignal text-center !text-white hover:!bg-blue-700"
+                className="w-full !bg-fleetSignal text-center !text-white shadow-soft hover:!bg-blue-700"
               >
                 View Intelligence
               </ButtonLink>
               <ButtonLink
                 href="#weekly-reports"
                 variant="secondary"
-                className="w-full text-center"
+                className="w-full text-center shadow-soft"
               >
                 Download Sample Report
               </ButtonLink>

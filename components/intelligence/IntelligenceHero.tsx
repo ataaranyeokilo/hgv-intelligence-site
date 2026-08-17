@@ -23,7 +23,7 @@ export function IntelligenceHero() {
             <div className="mt-6">
               <ButtonLink
                 href="/contact"
-                className="w-full !bg-fleetSignal !text-white hover:!bg-blue-700 sm:w-auto"
+                className="w-full !bg-fleetSignal !text-white shadow-soft hover:!bg-blue-700 sm:w-auto"
               >
                 Request a quote
               </ButtonLink>

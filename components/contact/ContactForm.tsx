@@ -90,7 +90,7 @@ export function ContactForm() {
       <Button
         type="submit"
         disabled={isPending}
-        className="w-full !bg-fleetSignal !text-white hover:!bg-blue-700 sm:w-auto"
+        className="w-full !bg-fleetSignal !text-white shadow-soft hover:!bg-blue-700 sm:w-auto"
       >
         {isPending ? "Sending…" : "Send message"}
       </Button>

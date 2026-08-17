@@ -50,7 +50,7 @@ export function IntelligenceUnlocksSection() {
           {unlocks.map(({ title, description, Icon }) => (
             <article
               key={title}
-              className="rounded-sm border border-neutral-200 bg-white p-5"
+              className="rounded-sm border border-neutral-200 bg-white p-5 shadow-soft"
             >
               <span className="flex h-10 w-10 items-center justify-center rounded-sm border border-neutral-200 bg-neutral-50 text-fleetSignal">
                 <Icon className="h-5 w-5" />

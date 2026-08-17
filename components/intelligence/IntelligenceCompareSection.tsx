@@ -48,7 +48,7 @@ export function IntelligenceCompareSection() {
                 </li>
               ))}
             </ul>
-            <ButtonLink href="/research" variant="secondary" className="mt-8 w-full">
+            <ButtonLink href="/research" variant="secondary" className="mt-8 w-full shadow-soft">
               Explore free research
             </ButtonLink>
           </article>
@@ -73,7 +73,7 @@ export function IntelligenceCompareSection() {
             </ul>
             <ButtonLink
               href="/contact"
-              className="mt-8 w-full !bg-fleetSignal !text-white hover:!bg-blue-700"
+              className="mt-8 w-full !bg-fleetSignal !text-white shadow-soft hover:!bg-blue-700"
             >
               Request a quote
             </ButtonLink>

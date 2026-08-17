@@ -12,6 +12,9 @@ const config: Config = {
           DEFAULT: "#2563EB",
         },
       },
+      boxShadow: {
+        soft: "0 1px 3px rgba(1, 5, 18, 0.08)",
+      },
     },
   },
   plugins: [],
