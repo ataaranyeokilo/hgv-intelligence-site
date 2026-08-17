@@ -87,7 +87,11 @@ export function ContactForm() {
       {result === "error" ? (
         <p className="text-sm text-red-600">Something went wrong. Please try again.</p>
       ) : null}
-      <Button type="submit" disabled={isPending}>
+      <Button
+        type="submit"
+        disabled={isPending}
+        className="w-full !bg-fleetSignal !text-white hover:!bg-blue-700 sm:w-auto"
+      >
         {isPending ? "Sending…" : "Send message"}
       </Button>
     </form>
