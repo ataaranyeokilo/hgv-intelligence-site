@@ -30,7 +30,7 @@ export function WeeklyReportsPitchSection({
         </h2>
         <div className="mt-4 max-w-2xl space-y-3 text-sm leading-relaxed text-neutral-600 sm:text-base">
           <p>
-            Each week we publish a structured Excel report of newly registered
+            Each week we publish a structured report of newly registered
             HGV operators from the previous seven days — companies whose operator
             licence applications have been approved, enriched with contact details
             where available so your team can reach them directly.

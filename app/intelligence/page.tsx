@@ -8,7 +8,7 @@ import { IntelligenceUnlocksSection } from "@/components/intelligence/Intelligen
 export const metadata: Metadata = {
   title: "Intelligence",
   description:
-    "Request a quote for enriched UK HGV operator intelligence — direct contacts and company data in Excel.",
+    "Request a quote for enriched UK HGV operator intelligence — direct contacts and company data in a CRM-friendly format.",
 };
 
 export default function IntelligencePage() {

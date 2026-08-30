@@ -25,13 +25,13 @@ const sideFeatures = [
     Icon: IconShield,
   },
   {
-    title: "Excel-first delivery",
+    title: "CRM-friendly format",
     description:
       "Clean, structured files ready to import into CRM or dialling software.",
     Icon: IconFile,
   },
   {
-    title: "Built for sales teams",
+    title: "Ideal for sales teams",
     description:
       "Designed to save time and help commercial teams focus on quality conversations.",
     Icon: IconUsers,
@@ -69,8 +69,8 @@ export function AboutHero() {
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-blue-100/85 sm:text-lg">
               Fleet Signal turns official UK HGV operator information into
-              structured reports that help sales teams identify relevant
-              transport businesses faster.
+              structured enriched reports. Helping the people who need this
+              information find it faster than the competition.
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <ButtonLink

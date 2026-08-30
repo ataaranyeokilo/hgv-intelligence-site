@@ -14,7 +14,7 @@ import { WhoItsFor } from "@/components/sections/home/WhoItsFor";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Fleet Signal operator data built for commercial teams — official UK sources, weekly Excel delivery.",
+    "Fleet Signal operator data built for commercial teams — official UK sources, weekly CRM-friendly delivery.",
 };
 
 export default function AboutPage() {

@@ -39,7 +39,7 @@ export function useIntelligenceDownload(): IntelligenceDownloadContextValue {
 const weeklySampleContent: DownloadGateModalContent = {
   title: "Download sample report",
   description:
-    "Enter your work email to receive a verification link for the redacted weekly operator Excel sample.",
+    "Enter your work email to receive a verification link for the redacted weekly operator sample.",
   source: "weekly_sample",
   emailSubject: WEEKLY_SAMPLE_EMAIL_SUBJECT,
   submitLabel: "Download sample report",

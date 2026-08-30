@@ -27,8 +27,8 @@ export function Footer() {
           <div>
             <SiteLogo className="h-10 w-auto sm:h-12" />
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-neutral-600">
-              Weekly HGV operator leads and free industry reports for UK
-              transport sales teams.
+              Providing expert insight and actionable intelligence centred
+              around the UK road transport industry.
             </p>
           </div>
           {linkColumns.map((column, index) => (

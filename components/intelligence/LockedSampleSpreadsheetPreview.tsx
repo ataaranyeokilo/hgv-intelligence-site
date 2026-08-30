@@ -29,7 +29,7 @@ export function LockedSampleSpreadsheetPreview() {
           Contact details unlocked on your quote
         </p>
         <p className="mt-1 max-w-sm text-xs leading-relaxed text-neutral-600">
-          Direct emails and phone numbers for every operator in your filter.
+          Direct phone numbers for every operator in your filter.
         </p>
       </div>
     </div>

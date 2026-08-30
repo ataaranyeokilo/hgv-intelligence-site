@@ -10,7 +10,7 @@ const bullets = [
   "Real operator registrations",
   "Deduplicated and organised records",
   "No customer portal required",
-  "Excel-ready structure",
+  "CRM-friendly format",
 ];
 
 export function IntelligenceSamplePreviewSection() {

@@ -1,18 +1,11 @@
 import {
   IconBuilding,
   IconFile,
-  IconMail,
   IconPhone,
 } from "@/components/ui/icons";
 import { pageContainerClass } from "@/lib/layout";
 
 const unlocks = [
-  {
-    title: "Direct email",
-    description:
-      "Verified, role-level emails rather than generic info@ inboxes.",
-    Icon: IconMail,
-  },
   {
     title: "Direct phone number",
     description: "Landline and mobile where available, so calls actually connect.",
@@ -25,9 +18,9 @@ const unlocks = [
     Icon: IconBuilding,
   },
   {
-    title: "Excel-ready delivery",
+    title: "CRM-friendly format",
     description:
-      "One clean file you can import straight into CRM or dialling software.",
+      "A structured file you can import straight into CRM or dialling software.",
     Icon: IconFile,
   },
 ];
@@ -46,7 +39,7 @@ export function IntelligenceUnlocksSection() {
           Research reports show where the market is moving. Intelligence gives
           you the operator records and contact details to act on it.
         </p>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {unlocks.map(({ title, description, Icon }) => (
             <article
               key={title}

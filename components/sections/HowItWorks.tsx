@@ -17,7 +17,7 @@ export const homeHowItWorksSteps: HowItWorksStep[] = [
   },
   {
     title: "Deliver",
-    description: "Customers receive a clean weekly Excel report.",
+    description: "Customers receive a clean weekly report.",
   },
 ];
 
@@ -35,7 +35,7 @@ export const aboutHowItWorksSteps: HowItWorksStep[] = [
   {
     title: "Deliver",
     description:
-      "Every Monday customers receive a clean Excel report ready for filtering and outreach.",
+      "Every Monday customers receive a clean report ready for filtering and outreach.",
   },
 ];
 

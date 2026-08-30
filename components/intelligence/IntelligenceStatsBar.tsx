@@ -7,8 +7,8 @@ const barGradient = [
 ].join(", ");
 
 const stats = [
-  { value: "24", label: "Enriched fields per operator" },
-  { value: "180+", label: "Newly licensed operators each week" },
+  { value: "Scored", label: "Leads ranked so you can prioritise outreach" },
+  { value: "200+", label: "Newly licensed operators each week" },
   { value: "48h", label: "Typical delivery after quote accepted" },
 ];
 

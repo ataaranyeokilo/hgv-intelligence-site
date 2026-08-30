@@ -15,10 +15,13 @@ export function IntelligenceHero() {
             <h1 className="mt-3 max-w-xl text-3xl font-semibold leading-[1.1] tracking-tight text-neutral-900 sm:text-4xl">
               Newly licensed operators — and the people to call
             </h1>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg">
-              Fleet Signal Intelligence is a structured Excel file of new UK HGV
-              operators, enriched with direct contact details so commercial
-              teams can reach the right people sooner.
+            <p className="mt-4 max-w-xl text-base font-medium leading-relaxed text-neutral-800 sm:text-lg">
+              Fleet Signal Intelligence — stay ahead of the market.
+            </p>
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg">
+              Fleet Signal Intelligence is our trademark weekly enriched report
+              of new and growing UK HGV operators, enriched with direct contact
+              details so commercial teams can reach the right people sooner.
             </p>
             <div className="mt-6">
               <ButtonLink

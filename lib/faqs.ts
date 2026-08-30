@@ -7,7 +7,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "What is Fleet Signal?",
     answer:
-      "Fleet Signal turns official UK HGV operator licence data into intelligence for commercial teams. We publish free industry reports and paid weekly Excel files of newly licensed operators.",
+      "Fleet Signal turns official UK HGV operator licence data into intelligence for commercial teams. We publish free industry reports and paid weekly reports of newly licensed operators.",
   },
   {
     question: "What information does Fleet Signal monitor?",
@@ -47,7 +47,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "What is the difference between free and paid reports?",
     answer:
-      "Free reports show where the market is moving. Paid reports are weekly Excel files of newly licensed operators with enriched contact details so you can act on it.",
+      "Free reports show where the market is moving. Paid reports are weekly reports of newly licensed operators with enriched contact details so you can act on it.",
   },
   {
     question: "Do I need an account to download a report?",

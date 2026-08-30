@@ -11,7 +11,7 @@ const checklistItems = [
   "Fleet size",
   "Region & postcode",
   "Contact details where available",
-  "Excel format",
+  "CRM-friendly format",
 ];
 
 export function AboutCustomersReceiveSection() {

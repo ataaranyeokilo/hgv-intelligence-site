@@ -22,7 +22,7 @@ export function ExploreAllIntelligenceReports({
     >
       <div className={`${pageContainerClass} py-12 sm:py-14`}>
         <Heading className="text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl">
-          Explore all intelligence reports
+          Explore all research
         </Heading>
         <p className="mt-3 max-w-2xl text-sm text-neutral-600 sm:text-base">
           Browse the latest published reports across different categories.

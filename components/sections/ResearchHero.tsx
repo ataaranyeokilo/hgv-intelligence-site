@@ -33,7 +33,7 @@ export function ResearchHero() {
             Research
           </p>
           <h1 className="mt-3 text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl">
-            Free HGV industry reports
+            Where the market is growing and going
           </h1>
           <p className="mt-3 max-w-lg text-sm leading-relaxed text-white sm:text-base">
             Original statistics, regional analysis, and expert commentary on the

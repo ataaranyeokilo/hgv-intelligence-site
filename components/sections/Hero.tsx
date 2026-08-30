@@ -133,7 +133,7 @@ export function HomeSampleCta({
             See the data before you subscribe
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-neutral-300 sm:text-base">
-            Download a redacted sample Excel report to review fields, layout,
+            Download a redacted sample report to review fields, layout,
             and data quality before you request a quote.
           </p>
         </div>

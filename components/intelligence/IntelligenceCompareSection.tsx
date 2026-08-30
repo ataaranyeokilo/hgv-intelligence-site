@@ -17,10 +17,9 @@ const freeItems = [
 
 const paidItems = [
   "Company-level records, filtered to your market",
-  "Direct email",
   "Direct phone number",
   "Corporate intelligence",
-  "Excel-ready delivery",
+  "CRM-friendly format",
 ];
 
 export function IntelligenceCompareSection() {
