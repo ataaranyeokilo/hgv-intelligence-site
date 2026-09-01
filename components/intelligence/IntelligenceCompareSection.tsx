@@ -2,12 +2,6 @@ import { ButtonLink } from "@/components/ui/Button";
 import { IconCheck } from "@/components/ui/icons";
 import { pageContainerClass } from "@/lib/layout";
 
-/** Same near-black navy bloom as the Intelligence stats bar. */
-const sectionGradient = [
-  "radial-gradient(60% 180% at 100% 0%, rgba(30,111,240,0.7) 0%, rgba(1,72,206,0.4) 32%, rgba(1,35,119,0.14) 55%, transparent 72%)",
-  "linear-gradient(90deg, #010512 0%, #010719 45%, #001240 72%, #012377 88%, #0033A1 100%)",
-].join(", ");
-
 const freeItems = [
   "Market-level trends and volumes",
   "Regional analysis and commentary",
@@ -24,9 +18,7 @@ const paidItems = [
 
 export function IntelligenceCompareSection() {
   return (
-    <section
-      style={{ backgroundColor: "#010512", backgroundImage: sectionGradient }}
-    >
+    <section className="bg-white">
       <div className={`${pageContainerClass} py-12 sm:py-14`}>
         <div className="grid gap-6 lg:grid-cols-2">
           <article className="flex flex-col rounded-sm border border-neutral-200 bg-white p-6 sm:p-8">
