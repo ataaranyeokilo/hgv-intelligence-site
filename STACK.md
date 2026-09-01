@@ -78,14 +78,16 @@ The app reads **`RESEND_API_KEY`** and **`EMAIL_FROM`** only (via [`lib/email/re
 - Marketing pages are Server Components where practical; forms use Server Actions.
 - `/intelligence` — weekly pitch + free report library; sample section uses `#sample-download`. `/weekly-reports` redirects to that anchor (legacy).
 - Report downloads use one **email verification modal** on `/intelligence` and on `/intelligence/[slug]`; `/download/intelligence/[slug]` redirects to the article with `?download=1`.
-- Published intelligence reports are read with the Supabase **anon** key and RLS.
+- Published intelligence reports are read with the Supabase **anon** key and RLS (`status = 'published'`).
 - Download flow: email → Postgres lead + token → Resend verification link → verify RPC → **signed Storage URL** (service role, server-only).
+- Report analytics: anonymous `report_events` rows (`viewed`, `clicked`, `download_started`). No personal data. Admin reads via service role.
 
 # Admin behaviour
 
 - Session via Supabase Auth + `@supabase/ssr` middleware cookie refresh.
 - Only the email in `ADMIN_EMAIL` may access `/admin/*`.
 - Mutations and Storage uploads use `SUPABASE_SERVICE_ROLE_KEY` on the server after the admin session check.
+- Report statuses are `draft`, `published`, and `archived`. Unpublish returns a report to draft. Archive keeps the row and file.
 
 # Local development
 

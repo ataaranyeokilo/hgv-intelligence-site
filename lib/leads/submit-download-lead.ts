@@ -65,6 +65,11 @@ export async function submitDownloadLead(input: {
       return "error";
     }
 
+    if (input.source === "intelligence_report" && input.reportId) {
+      const { recordReportEvent } = await import("@/lib/reports/events");
+      await recordReportEvent(input.reportId, "download_started");
+    }
+
     return "success";
   } catch (cause) {
     console.error("[submitDownloadLead] uncaught:", cause);

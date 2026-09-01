@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { IntelligenceReportDownloadActions } from "@/components/intelligence/IntelligenceReportDownloadActions";
 import { categoryBadgeLabel, pageContainerClass } from "@/lib/layout";
+import { recordReportEvent } from "@/lib/reports/events";
 import { getPublishedReportBySlug } from "@/lib/reports/queries";
 
 type ReportPageProps = {
@@ -46,6 +47,8 @@ export default async function IntelligenceReportPage({
   if (!report) {
     notFound();
   }
+
+  await recordReportEvent(report.id, "viewed");
 
   const keyFindings = report.content.key_findings ?? [];
 
@@ -94,7 +97,7 @@ export default async function IntelligenceReportPage({
       </article>
       <div className={`${pageContainerClass} py-8`}>
         <Link
-          href="/intelligence"
+          href="/research"
           className="text-sm font-medium text-neutral-600 hover:text-neutral-900"
         >
           ← All reports

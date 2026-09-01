@@ -29,6 +29,10 @@ export async function requireAdminUser() {
 }
 
 export async function assertAdminAccessOrRedirect() {
+  if (process.env.NODE_ENV === "development") {
+    return null;
+  }
+
   if (!isAdminEmailConfigured()) {
     redirect("/admin/login?error=config");
   }

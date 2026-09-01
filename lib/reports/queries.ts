@@ -1,12 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/env";
 
-import type {
-  IntelligenceReport,
-  IntelligenceReportListItem,
-} from "./types";
+import { isReportStatus, type IntelligenceReport, type IntelligenceReportListItem } from "./types";
 
 function mapReportRow(row: Record<string, unknown>): IntelligenceReport {
+  const statusValue = String(row.status ?? "");
+  const published = Boolean(row.published) || statusValue === "published";
+
   return {
     id: String(row.id),
     slug: String(row.slug),
@@ -15,7 +15,12 @@ function mapReportRow(row: Record<string, unknown>): IntelligenceReport {
     summary: String(row.summary),
     reading_time_minutes: Number(row.reading_time_minutes),
     published_at: String(row.published_at),
-    published: Boolean(row.published),
+    published,
+    status: isReportStatus(statusValue)
+      ? statusValue
+      : published
+        ? "published"
+        : "draft",
     content: (row.content ?? {}) as IntelligenceReport["content"],
     hero_image_path: row.hero_image_path ? String(row.hero_image_path) : null,
     download_storage_path: row.download_storage_path
@@ -31,13 +36,24 @@ export async function listPublishedReports(): Promise<
     return [];
   }
 
+  const publishedSelect =
+    "id, slug, title, category, summary, reading_time_minutes, published_at";
+
   const supabase = await createClient();
+
+  const byStatus = await supabase
+    .from("intelligence_reports")
+    .select(publishedSelect)
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
+
+  if (!byStatus.error && byStatus.data) {
+    return byStatus.data as IntelligenceReportListItem[];
+  }
 
   const { data, error } = await supabase
     .from("intelligence_reports")
-    .select(
-      "id, slug, title, category, summary, reading_time_minutes, published_at",
-    )
+    .select(publishedSelect)
     .eq("published", true)
     .order("published_at", { ascending: false });
 
@@ -57,12 +73,23 @@ export async function getPublishedReportBySlug(
 
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const byStatus = await supabase
     .from("intelligence_reports")
     .select("*")
     .eq("slug", slug)
-    .eq("published", true)
+    .eq("status", "published")
     .maybeSingle();
+
+  const resolved = !byStatus.error
+    ? byStatus
+    : await supabase
+        .from("intelligence_reports")
+        .select("*")
+        .eq("slug", slug)
+        .eq("published", true)
+        .maybeSingle();
+
+  const { data, error } = resolved;
 
   if (error || !data) {
     return null;

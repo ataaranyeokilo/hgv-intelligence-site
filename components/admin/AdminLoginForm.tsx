@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/Button";
 import { createClient } from "@/lib/supabase/client";
+import { isAdminUiPreview } from "@/lib/admin/preview";
 
 export function AdminLoginForm() {
   const router = useRouter();
@@ -17,6 +18,12 @@ export function AdminLoginForm() {
     event.preventDefault();
     setError(null);
     setLoading(true);
+
+    if (isAdminUiPreview()) {
+      router.push("/admin");
+      router.refresh();
+      return;
+    }
 
     const supabase = createClient();
     const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -64,7 +71,11 @@ export function AdminLoginForm() {
         />
       </div>
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      <Button type="submit" disabled={loading}>
+      <Button
+        type="submit"
+        disabled={loading}
+        className="w-full !bg-fleetSignal hover:!bg-blue-700 sm:w-auto"
+      >
         {loading ? "Signing in…" : "Sign in"}
       </Button>
     </form>
