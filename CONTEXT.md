@@ -41,7 +41,8 @@ Weekly Excel files with new UK HGV operator leads (company, fleet, licence, enri
 | `/about` | Trust |
 | `/faqs` | Frequently asked questions |
 | `/contact` | Contact form |
-| `/admin` | Private CMS (single administrator) |
+| `/admin` | Private CMS (single administrator; login required in production) |
+| `/admin-preview` | Public UI mock of Overview / Reports / Intelligence. Sample data only, no login. Not linked from the navbar. |
 
 # Customer journey
 
@@ -71,6 +72,8 @@ Permanent delete is not the normal admin workflow. The current Delete control sh
 # Admin
 
 One Supabase Auth user, matched to `ADMIN_EMAIL` on the server. `/admin` is not linked from the public navbar or footer.
+
+`/admin-preview` (and `/admin-preview/reports`, `/admin-preview/intelligence`) is a no-login mock of the admin screens for sharing with a client. It uses sample data, does not write to Supabase, and is marked `noindex`. Production `/admin` still requires login.
 
 Admin can:
 

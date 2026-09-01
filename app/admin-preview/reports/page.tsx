@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 import { AdminReportsLibrary } from "@/components/admin/AdminReportsLibrary";
 
 export const metadata: Metadata = {
-  title: "Admin — Reports",
+  title: "Admin preview — Reports",
   robots: { index: false, follow: false },
 };
 
-export default function AdminReportsPage() {
+export default function AdminPreviewReportsPage() {
   return <AdminReportsLibrary />;
 }

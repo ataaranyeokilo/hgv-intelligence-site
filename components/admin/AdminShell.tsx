@@ -7,7 +7,7 @@ import { signOutAdmin } from "@/lib/admin/reports";
 import { isAdminUiPreview } from "@/lib/admin/preview";
 import { pageContainerClass } from "@/lib/layout";
 
-const adminNav = [
+const defaultNav = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/reports", label: "Reports" },
   { href: "/admin/intelligence", label: "Intelligence" },
@@ -15,18 +15,28 @@ const adminNav = [
 
 type AdminShellProps = {
   children: React.ReactNode;
+  basePath?: string;
+  preview?: boolean;
 };
 
-function isActive(pathname: string, href: string): boolean {
-  if (href === "/admin") {
-    return pathname === "/admin";
+function isActive(pathname: string, href: string, basePath: string): boolean {
+  if (href === basePath) {
+    return pathname === basePath;
   }
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function AdminShell({ children }: AdminShellProps) {
+export function AdminShell({
+  children,
+  basePath = "/admin",
+  preview,
+}: AdminShellProps) {
   const pathname = usePathname();
-  const preview = isAdminUiPreview();
+  const isPreview = preview ?? isAdminUiPreview();
+  const adminNav = defaultNav.map((item) => ({
+    ...item,
+    href: item.href === "/admin" ? basePath : `${basePath}${item.href.slice("/admin".length)}`,
+  }));
 
   return (
     <div className="min-h-screen bg-white">
@@ -35,7 +45,7 @@ export function AdminShell({ children }: AdminShellProps) {
           className={`${pageContainerClass} flex flex-col gap-4 py-5 sm:flex-row sm:items-center sm:justify-between`}
         >
           <div className="flex flex-wrap items-center gap-x-10 gap-y-3">
-            <Link href="/admin" className="leading-none">
+            <Link href={basePath} className="leading-none">
               <span className="block text-base font-semibold tracking-tight text-white">
                 Fleet Signal
               </span>
@@ -45,7 +55,9 @@ export function AdminShell({ children }: AdminShellProps) {
             </Link>
             <nav aria-label="Admin" className="flex gap-8 text-sm sm:text-base">
               {adminNav.map((item) => {
-                const active = pathname ? isActive(pathname, item.href) : false;
+                const active = pathname
+                  ? isActive(pathname, item.href, basePath)
+                  : false;
                 return (
                   <Link
                     key={item.href}
@@ -66,7 +78,7 @@ export function AdminShell({ children }: AdminShellProps) {
             <Link href="/" className="text-blue-100 hover:text-white">
               View website
             </Link>
-            {preview ? null : (
+            {isPreview ? null : (
               <form action={signOutAdmin}>
                 <button
                   type="submit"
@@ -79,7 +91,7 @@ export function AdminShell({ children }: AdminShellProps) {
           </div>
         </div>
       </header>
-      {preview ? (
+      {isPreview ? (
         <p className="border-b border-neutral-200 bg-neutral-50 py-2 text-center text-xs text-neutral-500">
           UI preview with sample data. Saving is not connected yet.
         </p>
