@@ -3,6 +3,7 @@ import {
   IconFile,
   IconPhone,
 } from "@/components/ui/icons";
+import { LockedSampleSpreadsheetPreview } from "@/components/intelligence/LockedSampleSpreadsheetPreview";
 import { pageContainerClass } from "@/lib/layout";
 
 const unlocks = [
@@ -28,18 +29,23 @@ const unlocks = [
 export function IntelligenceUnlocksSection() {
   return (
     <section id="what-you-unlock" className="scroll-mt-20 border-b border-neutral-200">
-      <div className={`${pageContainerClass} py-12 sm:py-14`}>
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
-          What you unlock
-        </p>
-        <h2 className="mt-3 text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl">
-          Everything the free reports leave out
-        </h2>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-600 sm:text-base">
-          Research reports show where the market is moving. Intelligence gives
-          you the operator records and contact details to act on it.
-        </p>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className={`${pageContainerClass} py-16 sm:py-20`}>
+        <div className="grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+              What you unlock
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl">
+              Everything the free reports leave out
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-600 sm:text-base">
+              Research reports show where the market is moving. Intelligence gives
+              you the operator records and contact details to act on it.
+            </p>
+          </div>
+          <LockedSampleSpreadsheetPreview />
+        </div>
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {unlocks.map(({ title, description, Icon }) => (
             <article
               key={title}

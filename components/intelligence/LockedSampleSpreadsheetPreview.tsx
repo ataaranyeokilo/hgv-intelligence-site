@@ -4,7 +4,7 @@ import { WeeklySampleSpreadsheetPreview } from "@/components/reports/WeeklySampl
 export function LockedSampleSpreadsheetPreview() {
   return (
     <div className="relative overflow-hidden rounded-sm">
-      <div className="max-h-[16rem] overflow-hidden sm:max-h-[18rem]">
+      <div className="max-h-[18rem] overflow-hidden sm:max-h-[22rem]">
         <WeeklySampleSpreadsheetPreview />
       </div>
       <div
