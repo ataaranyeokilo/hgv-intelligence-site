@@ -6,11 +6,14 @@ import {
   useEffect,
   useRef,
   useState,
+  type PointerEvent,
   type ReactNode,
 } from "react";
 
 const AUTO_ADVANCE_MS = 5000;
 const CARD_GAP_PX = 24;
+const SWIPE_LOCK_PX = 8;
+const SWIPE_THRESHOLD_PX = 48;
 
 function ChevronIcon({ direction }: { direction: "left" | "right" }) {
   return (
@@ -37,11 +40,22 @@ export function FeaturedReportsScroller({
 }: FeaturedReportsScrollerProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    dragging: boolean;
+  } | null>(null);
+  const dragOffsetRef = useRef(0);
+  const skipClickRef = useRef(false);
+  const goNextRef = useRef<() => void>(() => {});
+  const goPrevRef = useRef<() => void>(() => {});
   const [index, setIndex] = useState(0);
   const [animate, setAnimate] = useState(true);
   const [paused, setPaused] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [stepPx, setStepPx] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
 
   const items = Children.toArray(children);
   const loopEnabled = itemCount > 1;
@@ -120,6 +134,40 @@ export function FeaturedReportsScroller({
     setIndex((current) => current - 1);
   }, [index, itemCount, loopEnabled]);
 
+  goNextRef.current = goNext;
+  goPrevRef.current = goPrev;
+
+  const finishDrag = useCallback(
+    (event: PointerEvent<HTMLDivElement>) => {
+      const drag = dragRef.current;
+      if (!drag || event.pointerId !== drag.pointerId) return;
+
+      const offset = dragOffsetRef.current;
+      const threshold = Math.max(SWIPE_THRESHOLD_PX, stepPx * 0.2);
+      dragRef.current = null;
+      dragOffsetRef.current = 0;
+      setDragOffset(0);
+
+      if (drag.dragging) {
+        skipClickRef.current = true;
+        setAnimate(true);
+        if (offset <= -threshold) {
+          goNextRef.current();
+        } else if (offset >= threshold) {
+          goPrevRef.current();
+        }
+        try {
+          event.currentTarget.releasePointerCapture(event.pointerId);
+        } catch {
+          // Capture may already be released.
+        }
+      }
+
+      setPaused(false);
+    },
+    [stepPx],
+  );
+
   useEffect(() => {
     if (!loopEnabled || paused || reduceMotion || stepPx === 0) return;
     const timer = window.setInterval(goNext, AUTO_ADVANCE_MS);
@@ -130,7 +178,7 @@ export function FeaturedReportsScroller({
 
   const showControls = loopEnabled;
   const transitionClass =
-    animate && !reduceMotion
+    animate && !reduceMotion && dragOffset === 0
       ? "transition-transform duration-500 ease-in-out"
       : "";
 
@@ -167,13 +215,63 @@ export function FeaturedReportsScroller({
         }
       }}
     >
-      <div ref={viewportRef} className="overflow-hidden">
+      <div
+        ref={viewportRef}
+        className="touch-pan-y overflow-hidden"
+        onPointerDown={(event) => {
+          if (!loopEnabled || event.button !== 0) return;
+          skipClickRef.current = false;
+          dragRef.current = {
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startY: event.clientY,
+            dragging: false,
+          };
+          setPaused(true);
+        }}
+        onPointerMove={(event) => {
+          const drag = dragRef.current;
+          if (!drag || event.pointerId !== drag.pointerId) return;
+
+          const dx = event.clientX - drag.startX;
+          const dy = event.clientY - drag.startY;
+
+          if (!drag.dragging) {
+            if (Math.abs(dx) < SWIPE_LOCK_PX) return;
+            if (Math.abs(dx) < Math.abs(dy)) {
+              dragRef.current = null;
+              setPaused(false);
+              return;
+            }
+            drag.dragging = true;
+            setAnimate(false);
+            try {
+              event.currentTarget.setPointerCapture(event.pointerId);
+            } catch {
+              // Capture is optional; swipe still works from move/up events.
+            }
+          }
+
+          dragOffsetRef.current = dx;
+          setDragOffset(dx);
+        }}
+        onPointerUp={finishDrag}
+        onPointerCancel={finishDrag}
+        onClickCapture={(event) => {
+          if (!skipClickRef.current) return;
+          event.preventDefault();
+          event.stopPropagation();
+          skipClickRef.current = false;
+        }}
+      >
         <div
           ref={trackRef}
           className={`flex gap-6 ${transitionClass}`}
           style={{
             transform:
-              stepPx > 0 ? `translateX(-${index * stepPx}px)` : undefined,
+              stepPx > 0
+                ? `translateX(${-index * stepPx + dragOffset}px)`
+                : undefined,
           }}
         >
           {trackItems}

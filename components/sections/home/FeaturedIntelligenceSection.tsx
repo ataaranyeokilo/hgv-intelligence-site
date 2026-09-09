@@ -39,7 +39,7 @@ export async function FeaturedIntelligenceSection() {
           </Link>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 -mr-6 sm:mr-0">
           <IntelligenceDownloadProvider>
             <FeaturedReportsScroller itemCount={itemCount}>
               {showPlaceholders
