@@ -18,14 +18,14 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white">
-      <div className={`${pageContainerClass} flex items-center justify-between gap-4 py-5`}>
-        <Link href="/" className="inline-flex shrink-0 items-center">
-          <SiteLogo className="h-12 w-auto sm:h-14" />
+      <div className={`${pageContainerClass} flex items-center justify-between gap-3 py-4 sm:gap-4 sm:py-5`}>
+        <Link href="/" className="inline-flex min-w-0 items-center">
+          <SiteLogo className="h-auto max-h-8 w-auto max-w-full sm:max-h-12 lg:max-h-14" />
         </Link>
 
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-sm border border-neutral-200 px-3 py-2 text-sm font-medium text-neutral-700 sm:hidden"
+          className="inline-flex shrink-0 items-center justify-center rounded-sm border border-neutral-200 px-3 py-2 text-sm font-medium text-neutral-700 sm:hidden"
           aria-expanded={menuOpen}
           aria-controls="main-navigation"
           onClick={() => setMenuOpen((open) => !open)}

@@ -20,7 +20,7 @@ export function SiteLogo({ className = "", variant = "header" }: SiteLogoProps) 
       alt={SITE_NAME}
       width={width}
       height={height}
-      className={className}
+      className={`max-w-full ${className}`.trim()}
       decoding="async"
     />
   );
