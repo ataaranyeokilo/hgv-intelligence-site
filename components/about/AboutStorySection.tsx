@@ -1,7 +1,7 @@
 import { pageContainerClass } from "@/lib/layout";
 
 const widerMarketAudiences = [
-  "Credit risk bureaux",
+  "Credit risk bureau",
   "Market researchers",
   "Transport newsletters and publications",
   "Other hauliers",
