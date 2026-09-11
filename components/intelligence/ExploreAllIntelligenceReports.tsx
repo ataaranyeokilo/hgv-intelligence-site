@@ -20,7 +20,7 @@ export function ExploreAllIntelligenceReports({
       id="research-reports"
       className="scroll-mt-20 border-b border-neutral-200"
     >
-      <div className={`${pageContainerClass} py-12 sm:py-14`}>
+      <div className={`${pageContainerClass} pt-6 pb-12 sm:pt-8 sm:pb-14`}>
         <Heading className="text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl">
           Explore all research
         </Heading>

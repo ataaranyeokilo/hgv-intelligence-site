@@ -4,46 +4,41 @@ import { pageContainerClass } from "@/lib/layout";
 const heroFade =
   "linear-gradient(to right, #ffffff 0%, #ffffff 36%, #f4f7fb 58%, #eef3f8 100%)";
 
+const imageMask = {
+  WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 32%)",
+  WebkitMaskSize: "100% 100%",
+  WebkitMaskRepeat: "no-repeat",
+  maskImage: "linear-gradient(to right, transparent 0%, black 32%)",
+  maskSize: "100% 100%",
+  maskRepeat: "no-repeat",
+} as const;
+
 export function ResearchHero() {
   return (
     <section
-      className="relative flex min-h-[20rem] items-center overflow-hidden border-b border-neutral-200 bg-white sm:min-h-[24rem] lg:min-h-[28rem]"
+      className="relative overflow-hidden border-b border-neutral-200 bg-white"
       style={{ backgroundImage: heroFade }}
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-y-0 right-0 hidden w-[75%] sm:block lg:w-[70%]"
+        className="pointer-events-none relative ml-auto hidden w-[75%] sm:block lg:w-[70%]"
+        style={imageMask}
       >
-        <div className="absolute inset-0 flex justify-end">
-          <div
-            className="relative aspect-[1024/576] h-full w-auto max-w-full"
-            style={{
-              WebkitMaskImage:
-                "linear-gradient(to right, transparent 0%, black 32%)",
-              WebkitMaskSize: "100% 100%",
-              WebkitMaskRepeat: "no-repeat",
-              maskImage: "linear-gradient(to right, transparent 0%, black 32%)",
-              maskSize: "100% 100%",
-              maskRepeat: "no-repeat",
-            }}
-          >
-            <img
-              src="/images/research-hero.jpg?v=1"
-              alt=""
-              className="h-full w-full object-contain object-right"
-            />
-            <div
-              className="absolute inset-0 bg-gradient-to-r from-white from-0% via-white/90 via-[18%] to-transparent to-[36%]"
-              aria-hidden="true"
-            />
-          </div>
-        </div>
+        <img
+          src="/images/research-hero.jpg?v=1"
+          alt=""
+          className="block h-auto w-full"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-white from-0% via-white/90 via-[18%] to-transparent to-[36%]"
+        />
         <div
           className="absolute inset-0 bg-gradient-to-r from-white from-0% via-[#f4f7fb] via-[32%] to-transparent to-[62%]"
-          aria-hidden="true"
         />
       </div>
-      <div className={`relative z-10 ${pageContainerClass} w-full py-10 lg:py-12`}>
+      <div
+        className={`relative z-10 ${pageContainerClass} w-full py-10 sm:absolute sm:inset-0 sm:flex sm:items-center sm:py-0`}
+      >
         <div className="max-w-xl">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
             Research

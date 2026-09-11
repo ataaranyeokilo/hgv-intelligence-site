@@ -2,7 +2,6 @@
 
 import type { ComponentType } from "react";
 
-import { Button } from "@/components/ui/Button";
 import {
   IconBuilding,
   IconChart,
@@ -10,6 +9,11 @@ import {
   IconTruck,
 } from "@/components/ui/icons";
 import { useIntelligenceDownload } from "@/components/intelligence/IntelligenceDownloadProvider";
+import {
+  ReportCardExploreCue,
+  reportCardClassName,
+  reportCardHitTargetClassName,
+} from "@/components/reports/ReportCardExplore";
 import type { ReportLibraryPlaceholder } from "@/lib/intelligence/report-library-placeholders";
 import {
   reportCategoryIconKey,
@@ -40,7 +44,7 @@ export function IntelligenceReportPlaceholderCard({
   const Icon = iconByKey[iconKey] ?? IconChart;
 
   return (
-    <article className="flex h-full flex-col rounded-sm border border-neutral-200 bg-white p-5 shadow-card">
+    <article className={reportCardClassName}>
       <div className="flex items-start justify-between gap-3">
         <span className="inline-flex rounded-sm border border-neutral-200 bg-neutral-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-neutral-600 shadow-soft">
           Preview
@@ -57,14 +61,13 @@ export function IntelligenceReportPlaceholderCard({
         {item.summary}
       </p>
       <p className="mt-4 text-xs text-neutral-500">{item.dateLabel}</p>
-      <Button
+      <ReportCardExploreCue />
+      <button
         type="button"
-        variant="secondary"
-        className="mt-6 w-full text-sm"
+        className={reportCardHitTargetClassName}
         onClick={openWeeklySample}
-      >
-        Download sample
-      </Button>
+        aria-label={`Explore ${item.title}`}
+      />
     </article>
   );
 }

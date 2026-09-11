@@ -8,8 +8,9 @@ import { trackReportClick } from "@/lib/reports/events";
 type ReportLibraryLinkProps = {
   reportId: string;
   slug: string;
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
+  "aria-label"?: string;
 };
 
 export function ReportLibraryLink({
@@ -17,11 +18,13 @@ export function ReportLibraryLink({
   slug,
   children,
   className,
+  "aria-label": ariaLabel,
 }: ReportLibraryLinkProps) {
   return (
     <Link
       href={`/intelligence/${slug}`}
       className={className}
+      aria-label={ariaLabel}
       onClick={() => {
         void trackReportClick(reportId);
       }}

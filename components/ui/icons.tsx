@@ -500,6 +500,25 @@ export function IconArrowUpRight({ className }: IconProps) {
   );
 }
 
+export function IconArrowRight({ className }: IconProps) {
+  return (
+    <svg
+      className={iconClassName("h-4 w-4", className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M5 12h14M13 6l6 6-6 6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 /** Bullseye with a dart, for "sales-ready" messaging. */
 export function IconTargetArrow({
   className = "h-6 w-6",

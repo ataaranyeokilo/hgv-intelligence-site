@@ -1,4 +1,9 @@
 import { ReportLibraryLink } from "@/components/reports/ReportLibraryLink";
+import {
+  ReportCardExploreCue,
+  reportCardClassName,
+  reportCardHitTargetClassName,
+} from "@/components/reports/ReportCardExplore";
 import type { ComponentType } from "react";
 
 import {
@@ -39,7 +44,7 @@ export function IntelligenceReportCard({ report }: IntelligenceReportCardProps) 
   const badge = formatReportCategoryBadge(report.category);
 
   return (
-    <article className="flex h-full flex-col rounded-sm border border-neutral-200 bg-white p-5 shadow-card">
+    <article className={reportCardClassName}>
       <div className="flex items-start justify-between gap-3">
         <span className="inline-flex rounded-sm border border-neutral-200 bg-neutral-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-neutral-600 shadow-soft">
           {badge}
@@ -55,12 +60,14 @@ export function IntelligenceReportCard({ report }: IntelligenceReportCardProps) 
       <p className="mt-4 text-xs text-neutral-500">
         {formatReportMonthYear(report.published_at)}
       </p>
+      <ReportCardExploreCue />
       <ReportLibraryLink
         reportId={report.id}
         slug={report.slug}
-        className="mt-6 text-sm font-medium text-neutral-900 hover:text-neutral-600"
+        className={reportCardHitTargetClassName}
+        aria-label={`Explore ${report.title}`}
       >
-        View report →
+        <span className="sr-only">Explore {report.title}</span>
       </ReportLibraryLink>
     </article>
   );
