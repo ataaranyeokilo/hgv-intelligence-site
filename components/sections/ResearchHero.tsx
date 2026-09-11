@@ -16,28 +16,24 @@ const imageMask = {
 export function ResearchHero() {
   return (
     <section
-      className="relative overflow-hidden border-b border-neutral-200 bg-white"
+      className="relative overflow-hidden border-b border-neutral-200 bg-white sm:h-[20rem] lg:h-[22rem]"
       style={{ backgroundImage: heroFade }}
     >
       <div
         aria-hidden
-        className="pointer-events-none relative ml-auto hidden w-[75%] sm:block lg:w-[70%]"
+        className="pointer-events-none absolute inset-y-0 right-0 hidden w-[75%] sm:block lg:w-[70%]"
         style={imageMask}
       >
         <img
           src="/images/research-hero.jpg?v=1"
           alt=""
-          className="block h-auto w-full"
+          className="h-full w-full object-cover object-right"
         />
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-white from-0% via-white/90 via-[18%] to-transparent to-[36%]"
-        />
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-white from-0% via-[#f4f7fb] via-[32%] to-transparent to-[62%]"
-        />
+        <div className="absolute inset-0 bg-gradient-to-r from-white from-0% via-white/90 via-[18%] to-transparent to-[36%]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-white from-0% via-[#f4f7fb] via-[32%] to-transparent to-[62%]" />
       </div>
       <div
-        className={`relative z-10 ${pageContainerClass} w-full py-10 sm:absolute sm:inset-0 sm:flex sm:items-center sm:py-0`}
+        className={`relative z-10 ${pageContainerClass} flex h-full w-full items-center py-10 sm:py-0`}
       >
         <div className="max-w-xl">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
