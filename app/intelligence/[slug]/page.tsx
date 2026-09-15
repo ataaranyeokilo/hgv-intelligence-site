@@ -68,7 +68,7 @@ export default async function IntelligenceReportPage({
           showHeaderDownload={Boolean(spreadsheetPreview)}
           contentClassName={`${pageContainerClass} ${
             spreadsheetPreview
-              ? "max-w-6xl pt-8 pb-14 sm:pb-20"
+              ? "pt-8 pb-14 sm:pb-20"
               : "max-w-3xl py-14 sm:py-20"
           }`}
         >

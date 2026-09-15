@@ -1,3 +1,5 @@
+import { pageContainerClass } from "@/lib/layout";
+
 type PageHeaderProps = {
   title: string;
   description?: string;
@@ -6,7 +8,7 @@ type PageHeaderProps = {
 export function PageHeader({ title, description }: PageHeaderProps) {
   return (
     <header className="border-b border-neutral-200">
-      <div className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+      <div className={`${pageContainerClass} py-16 sm:py-20`}>
         <h1 className="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">
           {title}
         </h1>

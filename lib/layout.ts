@@ -1,4 +1,4 @@
-export const pageContainerClass = "mx-auto max-w-6xl px-6";
+export const pageContainerClass = "mx-auto w-full px-6";
 
 export function categoryBadgeLabel(category: string): string {
   const upper = category.toUpperCase();
