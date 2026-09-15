@@ -9,7 +9,7 @@ export async function recordReportEvent(
   reportId: string,
   eventType: ReportEventType,
 ): Promise<void> {
-  if (!hasSupabaseEnv() || !reportId) {
+  if (!hasSupabaseEnv() || !reportId || reportId.startsWith("dev-")) {
     return;
   }
 

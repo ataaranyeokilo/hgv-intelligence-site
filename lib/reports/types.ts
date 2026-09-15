@@ -1,7 +1,12 @@
+import type { SpreadsheetPreview } from "@/lib/reports/spreadsheet-preview";
+
+export type { SpreadsheetPreview };
+
 export type ReportContent = {
   introduction?: string;
   key_findings?: string[];
   charts?: { title: string; description?: string }[];
+  spreadsheet_preview?: SpreadsheetPreview | null;
 };
 
 export const REPORT_STATUSES = ["draft", "published", "archived"] as const;

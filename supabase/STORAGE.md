@@ -4,7 +4,7 @@ Create these **private** buckets in the Supabase dashboard before using verified
 
 | Bucket | Purpose |
 | ------ | ------- |
-| `intelligence-downloads` | PDF/files linked from `intelligence_reports.download_storage_path` (e.g. `intelligence-downloads/report.pdf`) |
+| `intelligence-downloads` | PDF/Excel/CSV files linked from `intelligence_reports.download_storage_path` (e.g. `intelligence-downloads/report.xlsx`) |
 | `weekly-reports` | Sample Excel for weekly report downloads (path stored in `weekly_report_files`) |
 
 Signed download URLs require `SUPABASE_SERVICE_ROLE_KEY` on the Worker / `.env.local`.

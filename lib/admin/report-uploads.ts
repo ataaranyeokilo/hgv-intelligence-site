@@ -2,6 +2,11 @@
 
 import { requireAdminUser } from "@/lib/admin/auth";
 import { createServiceClient } from "@/lib/supabase/service";
+import {
+  isSpreadsheetFileName,
+  parseSpreadsheetPreviewFromBuffer,
+  type SpreadsheetPreview,
+} from "@/lib/reports/spreadsheet-preview";
 
 const INTELLIGENCE_BUCKET = "intelligence-downloads";
 const MAX_DOWNLOAD_BYTES = 20 * 1024 * 1024;
@@ -10,8 +15,19 @@ const DOWNLOAD_MIME_TYPES = new Set([
   "application/pdf",
   "application/msword",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "text/csv",
+  "application/csv",
 ]);
-const DOWNLOAD_EXTENSIONS = new Set(["pdf", "doc", "docx"]);
+const DOWNLOAD_EXTENSIONS = new Set([
+  "pdf",
+  "doc",
+  "docx",
+  "xlsx",
+  "xls",
+  "csv",
+]);
 const IMAGE_MIME_TYPES = new Set([
   "image/jpeg",
   "image/png",
@@ -40,7 +56,7 @@ function validateDownloadFile(file: File): string | null {
   const mimeOk = !file.type || DOWNLOAD_MIME_TYPES.has(file.type);
   const extensionOk = DOWNLOAD_EXTENSIONS.has(extension);
   if (!mimeOk && !extensionOk) {
-    return "Upload a PDF or Word document.";
+    return "Upload a PDF, Word, Excel, or CSV file.";
   }
   return null;
 }
@@ -63,7 +79,10 @@ function validateHeroImage(file: File): string | null {
 
 export async function uploadIntelligenceDownloadFile(
   formData: FormData,
-): Promise<{ ok: true; path: string } | { ok: false; message: string }> {
+): Promise<
+  | { ok: true; path: string; preview: SpreadsheetPreview | null }
+  | { ok: false; message: string }
+> {
   await requireAdminUser();
 
   const file = formData.get("file");
@@ -97,7 +116,11 @@ export async function uploadIntelligenceDownloadFile(
     return { ok: false, message: error.message };
   }
 
-  return { ok: true, path: `${INTELLIGENCE_BUCKET}/${objectName}` };
+  const preview = isSpreadsheetFileName(file.name)
+    ? await parseSpreadsheetPreviewFromBuffer(buffer, file.name)
+    : null;
+
+  return { ok: true, path: `${INTELLIGENCE_BUCKET}/${objectName}`, preview };
 }
 
 export async function uploadIntelligenceHeroImage(

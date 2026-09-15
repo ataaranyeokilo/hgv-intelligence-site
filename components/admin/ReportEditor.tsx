@@ -12,11 +12,15 @@ import {
   type AdminReportInput,
 } from "@/lib/admin/reports";
 import { isAdminUiPreview } from "@/lib/admin/preview";
+import type { SpreadsheetPreview } from "@/lib/reports/spreadsheet-preview";
 import type { ReportStatus } from "@/lib/reports/types";
 
 type ReportEditorProps = {
   reportId?: string;
-  initial?: Partial<AdminReportInput> & { fileName?: string };
+  initial?: Partial<AdminReportInput> & {
+    fileName?: string;
+    spreadsheetPreview?: SpreadsheetPreview | null;
+  };
 };
 
 function slugFromTitle(title: string): string {
@@ -46,6 +50,8 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
   const [downloadStoragePath, setDownloadStoragePath] = useState(
     initial?.downloadStoragePath ?? "",
   );
+  const [spreadsheetPreview, setSpreadsheetPreview] =
+    useState<SpreadsheetPreview | null>(initial?.spreadsheetPreview ?? null);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -88,6 +94,7 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
         }
         storagePath = upload.path;
         setDownloadStoragePath(upload.path);
+        setSpreadsheetPreview(upload.preview);
       }
 
       const publishedAt = period
@@ -109,6 +116,7 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
             : [""],
           downloadStoragePath: storagePath,
           heroImagePath: initial?.heroImagePath ?? "",
+          spreadsheetPreview,
         },
         reportId,
       );
@@ -162,7 +170,7 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
       </Field>
       <Field
         label="Report file"
-        hint="PDF or Word file. Visitors download this after verifying their email."
+        hint="PDF, Word, Excel, or CSV. Spreadsheets show a redacted 25-row preview on the public page. Visitors download the full file after verifying their email."
       >
         {fileName || downloadStoragePath ? (
           <p className="mt-2 text-sm text-neutral-500">
@@ -172,7 +180,7 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
         <input
           type="file"
           className={`${inputClass} file:mr-4 file:rounded-sm file:border-0 file:bg-neutral-100 file:px-3 file:py-2 file:text-sm`}
-          accept=".pdf,.doc,.docx,application/pdf"
+          accept=".pdf,.doc,.docx,.xlsx,.xls,.csv,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
           onChange={(event) => {
             const file = event.target.files?.[0] ?? null;
             setDownloadFile(file);

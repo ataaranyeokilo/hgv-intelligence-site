@@ -8,6 +8,7 @@ import {
   isAdminUiPreview,
 } from "@/lib/admin/preview";
 import { getAdminReport } from "@/lib/admin/reports";
+import type { SpreadsheetPreview } from "@/lib/reports/spreadsheet-preview";
 import { isReportStatus } from "@/lib/reports/types";
 
 type EditReportPageProps = {
@@ -53,6 +54,7 @@ export default async function AdminEditReportPage({ params }: EditReportPageProp
   const content = (report.content ?? {}) as {
     introduction?: string;
     key_findings?: string[];
+    spreadsheet_preview?: SpreadsheetPreview | null;
   };
 
   return (
@@ -75,6 +77,7 @@ export default async function AdminEditReportPage({ params }: EditReportPageProp
           keyFindings: content.key_findings ?? [""],
           downloadStoragePath: report.download_storage_path ?? "",
           heroImagePath: report.hero_image_path ?? "",
+          spreadsheetPreview: content.spreadsheet_preview ?? null,
         }}
       />
     </EditReportLayout>

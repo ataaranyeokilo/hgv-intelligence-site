@@ -7,6 +7,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 import {
   isReportStatus,
   type ReportStatus,
+  type SpreadsheetPreview,
 } from "@/lib/reports/types";
 
 export type AdminReportInput = {
@@ -21,6 +22,7 @@ export type AdminReportInput = {
   keyFindings: string[];
   downloadStoragePath: string;
   heroImagePath: string;
+  spreadsheetPreview?: SpreadsheetPreview | null;
 };
 
 export type AdminReportListItem = {
@@ -156,6 +158,7 @@ export async function saveAdminReport(
       introduction: input.introduction.trim(),
       key_findings: input.keyFindings.filter(Boolean),
       charts: [],
+      spreadsheet_preview: input.spreadsheetPreview ?? null,
     },
     updated_at: new Date().toISOString(),
   };

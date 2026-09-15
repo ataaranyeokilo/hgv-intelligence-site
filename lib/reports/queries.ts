@@ -2,6 +2,12 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/env";
 
 import { isReportStatus, type IntelligenceReport, type IntelligenceReportListItem } from "./types";
+import {
+  DEV_MASTER_REPORT_SLUG,
+  devMasterReport,
+  isDevMasterReportEnabled,
+  withDevMasterReport,
+} from "./dev-master-report";
 
 function mapReportRow(row: Record<string, unknown>): IntelligenceReport {
   const statusValue = String(row.status ?? "");
@@ -33,7 +39,7 @@ export async function listPublishedReports(): Promise<
   IntelligenceReportListItem[]
 > {
   if (!hasSupabaseEnv()) {
-    return [];
+    return withDevMasterReport([]);
   }
 
   const publishedSelect =
@@ -48,7 +54,7 @@ export async function listPublishedReports(): Promise<
     .order("published_at", { ascending: false });
 
   if (!byStatus.error && byStatus.data) {
-    return byStatus.data as IntelligenceReportListItem[];
+    return withDevMasterReport(byStatus.data as IntelligenceReportListItem[]);
   }
 
   const { data, error } = await supabase
@@ -58,16 +64,19 @@ export async function listPublishedReports(): Promise<
     .order("published_at", { ascending: false });
 
   if (error || !data) {
-    return [];
+    return withDevMasterReport([]);
   }
 
-  return data as IntelligenceReportListItem[];
+  return withDevMasterReport(data as IntelligenceReportListItem[]);
 }
 
 export async function getPublishedReportBySlug(
   slug: string,
 ): Promise<IntelligenceReport | null> {
   if (!hasSupabaseEnv()) {
+    if (isDevMasterReportEnabled() && slug === DEV_MASTER_REPORT_SLUG) {
+      return devMasterReport;
+    }
     return null;
   }
 
@@ -92,6 +101,9 @@ export async function getPublishedReportBySlug(
   const { data, error } = resolved;
 
   if (error || !data) {
+    if (isDevMasterReportEnabled() && slug === DEV_MASTER_REPORT_SLUG) {
+      return devMasterReport;
+    }
     return null;
   }
 

@@ -3,9 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { IntelligenceReportDownloadActions } from "@/components/intelligence/IntelligenceReportDownloadActions";
+import { ReportSpreadsheetPreview } from "@/components/reports/ReportSpreadsheetPreview";
 import { categoryBadgeLabel, pageContainerClass } from "@/lib/layout";
 import { recordReportEvent } from "@/lib/reports/events";
 import { getPublishedReportBySlug } from "@/lib/reports/queries";
+import { asSpreadsheetPreview } from "@/lib/reports/spreadsheet-preview";
 
 type ReportPageProps = {
   params: Promise<{ slug: string }>;
@@ -51,49 +53,73 @@ export default async function IntelligenceReportPage({
   await recordReportEvent(report.id, "viewed");
 
   const keyFindings = report.content.key_findings ?? [];
+  const spreadsheetPreview = asSpreadsheetPreview(
+    report.content.spreadsheet_preview,
+  );
+  const autoOpenDownload = download === "1";
 
   return (
     <>
       <article className="border-b border-neutral-200">
-        <div className={`${pageContainerClass} max-w-3xl py-14 sm:py-20`}>
-          <span className="inline-flex rounded-full bg-neutral-100 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-neutral-600">
-            {categoryBadgeLabel(report.category)}
-          </span>
-          <h1 className="mt-6 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">
-            {report.title}
-          </h1>
-          <p className="mt-4 text-sm text-neutral-500">
-            {formatPublishDate(report.published_at)} ·{" "}
-            {report.reading_time_minutes} min read
-          </p>
-          {report.content.introduction ? (
-            <p className="mt-10 text-lg leading-relaxed text-neutral-700">
-              {report.content.introduction}
+        <IntelligenceReportDownloadActions
+          reportId={report.id}
+          title={report.title}
+          autoOpenDownload={autoOpenDownload}
+          showHeaderDownload={Boolean(spreadsheetPreview)}
+          contentClassName={`${pageContainerClass} ${
+            spreadsheetPreview
+              ? "max-w-6xl pt-8 pb-14 sm:pb-20"
+              : "max-w-3xl py-14 sm:py-20"
+          }`}
+        >
+            <span className="inline-flex rounded-full bg-neutral-100 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-neutral-600">
+              {categoryBadgeLabel(report.category)}
+            </span>
+            <h1 className="mt-6 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">
+              {report.title}
+            </h1>
+            <p className="mt-4 text-sm text-neutral-500">
+              {formatPublishDate(report.published_at)}
+              {spreadsheetPreview
+                ? null
+                : ` · ${report.reading_time_minutes} min read`}
             </p>
-          ) : null}
-          {keyFindings.length > 0 ? (
-            <div className="mt-12 rounded-sm border border-neutral-200 bg-neutral-50 p-6 sm:p-8">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-neutral-500">
-                Key findings
-              </h2>
-              <ul className="mt-6 space-y-4">
-                {keyFindings.map((finding) => (
-                  <li
-                    key={finding}
-                    className="border-l-2 border-neutral-900 pl-4 text-neutral-800"
-                  >
-                    {finding}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-          <IntelligenceReportDownloadActions
-            reportId={report.id}
-            title={report.title}
-            autoOpenDownload={download === "1"}
-          />
-        </div>
+            {spreadsheetPreview ? (
+              <>
+                <p className="mt-8 text-lg leading-relaxed text-neutral-700">
+                  {report.summary}
+                </p>
+                <div className="mt-10">
+                  <ReportSpreadsheetPreview preview={spreadsheetPreview} />
+                </div>
+              </>
+            ) : (
+              <>
+                {report.content.introduction ? (
+                  <p className="mt-10 text-lg leading-relaxed text-neutral-700">
+                    {report.content.introduction}
+                  </p>
+                ) : null}
+                {keyFindings.length > 0 ? (
+                  <div className="mt-12 rounded-sm border border-neutral-200 bg-neutral-50 p-6 sm:p-8">
+                    <h2 className="text-sm font-semibold uppercase tracking-widest text-neutral-500">
+                      Key findings
+                    </h2>
+                    <ul className="mt-6 space-y-4">
+                      {keyFindings.map((finding) => (
+                        <li
+                          key={finding}
+                          className="border-l-2 border-neutral-900 pl-4 text-neutral-800"
+                        >
+                          {finding}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </>
+            )}
+          </IntelligenceReportDownloadActions>
       </article>
       <div className={`${pageContainerClass} py-8`}>
         <Link

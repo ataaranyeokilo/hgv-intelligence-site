@@ -17,8 +17,8 @@ export function AdminReportsLibrary() {
       gridHeading="On Research"
       currentLabel="Current file"
       currentHint="The last Research report file chosen on this page."
-      chooseHint="PDF or Word. This does not appear in Intelligence."
-      accept=".pdf,.doc,.docx,application/pdf"
+      chooseHint="PDF, Word, Excel, or CSV. This does not appear in Intelligence."
+      accept=".pdf,.doc,.docx,.xlsx,.xls,.csv,application/pdf"
       initialItems={initialItems}
       emptyMessage="No reports yet."
       uploadedBadge="Research report"
