@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { AutoStartDownload } from "@/components/download/AutoStartDownload";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Section } from "@/components/layout/Section";
 import { ButtonLink } from "@/components/ui/Button";
@@ -40,16 +41,23 @@ export default async function VerifyDownloadPage({
   const signedUrl = hasServiceRoleKey()
     ? await createSignedDownloadUrl(result.storagePath)
     : null;
+  const downloadHref =
+    signedUrl ??
+    (process.env.NODE_ENV === "development" ? "/download/dev-sample" : null);
 
   return (
     <>
       <PageHeader
         title="Email verified"
-        description="Your email is confirmed. You can download your file below."
+        description={
+          downloadHref
+            ? "Your download should start automatically. If it does not, use the button below."
+            : "Your email is confirmed. You can download your file below."
+        }
       />
       <Section bordered={false}>
-        {signedUrl ? (
-          <ButtonLink href={signedUrl}>Download now</ButtonLink>
+        {downloadHref ? (
+          <AutoStartDownload href={downloadHref} />
         ) : (
           <p className="text-sm leading-relaxed text-neutral-600">
             Your email is verified. File delivery requires storage configuration

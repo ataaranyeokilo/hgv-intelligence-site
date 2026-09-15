@@ -36,7 +36,7 @@ export async function createSignedDownloadUrl(
     const supabase = createServiceClient();
     const { data, error } = await supabase.storage
       .from(bucket)
-      .createSignedUrl(objectPath, expiresInSeconds);
+      .createSignedUrl(objectPath, expiresInSeconds, { download: true });
 
     if (error || !data?.signedUrl) {
       return null;

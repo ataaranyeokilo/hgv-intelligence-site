@@ -6,6 +6,16 @@ const TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
 
 export type SubmitDownloadLeadResult = "success" | "error";
 
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function asReportUuid(reportId: string | undefined): string | null {
+  if (!reportId) {
+    return null;
+  }
+  return UUID_RE.test(reportId) ? reportId : null;
+}
+
 function generateDownloadToken(): string {
   const bytes = crypto.getRandomValues(new Uint8Array(32));
   let binary = "";
@@ -38,13 +48,18 @@ export async function submitDownloadLead(input: {
     const normalizedEmail = input.email.trim().toLowerCase();
     const downloadToken = generateDownloadToken();
     const tokenExpiresAt = new Date(Date.now() + TOKEN_TTL_MS).toISOString();
+    const reportUuid = asReportUuid(input.reportId);
+    const leadSource =
+      input.source === "intelligence_report" && !reportUuid
+        ? "weekly_sample"
+        : input.source;
 
     const { error } = await supabase.rpc("upsert_download_lead", {
       p_email: normalizedEmail,
       p_token: downloadToken,
       p_expires_at: tokenExpiresAt,
-      p_source: input.source,
-      p_report_id: input.reportId ?? null,
+      p_source: leadSource,
+      p_report_id: reportUuid,
     });
 
     if (error) {

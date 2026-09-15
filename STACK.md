@@ -79,7 +79,7 @@ The app reads **`RESEND_API_KEY`** and **`EMAIL_FROM`** only (via [`lib/email/re
 - `/intelligence` — weekly pitch + free report library; sample section uses `#sample-download`. `/weekly-reports` redirects to that anchor (legacy).
 - Report downloads use one **email verification modal** on `/intelligence` and on `/intelligence/[slug]`; `/download/intelligence/[slug]` redirects to the article with `?download=1`.
 - Published intelligence reports are read with the Supabase **anon** key and RLS (`status = 'published'`).
-- Download flow: email → Postgres lead + token → Resend verification link → verify RPC → **signed Storage URL** (service role, server-only).
+- Download flow: email → Postgres lead + token → Resend verification link → verify RPC → **signed Storage URL** (service role, server-only) auto-starts in the browser, with a Download now fallback.
 - Report analytics: anonymous `report_events` rows (`viewed`, `clicked`, `download_started`). No personal data. Admin reads via service role.
 
 # Admin behaviour

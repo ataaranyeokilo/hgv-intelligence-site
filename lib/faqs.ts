@@ -52,6 +52,6 @@ export const faqItems: FaqItem[] = [
   {
     question: "Do I need an account to download a report?",
     answer:
-      "No. Enter your email, confirm the verification link we send, then download. There is no sign-up or password.",
+      "No. Enter your email, confirm the verification link we send, and the download starts. There is no sign-up or password.",
   },
 ];

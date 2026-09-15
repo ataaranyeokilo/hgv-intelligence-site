@@ -37,7 +37,7 @@ Weekly Excel files with new UK HGV operator leads (company, fleet, licence, enri
 | `/intelligence/[slug]` | Report article or redacted spreadsheet preview; download via modal (`?download=1` auto-opens modal) |
 | `/weekly-reports` | Redirects to `/intelligence#sample-download` (legacy URL) |
 | `/download/sample` | Legacy: token → verify; else → `/intelligence#sample-download` |
-| `/download/verify` | Email verification → signed file download |
+| `/download/verify` | Email verification → signed file download starts automatically |
 | `/about` | Trust |
 | `/faqs` | Frequently asked questions |
 | `/contact` | Contact form |
@@ -46,7 +46,7 @@ Weekly Excel files with new UK HGV operator leads (company, fleet, licence, enri
 
 # Customer journey
 
-Home → Research library → Report detail (`/intelligence/[slug]`) → redacted spreadsheet snippet (if uploaded) → Download (email modal) → Verification email → File download → Contact / sales follow-up.
+Home → Research library → Report detail (`/intelligence/[slug]`) → redacted spreadsheet snippet (if uploaded) → Download (email modal) → Verification email → Click link → File download starts → Contact / sales follow-up.
 
 Sample Excel: **`/about`** (`#weekly-reports`) and **`/intelligence`** (`#sample-download`).
 

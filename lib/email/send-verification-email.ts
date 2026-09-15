@@ -14,7 +14,7 @@ export async function sendVerificationEmail({
   return sendResendEmail({
     to,
     subject,
-    html: `<p>Confirm your email to download your report.</p><p><a href="${verifyUrl}">Verify and download</a></p>`,
+    html: `<p>Confirm your email to download your report. The file will start downloading when you open this link.</p><p><a href="${verifyUrl}">Verify and download</a></p>`,
   });
 }
 
