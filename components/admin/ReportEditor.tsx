@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/Button";
@@ -11,7 +11,6 @@ import {
   saveAdminReport,
   type AdminReportInput,
 } from "@/lib/admin/reports";
-import { isAdminUiPreview } from "@/lib/admin/preview";
 import {
   isSpreadsheetFileName,
   parseSpreadsheetPreviewFromFile,
@@ -45,10 +44,14 @@ function toMonthValue(isoDate: string): string {
 
 const PREVIEW_UNAVAILABLE_NOTICE =
   "This spreadsheet could not be previewed. You can still publish; visitors will not see the sample table.";
+const PREVIEW_READY_NOTICE =
+  "Public preview ready. Visitors will see a redacted 25-row sample before download.";
+const PREVIEW_BUILDING_NOTICE = "Building the public spreadsheet preview…";
 
 export function ReportEditor({ reportId, initial }: ReportEditorProps) {
   const router = useRouter();
-  const preview = isAdminUiPreview();
+  const pathname = usePathname();
+  const preview = pathname.startsWith("/admin-preview");
   const [title, setTitle] = useState(initial?.title ?? "");
   const [period, setPeriod] = useState(toMonthValue(initial?.publishedAt ?? ""));
   const [summary, setSummary] = useState(initial?.summary ?? "");
@@ -80,8 +83,8 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
     if (preview) {
       setNotice(
         status === "published"
-          ? "Publish will put this report on the Research page once saving is connected."
-          : "Save as draft will keep this report off the website once saving is connected.",
+          ? "This is the UI preview. Open /admin/reports/new to publish to the live Research page."
+          : "This is the UI preview. Saving is only connected on /admin.",
       );
       return;
     }
@@ -216,15 +219,20 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
               setNotice(null);
               return;
             }
-            void parseSpreadsheetPreviewFromFile(file)
-              .then((parsed) => {
-                setSpreadsheetPreview(parsed);
-                setNotice(parsed ? null : PREVIEW_UNAVAILABLE_NOTICE);
-              })
-              .catch(() => {
-                setSpreadsheetPreview(null);
-                setNotice(PREVIEW_UNAVAILABLE_NOTICE);
-              });
+            setNotice(PREVIEW_BUILDING_NOTICE);
+            window.setTimeout(() => {
+              void parseSpreadsheetPreviewFromFile(file)
+                .then((parsed) => {
+                  setSpreadsheetPreview(parsed);
+                  setNotice(
+                    parsed ? PREVIEW_READY_NOTICE : PREVIEW_UNAVAILABLE_NOTICE,
+                  );
+                })
+                .catch(() => {
+                  setSpreadsheetPreview(null);
+                  setNotice(PREVIEW_UNAVAILABLE_NOTICE);
+                });
+            }, 0);
           }}
         />
       </Field>

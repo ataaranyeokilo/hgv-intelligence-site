@@ -16,6 +16,10 @@ export async function getAdminUser() {
 }
 
 export async function requireAdminUser() {
+  if (process.env.NODE_ENV === "development") {
+    return getAdminUser();
+  }
+
   if (!isAdminEmailConfigured()) {
     throw new Error("Admin email is not configured.");
   }

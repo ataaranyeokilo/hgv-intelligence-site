@@ -10,5 +10,5 @@ export default async function AdminSecureLayout({
 }) {
   await assertAdminAccessOrRedirect();
 
-  return <AdminShell>{children}</AdminShell>;
+  return <AdminShell preview={false}>{children}</AdminShell>;
 }
