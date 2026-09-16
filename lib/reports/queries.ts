@@ -9,18 +9,32 @@ import {
   withDevMasterReport,
 } from "./dev-master-report";
 
+function mapReportListItem(
+  row: Record<string, unknown>,
+): IntelligenceReportListItem {
+  return {
+    id: String(row.id ?? ""),
+    slug: String(row.slug ?? ""),
+    title: String(row.title ?? ""),
+    category: String(row.category ?? ""),
+    summary: String(row.summary ?? ""),
+    reading_time_minutes: Number(row.reading_time_minutes ?? 0),
+    published_at: String(row.published_at ?? ""),
+  };
+}
+
 function mapReportRow(row: Record<string, unknown>): IntelligenceReport {
   const statusValue = String(row.status ?? "");
   const published = Boolean(row.published) || statusValue === "published";
 
   return {
-    id: String(row.id),
-    slug: String(row.slug),
-    title: String(row.title),
-    category: String(row.category),
-    summary: String(row.summary),
-    reading_time_minutes: Number(row.reading_time_minutes),
-    published_at: String(row.published_at),
+    id: String(row.id ?? ""),
+    slug: String(row.slug ?? ""),
+    title: String(row.title ?? ""),
+    category: String(row.category ?? ""),
+    summary: String(row.summary ?? ""),
+    reading_time_minutes: Number(row.reading_time_minutes ?? 0),
+    published_at: String(row.published_at ?? ""),
     published,
     status: isReportStatus(statusValue)
       ? statusValue
@@ -54,7 +68,9 @@ export async function listPublishedReports(): Promise<
     .order("published_at", { ascending: false });
 
   if (!byStatus.error && byStatus.data) {
-    return withDevMasterReport(byStatus.data as IntelligenceReportListItem[]);
+    return withDevMasterReport(
+      (byStatus.data as Record<string, unknown>[]).map(mapReportListItem),
+    );
   }
 
   const { data, error } = await supabase
@@ -67,7 +83,9 @@ export async function listPublishedReports(): Promise<
     return withDevMasterReport([]);
   }
 
-  return withDevMasterReport(data as IntelligenceReportListItem[]);
+  return withDevMasterReport(
+    (data as Record<string, unknown>[]).map(mapReportListItem),
+  );
 }
 
 export async function getPublishedReportBySlug(

@@ -40,20 +40,24 @@ export async function FeaturedIntelligenceSection() {
         </div>
 
         <div className="mt-8 -mr-6 sm:mr-0">
-          <IntelligenceDownloadProvider>
+          {showPlaceholders ? (
+            <IntelligenceDownloadProvider>
+              <FeaturedReportsScroller itemCount={itemCount}>
+                {reportLibraryPlaceholders.map((item) => (
+                  <IntelligenceReportPlaceholderCard
+                    key={item.title}
+                    item={item}
+                  />
+                ))}
+              </FeaturedReportsScroller>
+            </IntelligenceDownloadProvider>
+          ) : (
             <FeaturedReportsScroller itemCount={itemCount}>
-              {showPlaceholders
-                ? reportLibraryPlaceholders.map((item) => (
-                    <IntelligenceReportPlaceholderCard
-                      key={item.title}
-                      item={item}
-                    />
-                  ))
-                : featuredReports.map((report) => (
-                    <IntelligenceReportCard key={report.id} report={report} />
-                  ))}
+              {featuredReports.map((report) => (
+                <IntelligenceReportCard key={report.id} report={report} />
+              ))}
             </FeaturedReportsScroller>
-          </IntelligenceDownloadProvider>
+          )}
         </div>
       </div>
     </section>

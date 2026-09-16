@@ -6,7 +6,7 @@ import { ExploreAllIntelligenceReports } from "@/components/intelligence/Explore
 import { IntelligenceDownloadProvider } from "@/components/intelligence/IntelligenceDownloadProvider";
 import { IntelligenceSamplePreviewSection } from "@/components/intelligence/IntelligenceSamplePreviewSection";
 import { WeeklyReportsPitchSection } from "@/components/intelligence/WeeklyReportsPitchSection";
-import { HomeSampleCta } from "@/components/sections/Hero";
+import { HomeSampleCta } from "@/components/sections/home/HomeSampleCta";
 
 type IntelligencePageWithDownloadProps = {
   generalReports: IntelligenceReportListItem[];

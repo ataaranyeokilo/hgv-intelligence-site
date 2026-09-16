@@ -1,6 +1,7 @@
 /** Display badge for intelligence library cards (from admin `category` string). */
-export function formatReportCategoryBadge(category: string): string {
-  const normalised = category.trim().toLowerCase();
+export function formatReportCategoryBadge(category: string | null | undefined): string {
+  const raw = category ?? "";
+  const normalised = raw.trim().toLowerCase();
 
   if (normalised.includes("market") && normalised.includes("outlook")) {
     return "Market outlook";
@@ -27,15 +28,19 @@ export function formatReportCategoryBadge(category: string): string {
     return "Weekly report";
   }
 
-  const upper = category.trim().toUpperCase();
+  const upper = raw.trim().toUpperCase();
   return upper.length > 24 ? `${upper.slice(0, 24)}…` : upper;
 }
 
-export function formatReportMonthYear(isoDate: string): string {
+export function formatReportMonthYear(isoDate: string | null | undefined): string {
+  const date = new Date(isoDate ?? "");
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
   return new Intl.DateTimeFormat("en-GB", {
     month: "long",
     year: "numeric",
-  }).format(new Date(isoDate));
+  }).format(date);
 }
 
 export type ReportCategoryIconKey =
@@ -46,8 +51,10 @@ export type ReportCategoryIconKey =
   | "file"
   | "clock";
 
-export function reportCategoryIconKey(category: string): ReportCategoryIconKey {
-  const n = category.trim().toLowerCase();
+export function reportCategoryIconKey(
+  category: string | null | undefined,
+): ReportCategoryIconKey {
+  const n = (category ?? "").trim().toLowerCase();
   if (n.includes("market") || n.includes("outlook") || n.includes("trend")) {
     return "chart";
   }

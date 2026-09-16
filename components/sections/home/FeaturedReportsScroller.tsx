@@ -78,8 +78,12 @@ export function FeaturedReportsScroller({
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setReduceMotion(mediaQuery.matches);
     update();
-    mediaQuery.addEventListener("change", update);
-    return () => mediaQuery.removeEventListener("change", update);
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", update);
+      return () => mediaQuery.removeEventListener("change", update);
+    }
+    mediaQuery.addListener(update);
+    return () => mediaQuery.removeListener(update);
   }, []);
 
   const disableThenEnableAnimation = useCallback(() => {

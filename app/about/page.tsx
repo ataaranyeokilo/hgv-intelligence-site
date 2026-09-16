@@ -4,7 +4,7 @@ import { AboutCustomersReceiveSection } from "@/components/about/AboutCustomersR
 import { AboutDataSourcesSection } from "@/components/about/AboutDataSourcesSection";
 import { AboutHero } from "@/components/about/AboutHero";
 import { AboutStorySection } from "@/components/about/AboutStorySection";
-import { HomeSampleCta } from "@/components/sections/Hero";
+import { HomeSampleCta } from "@/components/sections/home/HomeSampleCta";
 import {
   aboutHowItWorksSteps,
   HowItWorks,

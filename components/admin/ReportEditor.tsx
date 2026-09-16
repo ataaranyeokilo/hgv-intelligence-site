@@ -51,7 +51,7 @@ const PREVIEW_BUILDING_NOTICE = "Building the public spreadsheet preview…";
 export function ReportEditor({ reportId, initial }: ReportEditorProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const preview = pathname.startsWith("/admin-preview");
+  const preview = pathname?.startsWith("/admin-preview") ?? false;
   const [title, setTitle] = useState(initial?.title ?? "");
   const [period, setPeriod] = useState(toMonthValue(initial?.publishedAt ?? ""));
   const [summary, setSummary] = useState(initial?.summary ?? "");

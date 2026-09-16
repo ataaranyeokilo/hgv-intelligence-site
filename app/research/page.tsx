@@ -19,13 +19,21 @@ export default async function ResearchPage() {
   return (
     <>
       <ResearchHero />
-      <IntelligenceDownloadProvider>
+      {reports.length === 0 ? (
+        <IntelligenceDownloadProvider>
+          <ExploreAllIntelligenceReports
+            generalReports={general}
+            headingAs="h2"
+            showPlaceholders
+          />
+        </IntelligenceDownloadProvider>
+      ) : (
         <ExploreAllIntelligenceReports
           generalReports={general}
           headingAs="h2"
-          showPlaceholders={reports.length === 0}
+          showPlaceholders={false}
         />
-      </IntelligenceDownloadProvider>
+      )}
     </>
   );
 }
