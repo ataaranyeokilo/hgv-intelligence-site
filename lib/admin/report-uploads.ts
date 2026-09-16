@@ -2,11 +2,6 @@
 
 import { requireAdminUser } from "@/lib/admin/auth";
 import { createServiceClient } from "@/lib/supabase/service";
-import {
-  isSpreadsheetFileName,
-  parseSpreadsheetPreviewFromBuffer,
-  type SpreadsheetPreview,
-} from "@/lib/reports/spreadsheet-preview";
 
 const INTELLIGENCE_BUCKET = "intelligence-downloads";
 const MAX_DOWNLOAD_BYTES = 20 * 1024 * 1024;
@@ -38,6 +33,13 @@ const IMAGE_EXTENSIONS = new Set(["jpg", "jpeg", "png", "webp", "gif"]);
 
 function sanitizeFileName(name: string): string {
   return name.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9._-]/g, "");
+}
+
+function actionErrorMessage(cause: unknown, fallback: string): string {
+  if (cause instanceof Error && cause.message.trim()) {
+    return cause.message;
+  }
+  return fallback;
 }
 
 function fileExtension(name: string): string {
@@ -79,88 +81,95 @@ function validateHeroImage(file: File): string | null {
 
 export async function uploadIntelligenceDownloadFile(
   formData: FormData,
-): Promise<
-  | { ok: true; path: string; preview: SpreadsheetPreview | null }
-  | { ok: false; message: string }
-> {
-  await requireAdminUser();
+): Promise<{ ok: true; path: string } | { ok: false; message: string }> {
+  try {
+    await requireAdminUser();
 
-  const file = formData.get("file");
-  const slug = String(formData.get("slug") ?? "").trim();
+    const file = formData.get("file");
+    const slug = String(formData.get("slug") ?? "").trim();
 
-  if (!(file instanceof File) || file.size === 0) {
-    return { ok: false, message: "Choose a download file to upload." };
+    if (!(file instanceof File) || file.size === 0) {
+      return { ok: false, message: "Choose a download file to upload." };
+    }
+
+    const validationError = validateDownloadFile(file);
+    if (validationError) {
+      return { ok: false, message: validationError };
+    }
+
+    if (!slug) {
+      return { ok: false, message: "Enter a slug before uploading the download file." };
+    }
+
+    const objectName = `${slug}/${Date.now()}-${sanitizeFileName(file.name)}`;
+    const supabase = createServiceClient();
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    const { error } = await supabase.storage
+      .from(INTELLIGENCE_BUCKET)
+      .upload(objectName, buffer, {
+        upsert: true,
+        contentType: file.type || "application/octet-stream",
+      });
+
+    if (error) {
+      return { ok: false, message: error.message };
+    }
+
+    return { ok: true, path: `${INTELLIGENCE_BUCKET}/${objectName}` };
+  } catch (cause) {
+    return {
+      ok: false,
+      message: actionErrorMessage(cause, "Could not upload the report file."),
+    };
   }
-
-  const validationError = validateDownloadFile(file);
-  if (validationError) {
-    return { ok: false, message: validationError };
-  }
-
-  if (!slug) {
-    return { ok: false, message: "Enter a slug before uploading the download file." };
-  }
-
-  const objectName = `${slug}/${Date.now()}-${sanitizeFileName(file.name)}`;
-  const supabase = createServiceClient();
-  const buffer = Buffer.from(await file.arrayBuffer());
-
-  const { error } = await supabase.storage
-    .from(INTELLIGENCE_BUCKET)
-    .upload(objectName, buffer, {
-      upsert: true,
-      contentType: file.type || "application/octet-stream",
-    });
-
-  if (error) {
-    return { ok: false, message: error.message };
-  }
-
-  const preview = isSpreadsheetFileName(file.name)
-    ? await parseSpreadsheetPreviewFromBuffer(buffer, file.name)
-    : null;
-
-  return { ok: true, path: `${INTELLIGENCE_BUCKET}/${objectName}`, preview };
 }
 
 export async function uploadIntelligenceHeroImage(
   formData: FormData,
 ): Promise<{ ok: true; path: string } | { ok: false; message: string }> {
-  await requireAdminUser();
+  try {
+    await requireAdminUser();
 
-  const file = formData.get("file");
-  const slug = String(formData.get("slug") ?? "").trim();
+    const file = formData.get("file");
+    const slug = String(formData.get("slug") ?? "").trim();
 
-  if (!(file instanceof File) || file.size === 0) {
-    return { ok: false, message: "Choose a hero image to upload." };
+    if (!(file instanceof File) || file.size === 0) {
+      return { ok: false, message: "Choose a hero image to upload." };
+    }
+
+    const validationError = validateHeroImage(file);
+    if (validationError) {
+      return { ok: false, message: validationError };
+    }
+
+    if (!slug) {
+      return { ok: false, message: "Enter a slug before uploading the hero image." };
+    }
+
+    const extension = sanitizeFileName(file.name).includes(".")
+      ? sanitizeFileName(file.name).split(".").pop()
+      : "jpg";
+    const objectName = `hero/${slug}.${extension}`;
+    const supabase = createServiceClient();
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    const { error } = await supabase.storage
+      .from(INTELLIGENCE_BUCKET)
+      .upload(objectName, buffer, {
+        upsert: true,
+        contentType: file.type || "image/jpeg",
+      });
+
+    if (error) {
+      return { ok: false, message: error.message };
+    }
+
+    return { ok: true, path: `${INTELLIGENCE_BUCKET}/${objectName}` };
+  } catch (cause) {
+    return {
+      ok: false,
+      message: actionErrorMessage(cause, "Could not upload the hero image."),
+    };
   }
-
-  const validationError = validateHeroImage(file);
-  if (validationError) {
-    return { ok: false, message: validationError };
-  }
-
-  if (!slug) {
-    return { ok: false, message: "Enter a slug before uploading the hero image." };
-  }
-
-  const extension = sanitizeFileName(file.name).includes(".")
-    ? sanitizeFileName(file.name).split(".").pop()
-    : "jpg";
-  const objectName = `hero/${slug}.${extension}`;
-  const supabase = createServiceClient();
-  const buffer = Buffer.from(await file.arrayBuffer());
-
-  const { error } = await supabase.storage
-    .from(INTELLIGENCE_BUCKET)
-    .upload(objectName, buffer, {
-      upsert: true,
-      contentType: file.type || "image/jpeg",
-    });
-
-  if (error) {
-    return { ok: false, message: error.message };
-  }
-
-  return { ok: true, path: `${INTELLIGENCE_BUCKET}/${objectName}` };
 }

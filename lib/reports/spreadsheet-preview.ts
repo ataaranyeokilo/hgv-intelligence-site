@@ -150,11 +150,11 @@ function parseCsvText(text: string): string[][] {
 }
 
 async function parseWorkbookRows(
-  buffer: Buffer,
+  bytes: Uint8Array,
 ): Promise<string[][] | null> {
   const XLSX = await import("xlsx");
-  const workbook = XLSX.read(buffer, {
-    type: "buffer",
+  const workbook = XLSX.read(bytes, {
+    type: "array",
     sheetRows: SPREADSHEET_PREVIEW_ROW_LIMIT + 1,
     dense: true,
   });
@@ -173,8 +173,8 @@ async function parseWorkbookRows(
   }) as string[][];
 }
 
-export async function parseSpreadsheetPreviewFromBuffer(
-  buffer: Buffer,
+export async function parseSpreadsheetPreviewFromBytes(
+  bytes: Uint8Array,
   fileName: string,
 ): Promise<SpreadsheetPreview | null> {
   if (!isSpreadsheetFileName(fileName)) {
@@ -186,9 +186,9 @@ export async function parseSpreadsheetPreviewFromBuffer(
 
   try {
     if (extension === "csv") {
-      table = parseCsvText(buffer.toString("utf8"));
+      table = parseCsvText(new TextDecoder("utf-8").decode(bytes));
     } else {
-      table = await parseWorkbookRows(buffer);
+      table = await parseWorkbookRows(bytes);
     }
   } catch (cause) {
     console.error("[spreadsheet-preview] parse failed:", cause);
@@ -204,4 +204,23 @@ export async function parseSpreadsheetPreviewFromBuffer(
     headers.map((header) => cellToString(header)),
     dataRows,
   );
+}
+
+export async function parseSpreadsheetPreviewFromBuffer(
+  buffer: Uint8Array,
+  fileName: string,
+): Promise<SpreadsheetPreview | null> {
+  return parseSpreadsheetPreviewFromBytes(buffer, fileName);
+}
+
+export async function parseSpreadsheetPreviewFromFile(
+  file: File,
+): Promise<SpreadsheetPreview | null> {
+  try {
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    return parseSpreadsheetPreviewFromBytes(bytes, file.name);
+  } catch (cause) {
+    console.error("[spreadsheet-preview] parse failed:", cause);
+    return null;
+  }
 }

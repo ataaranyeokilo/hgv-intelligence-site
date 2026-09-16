@@ -130,55 +130,65 @@ export async function saveAdminReport(
   input: AdminReportInput,
   id?: string,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
-  await requireAdminUser();
-  const supabase = createServiceClient();
+  try {
+    await requireAdminUser();
+    const supabase = createServiceClient();
 
-  const status = input.status;
-  const downloadStoragePath = input.downloadStoragePath.trim() || null;
+    const status = input.status;
+    const downloadStoragePath = input.downloadStoragePath.trim() || null;
 
-  if (status === "published" && !downloadStoragePath) {
+    if (status === "published" && !downloadStoragePath) {
+      return {
+        ok: false,
+        message: "Upload a download file before publishing this report.",
+      };
+    }
+
+    const payload = {
+      slug: input.slug.trim(),
+      title: input.title.trim(),
+      category: input.category.trim(),
+      summary: input.summary.trim(),
+      reading_time_minutes: input.readingTimeMinutes,
+      published_at: input.publishedAt,
+      status,
+      published: status === "published",
+      download_storage_path: downloadStoragePath,
+      hero_image_path: input.heroImagePath.trim() || null,
+      content: {
+        introduction: input.introduction.trim(),
+        key_findings: input.keyFindings.filter(Boolean),
+        charts: [],
+        spreadsheet_preview: input.spreadsheetPreview ?? null,
+      },
+      updated_at: new Date().toISOString(),
+    };
+
+    if (id) {
+      const { error } = await supabase
+        .from("intelligence_reports")
+        .update(payload)
+        .eq("id", id);
+      if (error) {
+        return { ok: false, message: error.message };
+      }
+    } else {
+      const { error } = await supabase.from("intelligence_reports").insert(payload);
+      if (error) {
+        return { ok: false, message: error.message };
+      }
+    }
+
+    return { ok: true };
+  } catch (cause) {
     return {
       ok: false,
-      message: "Upload a download file before publishing this report.",
+      message:
+        cause instanceof Error && cause.message.trim()
+          ? cause.message
+          : "Could not save this report.",
     };
   }
-
-  const payload = {
-    slug: input.slug.trim(),
-    title: input.title.trim(),
-    category: input.category.trim(),
-    summary: input.summary.trim(),
-    reading_time_minutes: input.readingTimeMinutes,
-    published_at: input.publishedAt,
-    status,
-    published: status === "published",
-    download_storage_path: downloadStoragePath,
-    hero_image_path: input.heroImagePath.trim() || null,
-    content: {
-      introduction: input.introduction.trim(),
-      key_findings: input.keyFindings.filter(Boolean),
-      charts: [],
-      spreadsheet_preview: input.spreadsheetPreview ?? null,
-    },
-    updated_at: new Date().toISOString(),
-  };
-
-  if (id) {
-    const { error } = await supabase
-      .from("intelligence_reports")
-      .update(payload)
-      .eq("id", id);
-    if (error) {
-      return { ok: false, message: error.message };
-    }
-  } else {
-    const { error } = await supabase.from("intelligence_reports").insert(payload);
-    if (error) {
-      return { ok: false, message: error.message };
-    }
-  }
-
-  return { ok: true };
 }
 
 export async function setAdminReportStatus(

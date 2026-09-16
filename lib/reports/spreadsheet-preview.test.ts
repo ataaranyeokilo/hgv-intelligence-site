@@ -4,6 +4,7 @@ import { test } from "node:test";
 import {
   isSensitiveHeader,
   parseSpreadsheetPreviewFromBuffer,
+  parseSpreadsheetPreviewFromBytes,
   redactSpreadsheetPreview,
   SPREADSHEET_PREVIEW_ROW_LIMIT,
 } from "./spreadsheet-preview";
@@ -96,4 +97,15 @@ test("parseSpreadsheetPreviewFromBuffer redacts CSV identity columns", async () 
   assert.equal(serialized.includes("Hidden Street"), false);
   assert.equal(preview.rows[0][1], "North West");
   assert.equal(preview.rows[0][3], "4");
+});
+
+test("parseSpreadsheetPreviewFromBytes accepts Uint8Array CSV", async () => {
+  const csv = "Region,Vehicles\nNorth,4\n";
+  const preview = await parseSpreadsheetPreviewFromBytes(
+    new TextEncoder().encode(csv),
+    "sample.csv",
+  );
+  assert.ok(preview);
+  assert.equal(preview.rows[0][0], "North");
+  assert.equal(preview.rows[0][1], "4");
 });

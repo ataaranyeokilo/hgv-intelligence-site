@@ -12,7 +12,11 @@ import {
   type AdminReportInput,
 } from "@/lib/admin/reports";
 import { isAdminUiPreview } from "@/lib/admin/preview";
-import type { SpreadsheetPreview } from "@/lib/reports/spreadsheet-preview";
+import {
+  isSpreadsheetFileName,
+  parseSpreadsheetPreviewFromFile,
+  type SpreadsheetPreview,
+} from "@/lib/reports/spreadsheet-preview";
 import type { ReportStatus } from "@/lib/reports/types";
 
 type ReportEditorProps = {
@@ -38,6 +42,9 @@ function toMonthValue(isoDate: string): string {
   if (Number.isNaN(date.getTime())) return isoDate.slice(0, 7);
   return date.toISOString().slice(0, 7);
 }
+
+const PREVIEW_UNAVAILABLE_NOTICE =
+  "This spreadsheet could not be previewed. You can still publish; visitors will not see the sample table.";
 
 export function ReportEditor({ reportId, initial }: ReportEditorProps) {
   const router = useRouter();
@@ -82,6 +89,22 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
     startTransition(async () => {
       const slug = initial?.slug?.trim() || slugFromTitle(title);
       let storagePath = downloadStoragePath;
+      let previewForSave = spreadsheetPreview;
+
+      if (downloadFile && isSpreadsheetFileName(downloadFile.name)) {
+        try {
+          previewForSave = await parseSpreadsheetPreviewFromFile(downloadFile);
+        } catch {
+          previewForSave = null;
+        }
+        setSpreadsheetPreview(previewForSave);
+        if (!previewForSave) {
+          setNotice(PREVIEW_UNAVAILABLE_NOTICE);
+        }
+      } else if (downloadFile) {
+        previewForSave = null;
+        setSpreadsheetPreview(null);
+      }
 
       if (downloadFile) {
         const payload = new FormData();
@@ -94,7 +117,6 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
         }
         storagePath = upload.path;
         setDownloadStoragePath(upload.path);
-        setSpreadsheetPreview(upload.preview);
       }
 
       const publishedAt = period
@@ -116,7 +138,7 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
             : [""],
           downloadStoragePath: storagePath,
           heroImagePath: initial?.heroImagePath ?? "",
-          spreadsheetPreview,
+          spreadsheetPreview: previewForSave,
         },
         reportId,
       );
@@ -184,7 +206,25 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
           onChange={(event) => {
             const file = event.target.files?.[0] ?? null;
             setDownloadFile(file);
-            if (file) setFileName(file.name);
+            setError(null);
+            if (!file) {
+              return;
+            }
+            setFileName(file.name);
+            if (!isSpreadsheetFileName(file.name)) {
+              setSpreadsheetPreview(null);
+              setNotice(null);
+              return;
+            }
+            void parseSpreadsheetPreviewFromFile(file)
+              .then((parsed) => {
+                setSpreadsheetPreview(parsed);
+                setNotice(parsed ? null : PREVIEW_UNAVAILABLE_NOTICE);
+              })
+              .catch(() => {
+                setSpreadsheetPreview(null);
+                setNotice(PREVIEW_UNAVAILABLE_NOTICE);
+              });
           }}
         />
       </Field>
