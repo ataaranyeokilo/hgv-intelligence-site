@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { AdminReportsLibrary } from "@/components/admin/AdminReportsLibrary";
+import { AdminReportsIntro } from "@/components/admin/AdminReportsIntro";
 
 export const metadata: Metadata = {
   title: "Admin preview — Reports",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function AdminPreviewReportsPage() {
-  return <AdminReportsLibrary />;
+  return <AdminReportsIntro newReportHref="/admin/reports/new" />;
 }
