@@ -49,22 +49,10 @@ export default async function VerifyDownloadPage({
     <>
       <PageHeader
         title="Email verified"
-        description={
-          downloadHref
-            ? "Your email is confirmed. Your download has started."
-            : "Your email is confirmed. If the file did not start downloading, contact support."
-        }
+        description="Your email is confirmed. Your download has started."
       />
       <Section bordered={false}>
-        {downloadHref ? (
-          <AutoStartDownload href={downloadHref} />
-        ) : (
-          <p className="text-sm leading-relaxed text-neutral-600">
-            Your email is verified. File delivery requires storage configuration
-            (`SUPABASE_SERVICE_ROLE_KEY` and uploaded files in Supabase
-            Storage). Contact support if you need assistance.
-          </p>
-        )}
+        {downloadHref ? <AutoStartDownload href={downloadHref} /> : null}
         <p className="mt-6 text-sm text-neutral-500">
           <Link href="/intelligence#sample-download" className="hover:text-neutral-900">
             Explore weekly reports →
