@@ -1,11 +1,13 @@
 import { WeeklySampleDownloadBlock } from "@/components/download/WeeklySampleDownloadBlock";
 import { pageContainerClass } from "@/lib/layout";
+import { readDownloadVerifiedCookie } from "@/lib/download/verified-cookie";
 
-export function HomeSampleCta({
+export async function HomeSampleCta({
   sectionId = "weekly-reports",
 }: {
   sectionId?: string;
 }) {
+  const alreadyVerified = await readDownloadVerifiedCookie();
   return (
     <section
       id={sectionId}
@@ -32,6 +34,7 @@ export function HomeSampleCta({
         </div>
         <div className="w-full max-w-md lg:max-w-none lg:justify-self-end">
           <WeeklySampleDownloadBlock
+            alreadyVerified={alreadyVerified}
             variant="dark"
             layout="inline"
             submitLabel="Download sample"

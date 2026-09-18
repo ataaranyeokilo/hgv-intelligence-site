@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { AutoStartDownload } from "@/components/download/AutoStartDownload";
+import { RememberDownloadCookie } from "@/components/download/RememberDownloadCookie";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Section } from "@/components/layout/Section";
 import { ButtonLink } from "@/components/ui/Button";
@@ -52,6 +53,7 @@ export default async function VerifyDownloadPage({
         description="Your email is confirmed. Your download has started."
       />
       <Section bordered={false}>
+        <RememberDownloadCookie token={token ?? ""} />
         {downloadHref ? <AutoStartDownload href={downloadHref} /> : null}
         <p className="mt-6 text-sm text-neutral-500">
           <Link href="/intelligence#sample-download" className="hover:text-neutral-900">

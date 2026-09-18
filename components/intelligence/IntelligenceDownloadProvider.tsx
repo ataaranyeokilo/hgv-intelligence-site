@@ -13,10 +13,12 @@ import {
   DownloadGateModal,
   type DownloadGateModalContent,
 } from "@/components/download/DownloadGateModal";
+import { startBrowserDownload } from "@/lib/download/start-browser-download";
 import {
   intelligenceReportEmailSubject,
   WEEKLY_SAMPLE_EMAIL_SUBJECT,
 } from "@/lib/download/constants";
+import { startRememberedDownload } from "@/lib/leads/remember-download";
 
 type IntelligenceDownloadContextValue = {
   openWeeklySample: () => void;
@@ -60,21 +62,40 @@ export function IntelligenceDownloadProvider({
   }, []);
 
   const openWeeklySample = useCallback(() => {
-    setContent(weeklySampleContent);
-    setOpen(true);
+    void (async () => {
+      const remembered = await startRememberedDownload({
+        source: "weekly_sample",
+      });
+      if (remembered.status === "ready") {
+        startBrowserDownload(remembered.url);
+        return;
+      }
+      setContent(weeklySampleContent);
+      setOpen(true);
+    })();
   }, []);
 
   const openReportDownload = useCallback(
     (input: { reportId: string; title: string }) => {
-      setContent({
-        title: "Download full report",
-        description: `Enter your work email to receive a verification link for “${input.title}”.`,
-        source: "intelligence_report",
-        reportId: input.reportId,
-        emailSubject: intelligenceReportEmailSubject(input.title),
-        submitLabel: "Send verification email",
-      });
-      setOpen(true);
+      void (async () => {
+        const remembered = await startRememberedDownload({
+          source: "intelligence_report",
+          reportId: input.reportId,
+        });
+        if (remembered.status === "ready") {
+          startBrowserDownload(remembered.url);
+          return;
+        }
+        setContent({
+          title: "Download full report",
+          description: `Enter your work email to receive a verification link for “${input.title}”.`,
+          source: "intelligence_report",
+          reportId: input.reportId,
+          emailSubject: intelligenceReportEmailSubject(input.title),
+          submitLabel: "Send verification email",
+        });
+        setOpen(true);
+      })();
     },
     [],
   );
