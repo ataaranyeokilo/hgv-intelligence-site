@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
+import { MonthYearPicker } from "@/components/admin/MonthYearPicker";
 import { Button } from "@/components/ui/Button";
 import { uploadIntelligenceDownloadFile } from "@/lib/admin/report-uploads";
 import {
@@ -95,6 +96,11 @@ export function ReportEditor({
         ? "published"
         : "draft";
 
+    if (!period) {
+      setError("Choose a month and year.");
+      return;
+    }
+
     if (preview) {
       setNotice(
         isIntelligence
@@ -139,9 +145,7 @@ export function ReportEditor({
         setDownloadStoragePath(upload.path);
       }
 
-      const publishedAt = period
-        ? new Date(`${period}-01T09:00:00.000Z`).toISOString()
-        : new Date().toISOString();
+      const publishedAt = new Date(`${period}-01T09:00:00.000Z`).toISOString();
 
       const result = await saveAdminReport(
         {
@@ -189,22 +193,15 @@ export function ReportEditor({
           required
         />
       </Field>
-      <Field
-        label="Reporting period"
-        hint={
-          isIntelligence
-            ? "The month this Intelligence card covers, for example July 2026."
-            : "The month this report covers, for example July 2026."
-        }
-      >
-        <input
-          type="month"
-          className={inputClass}
-          value={period}
-          onChange={(event) => setPeriod(event.target.value)}
-          required
-        />
-      </Field>
+      <div>
+        <span className="text-sm font-medium text-neutral-900">
+          Reporting period
+        </span>
+        <span className="mt-1 block text-sm text-neutral-500">
+          Choose the month and year this report covers.
+        </span>
+        <MonthYearPicker value={period} onChange={setPeriod} />
+      </div>
       <Field
         label="Short description"
         hint="One or two sentences shown on the card."
