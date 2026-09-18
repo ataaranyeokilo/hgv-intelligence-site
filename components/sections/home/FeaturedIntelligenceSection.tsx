@@ -10,7 +10,7 @@ import { listPublishedReports } from "@/lib/reports/queries";
 import { selectFeaturedReports } from "@/lib/reports/select-featured-reports";
 
 export async function FeaturedIntelligenceSection() {
-  const reports = await listPublishedReports();
+  const reports = await listPublishedReports({ kind: "research" });
   const showPlaceholders = reports.length === 0;
   const featuredReports = selectFeaturedReports(reports);
   const itemCount = showPlaceholders

@@ -15,9 +15,11 @@ The site is **not** a SaaS product. It exists to:
 
 ## Free intelligence reports
 
-Published reports are listed on **`/research`** (the public report library) and featured on the home “Explore our research” scroller. Report articles stay at `/intelligence/[slug]`. **`/intelligence`** is the paid Intelligence product pitch, not the report library.
+Published **research** reports are listed on **`/research`** and featured on the home “Explore our research” scroller. Report articles stay at `/intelligence/[slug]`. **`/intelligence`** is the paid Intelligence product pitch, not the report library.
 
-Weekly vs general split uses the admin **category** field (contains `weekly`) until a dedicated report type exists in the schema.
+Live **Intelligence** items (`kind = intelligence`) also appear on **`/research`**, mixed with research cards. They show a gold **Subscribe** pill and link to **`/contact`** (request a quote). They do not open a report article and do not appear on the home scroller.
+
+Weekly vs general split uses the admin **category** field (contains `weekly`) until a dedicated report type exists in the schema. Intelligence items are a separate `kind`, not a weekly category.
 
 Published library cards link to the article page. Spreadsheet reports show a **redacted 25-row snippet** (company name, address, licence and similar identity columns are never stored in that preview). **Download** (header and below the table) opens the **email verification modal**. PDF reports keep the article + key findings layout. Placeholder cards and the weekly sample CTA open the same modal.
 
@@ -32,7 +34,7 @@ Weekly Excel files with new UK HGV operator leads (company, fleet, licence, enri
 | Route | Purpose |
 | ----- | ------- |
 | `/` | Home — hero, featured research card scroller, intelligence highlights bar |
-| `/research` | Public report library — published reports from the database |
+| `/research` | Public library — live research reports and live Intelligence Subscribe cards |
 | `/intelligence` | Paid Intelligence product pitch (not the report library) |
 | `/intelligence/[slug]` | Report article or redacted spreadsheet preview; download via modal (`?download=1` auto-opens modal) |
 | `/weekly-reports` | Redirects to `/intelligence#sample-download` (legacy URL) |
@@ -54,12 +56,15 @@ Sample Excel: **`/about`** (`#weekly-reports`) and **`/intelligence`** (`#sample
 
 | Term | Definition |
 | ---- | ---------- |
-| Public report library | `/research` — visitors browse published reports. The home scroller shows a subset of the same list. |
-| Intelligence | Paid product pitch at `/intelligence`. Report articles still use `/intelligence/[slug]`. |
-| Draft | Report is not on the public site. It stays in the admin working list and can be published. |
-| Published | Report is live on `/research` and the home scroller. |
-| Archived | Report is not on the public site. The database row and uploaded file are kept. It is not treated as an active draft. Restore to draft, then publish, to put it back on the site. |
-| Unpublish | Admin action: published → draft. |
+| Public report library | `/research` — visitors browse live research reports and live Intelligence Subscribe cards. The home scroller shows research reports only. |
+| Intelligence | Paid product pitch at `/intelligence`. Admin Intelligence items (`kind = intelligence`) go live on `/research` as Subscribe cards linking to `/contact`. Report articles still use `/intelligence/[slug]`. |
+| Kind | `intelligence_reports.kind`: `research` (default) or `intelligence`. |
+| Draft / Not live | Item is not on the public site. It stays in the admin card grid and can be made live. |
+| Published / Live | Research is live on `/research` and the home scroller. Intelligence is live on `/research` as a Subscribe card. |
+| Go live | Admin action: status → published. Everyday control on each admin card. |
+| Take down | Admin action: published → draft. Removes the card from the public site without deleting it. |
+| Archived | Item is not on the public site. The database row and uploaded file are kept. Not shown as an everyday admin control. |
+| Unpublish | Same as Take down: published → draft. |
 | Archive | Admin action: set status to archived. |
 | Restore | Admin action: archived → draft. |
 | Reporting period | The existing `published_at` date. Public cards show month + year. Admin can show the same date as period and as date published. |
@@ -78,18 +83,19 @@ One Supabase Auth user, matched to `ADMIN_EMAIL` on the server. `/admin` is not 
 
 Admin can:
 
-- create / edit intelligence reports (with file uploads to Supabase Storage; Excel/CSV builds a redacted 25-row public preview)
-- save as draft, publish, unpublish (back to draft), and archive
-- save as draft, publish, unpublish (back to draft), and archive
-- publishing a report makes it appear on `/research` and the home research scroller without a code change or redeploy
-- archiving or unpublishing removes it from the public site but keeps the record and file
+- create / edit research reports (with file uploads to Supabase Storage; Excel/CSV builds a redacted 25-row public preview)
+- create / edit Intelligence cards (title, period, description; file optional)
+- save as draft, then **Go live** or **Take down** from each admin card
+- publishing or going live on a research report makes it appear on `/research` and the home research scroller without a code change or redeploy
+- going live on an Intelligence card makes it appear on `/research` with a gold Subscribe pill linking to `/contact`
+- taking down removes it from the public site but keeps the record and file
 - see lightweight last-7-day report metrics (views, clicks, downloads)
 - upload the weekly sample Excel file
 - edit market snapshot statistics (stored in Postgres; **not shown on the public homepage** today)
 
 The report editor keeps the fields the public article page already needs (slug, category, summary, introduction, key findings, reading time, optional hero image). Spreadsheet reports also store a redacted preview on the report content JSON.
 
-To publish the first real Research card: **Admin → Reports → New report** (`/admin/reports/new`). Title **UK HGV Operator Master 2025**, upload `Fleet_Signal_UK_HGV_2025_Master_v3.xlsx` (do not commit that file to git), write a short description, Publish. Placeholders on `/research` drop once any report is published.
+To publish the first real Research card: **Admin → Reports → New report** (`/admin/reports/new`). Title **UK HGV Operator Master 2025**, upload `Fleet_Signal_UK_HGV_2025_Master_v3.xlsx` (do not commit that file to git), write a short description, Publish or Go live. Placeholders on `/research` drop once any research report or Intelligence card is live.
 
 No customer accounts, public sign-up, role-management UI, or password reset UI (unless added later).
 

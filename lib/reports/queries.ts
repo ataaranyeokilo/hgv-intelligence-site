@@ -1,13 +1,24 @@
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/env";
 
-import { isReportStatus, type IntelligenceReport, type IntelligenceReportListItem } from "./types";
+import {
+  isReportStatus,
+  kindFromRow,
+  type IntelligenceReport,
+  type IntelligenceReportListItem,
+  type ReportKind,
+} from "./types";
 import {
   DEV_MASTER_REPORT_SLUG,
   devMasterReport,
   isDevMasterReportEnabled,
   withDevMasterReport,
 } from "./dev-master-report";
+
+const PUBLISHED_SELECT =
+  "id, slug, title, category, summary, reading_time_minutes, published_at, kind";
+const PUBLISHED_SELECT_LEGACY =
+  "id, slug, title, category, summary, reading_time_minutes, published_at";
 
 function mapReportListItem(
   row: Record<string, unknown>,
@@ -20,6 +31,7 @@ function mapReportListItem(
     summary: String(row.summary ?? ""),
     reading_time_minutes: Number(row.reading_time_minutes ?? 0),
     published_at: String(row.published_at ?? ""),
+    kind: kindFromRow(row.kind, row.category),
   };
 }
 
@@ -41,6 +53,7 @@ function mapReportRow(row: Record<string, unknown>): IntelligenceReport {
       : published
         ? "published"
         : "draft",
+    kind: kindFromRow(row.kind, row.category),
     content: (row.content ?? {}) as IntelligenceReport["content"],
     hero_image_path: row.hero_image_path ? String(row.hero_image_path) : null,
     download_storage_path: row.download_storage_path
@@ -49,42 +62,55 @@ function mapReportRow(row: Record<string, unknown>): IntelligenceReport {
   };
 }
 
-export async function listPublishedReports(): Promise<
-  IntelligenceReportListItem[]
-> {
-  if (!hasSupabaseEnv()) {
-    return withDevMasterReport([]);
-  }
+function filterByKind(
+  reports: IntelligenceReportListItem[],
+  kind: ReportKind | "all",
+): IntelligenceReportListItem[] {
+  if (kind === "all") return reports;
+  return reports.filter((report) => report.kind === kind);
+}
 
-  const publishedSelect =
-    "id, slug, title, category, summary, reading_time_minutes, published_at";
+export async function listPublishedReports(options?: {
+  kind?: ReportKind | "all";
+}): Promise<IntelligenceReportListItem[]> {
+  const kind = options?.kind ?? "all";
+
+  if (!hasSupabaseEnv()) {
+    return filterByKind(withDevMasterReport([]), kind);
+  }
 
   const supabase = await createClient();
 
   const byStatus = await supabase
     .from("intelligence_reports")
-    .select(publishedSelect)
+    .select(PUBLISHED_SELECT)
     .eq("status", "published")
     .order("published_at", { ascending: false });
 
   if (!byStatus.error && byStatus.data) {
-    return withDevMasterReport(
-      (byStatus.data as Record<string, unknown>[]).map(mapReportListItem),
+    return filterByKind(
+      withDevMasterReport(
+        (byStatus.data as Record<string, unknown>[]).map(mapReportListItem),
+      ),
+      kind,
     );
   }
 
   const { data, error } = await supabase
     .from("intelligence_reports")
-    .select(publishedSelect)
+    .select(PUBLISHED_SELECT_LEGACY)
     .eq("published", true)
     .order("published_at", { ascending: false });
 
   if (error || !data) {
-    return withDevMasterReport([]);
+    return filterByKind(withDevMasterReport([]), kind);
   }
 
-  return withDevMasterReport(
-    (data as Record<string, unknown>[]).map(mapReportListItem),
+  return filterByKind(
+    withDevMasterReport(
+      (data as Record<string, unknown>[]).map(mapReportListItem),
+    ),
+    kind,
   );
 }
 
@@ -125,12 +151,16 @@ export async function getPublishedReportBySlug(
     return null;
   }
 
-  return mapReportRow(data as Record<string, unknown>);
+  const report = mapReportRow(data as Record<string, unknown>);
+  if (report.kind === "intelligence") {
+    return null;
+  }
+  return report;
 }
 
 export async function listLatestPublishedReports(
   limit: number,
 ): Promise<IntelligenceReportListItem[]> {
-  const reports = await listPublishedReports();
+  const reports = await listPublishedReports({ kind: "research" });
   return reports.slice(0, limit);
 }

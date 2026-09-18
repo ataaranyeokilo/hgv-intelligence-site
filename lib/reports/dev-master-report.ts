@@ -20,6 +20,7 @@ export const devMasterReport: IntelligenceReport = {
   published_at: "2025-12-01T09:00:00.000Z",
   published: true,
   status: "published",
+  kind: "research",
   content: {
     spreadsheet_preview: spreadsheetPreview,
   },
@@ -40,10 +41,27 @@ export function withDevMasterReport(
   if (reports.some((report) => report.slug === DEV_MASTER_REPORT_SLUG)) {
     return reports;
   }
-  const { id, slug, title, category, summary, reading_time_minutes, published_at } =
-    devMasterReport;
+  const {
+    id,
+    slug,
+    title,
+    category,
+    summary,
+    reading_time_minutes,
+    published_at,
+    kind,
+  } = devMasterReport;
   return [
-    { id, slug, title, category, summary, reading_time_minutes, published_at },
+    {
+      id,
+      slug,
+      title,
+      category,
+      summary,
+      reading_time_minutes,
+      published_at,
+      kind,
+    },
     ...reports,
   ];
 }

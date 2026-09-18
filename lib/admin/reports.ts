@@ -5,7 +5,10 @@ import { redirect } from "next/navigation";
 import { requireAdminUser } from "@/lib/admin/auth";
 import { createServiceClient } from "@/lib/supabase/service";
 import {
+  asReportKind,
   isReportStatus,
+  kindFromRow,
+  type ReportKind,
   type ReportStatus,
   type SpreadsheetPreview,
 } from "@/lib/reports/types";
@@ -18,6 +21,7 @@ export type AdminReportInput = {
   readingTimeMinutes: number;
   publishedAt: string;
   status: ReportStatus;
+  kind: ReportKind;
   introduction: string;
   keyFindings: string[];
   downloadStoragePath: string;
@@ -29,6 +33,9 @@ export type AdminReportListItem = {
   id: string;
   slug: string;
   title: string;
+  summary: string;
+  category: string;
+  kind: ReportKind;
   status: ReportStatus;
   published_at: string;
   updated_at: string;
@@ -87,32 +94,60 @@ async function loadEventCounts(
   return countsByReport;
 }
 
-export async function listAdminReports(): Promise<AdminReportListItem[]> {
+export async function listAdminReports(
+  kind?: ReportKind,
+): Promise<AdminReportListItem[]> {
   await requireAdminUser();
   const supabase = createServiceClient();
-  const { data, error } = await supabase
-    .from("intelligence_reports")
-    .select("id, slug, title, published, published_at, status, updated_at")
-    .order("updated_at", { ascending: false });
+  const selectWithKind =
+    "id, slug, title, category, summary, published, published_at, status, updated_at, kind";
+  const selectLegacy =
+    "id, slug, title, category, summary, published, published_at, status, updated_at";
 
-  if (error || !data) {
+  let query = supabase
+    .from("intelligence_reports")
+    .select(selectWithKind)
+    .order("updated_at", { ascending: false });
+  if (kind) {
+    query = query.eq("kind", kind);
+  }
+
+  let { data, error } = await query;
+  let rows = (data ?? null) as Record<string, unknown>[] | null;
+
+  if (error) {
+    const fallback = await supabase
+      .from("intelligence_reports")
+      .select(selectLegacy)
+      .order("updated_at", { ascending: false });
+    rows = (fallback.data ?? null) as Record<string, unknown>[] | null;
+    error = fallback.error;
+  }
+
+  if (error || !rows) {
     return [];
   }
 
   const countsByReport = await loadEventCounts(supabase);
 
-  return data.map((report) => {
-    const counts = countsByReport.get(report.id) ?? emptyCounts();
-    return {
-      id: report.id,
-      slug: report.slug,
-      title: report.title,
-      status: mapAdminStatus(report),
-      published_at: report.published_at,
-      updated_at: report.updated_at,
-      ...counts,
-    };
-  });
+  return rows
+    .map((report) => {
+      const id = String(report.id ?? "");
+      const counts = countsByReport.get(id) ?? emptyCounts();
+      return {
+        id,
+        slug: String(report.slug ?? ""),
+        title: String(report.title ?? ""),
+        summary: String(report.summary ?? ""),
+        category: String(report.category ?? ""),
+        kind: kindFromRow(report.kind, report.category),
+        status: mapAdminStatus(report),
+        published_at: String(report.published_at ?? ""),
+        updated_at: String(report.updated_at ?? ""),
+        ...counts,
+      };
+    })
+    .filter((report) => (kind ? report.kind === kind : true));
 }
 
 export async function getAdminReport(id: string) {
@@ -135,9 +170,10 @@ export async function saveAdminReport(
     const supabase = createServiceClient();
 
     const status = input.status;
+    const kind = asReportKind(input.kind);
     const downloadStoragePath = input.downloadStoragePath.trim() || null;
 
-    if (status === "published" && !downloadStoragePath) {
+    if (status === "published" && kind === "research" && !downloadStoragePath) {
       return {
         ok: false,
         message: "Upload a download file before publishing this report.",
@@ -153,6 +189,7 @@ export async function saveAdminReport(
       published_at: input.publishedAt,
       status,
       published: status === "published",
+      kind,
       download_storage_path: downloadStoragePath,
       hero_image_path: input.heroImagePath.trim() || null,
       content: {
@@ -164,22 +201,38 @@ export async function saveAdminReport(
       updated_at: new Date().toISOString(),
     };
 
-    if (id) {
-      const { error } = await supabase
-        .from("intelligence_reports")
-        .update(payload)
-        .eq("id", id);
-      if (error) {
-        return { ok: false, message: error.message };
+    const { kind: _kind, ...payloadWithoutKind } = payload;
+
+    async function write(
+      body: typeof payload | typeof payloadWithoutKind,
+    ): Promise<{ ok: true } | { ok: false; message: string }> {
+      if (id) {
+        const { error } = await supabase
+          .from("intelligence_reports")
+          .update(body)
+          .eq("id", id);
+        if (error) {
+          return { ok: false, message: error.message };
+        }
+      } else {
+        const { error } = await supabase
+          .from("intelligence_reports")
+          .insert(body);
+        if (error) {
+          return { ok: false, message: error.message };
+        }
       }
-    } else {
-      const { error } = await supabase.from("intelligence_reports").insert(payload);
-      if (error) {
-        return { ok: false, message: error.message };
-      }
+      return { ok: true };
     }
 
-    return { ok: true };
+    const result = await write(payload);
+    if (
+      !result.ok &&
+      result.message.toLowerCase().includes("kind")
+    ) {
+      return write(payloadWithoutKind);
+    }
+    return result;
   } catch (cause) {
     return {
       ok: false,
@@ -199,13 +252,27 @@ export async function setAdminReportStatus(
   const supabase = createServiceClient();
 
   if (status === "published") {
-    const { data: report } = await supabase
+    const withKind = await supabase
       .from("intelligence_reports")
-      .select("download_storage_path")
+      .select("download_storage_path, kind, category")
       .eq("id", id)
       .maybeSingle();
+    const report = !withKind.error
+      ? withKind.data
+      : (
+          await supabase
+            .from("intelligence_reports")
+            .select("download_storage_path, category")
+            .eq("id", id)
+            .maybeSingle()
+        ).data;
 
-    if (!report?.download_storage_path) {
+    const kind = kindFromRow(
+      report && "kind" in report ? report.kind : undefined,
+      report?.category,
+    );
+
+    if (kind === "research" && !report?.download_storage_path) {
       return {
         ok: false,
         message: "Upload a download file before publishing this report.",

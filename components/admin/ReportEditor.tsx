@@ -4,9 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/Button";
-import {
-  uploadIntelligenceDownloadFile,
-} from "@/lib/admin/report-uploads";
+import { uploadIntelligenceDownloadFile } from "@/lib/admin/report-uploads";
 import {
   saveAdminReport,
   type AdminReportInput,
@@ -16,10 +14,15 @@ import {
   parseSpreadsheetPreviewFromFile,
   type SpreadsheetPreview,
 } from "@/lib/reports/spreadsheet-preview";
-import type { ReportStatus } from "@/lib/reports/types";
+import {
+  asReportKind,
+  type ReportKind,
+  type ReportStatus,
+} from "@/lib/reports/types";
 
 type ReportEditorProps = {
   reportId?: string;
+  kind?: ReportKind;
   initial?: Partial<AdminReportInput> & {
     fileName?: string;
     spreadsheetPreview?: SpreadsheetPreview | null;
@@ -48,10 +51,17 @@ const PREVIEW_READY_NOTICE =
   "Public preview ready. Visitors will see a redacted 25-row sample before download.";
 const PREVIEW_BUILDING_NOTICE = "Building the public spreadsheet preview…";
 
-export function ReportEditor({ reportId, initial }: ReportEditorProps) {
+export function ReportEditor({
+  reportId,
+  kind: kindProp,
+  initial,
+}: ReportEditorProps) {
   const router = useRouter();
   const pathname = usePathname();
   const preview = pathname?.startsWith("/admin-preview") ?? false;
+  const kind = asReportKind(kindProp ?? initial?.kind);
+  const isIntelligence = kind === "intelligence";
+  const listHref = isIntelligence ? "/admin/intelligence" : "/admin/reports";
   const [title, setTitle] = useState(initial?.title ?? "");
   const [period, setPeriod] = useState(toMonthValue(initial?.publishedAt ?? ""));
   const [summary, setSummary] = useState(initial?.summary ?? "");
@@ -77,14 +87,21 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
     const submitter = (event.nativeEvent as SubmitEvent).submitter as
       | HTMLButtonElement
       | null;
-    const status: ReportStatus =
-      submitter?.value === "published" ? "published" : "draft";
+    const status: ReportStatus = isIntelligence
+      ? reportId && initial?.status === "published"
+        ? "published"
+        : "draft"
+      : submitter?.value === "published"
+        ? "published"
+        : "draft";
 
     if (preview) {
       setNotice(
-        status === "published"
-          ? "This is the UI preview. Open /admin/reports/new to publish to the live Research page."
-          : "This is the UI preview. Saving is only connected on /admin.",
+        isIntelligence
+          ? "This is the UI preview. Open /admin/intelligence/new to save Intelligence cards."
+          : status === "published"
+            ? "This is the UI preview. Open /admin/reports/new to publish to the live Research page."
+            : "This is the UI preview. Saving is only connected on /admin.",
       );
       return;
     }
@@ -101,7 +118,7 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
           previewForSave = null;
         }
         setSpreadsheetPreview(previewForSave);
-        if (!previewForSave) {
+        if (!previewForSave && !isIntelligence) {
           setNotice(PREVIEW_UNAVAILABLE_NOTICE);
         }
       } else if (downloadFile) {
@@ -130,11 +147,14 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
         {
           slug,
           title: title.trim(),
-          category: initial?.category?.trim() || "Market outlook",
+          category:
+            initial?.category?.trim() ||
+            (isIntelligence ? "Intelligence" : "Market outlook"),
           summary: summary.trim(),
           readingTimeMinutes: initial?.readingTimeMinutes ?? 5,
           publishedAt,
           status,
+          kind,
           introduction: initial?.introduction ?? summary.trim(),
           keyFindings: initial?.keyFindings?.length
             ? initial.keyFindings
@@ -151,7 +171,7 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
         return;
       }
 
-      router.push("/admin/reports");
+      router.push(listHref);
       router.refresh();
     });
   }
@@ -171,7 +191,11 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
       </Field>
       <Field
         label="Reporting period"
-        hint="The month this report covers, for example July 2026."
+        hint={
+          isIntelligence
+            ? "The month this Intelligence card covers, for example July 2026."
+            : "The month this report covers, for example July 2026."
+        }
       >
         <input
           type="month"
@@ -183,7 +207,7 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
       </Field>
       <Field
         label="Short description"
-        hint="One or two sentences shown on the report card."
+        hint="One or two sentences shown on the card."
       >
         <textarea
           className={inputClass}
@@ -194,8 +218,12 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
         />
       </Field>
       <Field
-        label="Report file"
-        hint="PDF, Word, Excel, or CSV. Spreadsheets show a redacted 25-row preview on the public page. Visitors download the full file after verifying their email."
+        label={isIntelligence ? "File (optional)" : "Report file"}
+        hint={
+          isIntelligence
+            ? "Optional. Intelligence cards on Research send visitors to request a quote, not to a download."
+            : "PDF, Word, Excel, or CSV. Spreadsheets show a redacted 25-row preview on the public page. Visitors download the full file after verifying their email."
+        }
       >
         {fileName || downloadStoragePath ? (
           <p className="mt-2 text-sm text-neutral-500">
@@ -214,9 +242,11 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
               return;
             }
             setFileName(file.name);
-            if (!isSpreadsheetFileName(file.name)) {
-              setSpreadsheetPreview(null);
-              setNotice(null);
+            if (!isSpreadsheetFileName(file.name) || isIntelligence) {
+              if (!isSpreadsheetFileName(file.name)) {
+                setSpreadsheetPreview(null);
+                setNotice(null);
+              }
               return;
             }
             setNotice(PREVIEW_BUILDING_NOTICE);
@@ -242,30 +272,53 @@ export function ReportEditor({ reportId, initial }: ReportEditorProps) {
           {notice}
         </p>
       ) : null}
-      <div className="flex flex-wrap gap-3">
-        <Button
-          type="submit"
-          name="intent"
-          value="draft"
-          variant="secondary"
-          disabled={isPending}
-        >
-          {isPending ? "Saving…" : "Save as draft"}
-        </Button>
-        <Button
-          type="submit"
-          name="intent"
-          value="published"
-          className="!bg-fleetSignal hover:!bg-blue-700"
-          disabled={isPending}
-        >
-          {isPending ? "Saving…" : "Publish"}
-        </Button>
-      </div>
-      <p className="text-xs leading-relaxed text-neutral-500">
-        Draft stays private. Publish puts it on the Research page. Archive is
-        available from the reports list if you need to take it down later.
-      </p>
+      {isIntelligence ? (
+        <>
+          <div className="flex flex-wrap gap-3">
+            <Button
+              type="submit"
+              name="intent"
+              value="draft"
+              className="!bg-fleetSignal hover:!bg-blue-700"
+              disabled={isPending}
+            >
+              {isPending ? "Saving…" : "Save"}
+            </Button>
+          </div>
+          <p className="text-xs leading-relaxed text-neutral-500">
+            Saving adds the card on the Intelligence admin page. Use Go live
+            there to show it on Research with a Subscribe pill.
+          </p>
+        </>
+      ) : (
+        <>
+          <div className="flex flex-wrap gap-3">
+            <Button
+              type="submit"
+              name="intent"
+              value="draft"
+              variant="secondary"
+              disabled={isPending}
+            >
+              {isPending ? "Saving…" : "Save as draft"}
+            </Button>
+            <Button
+              type="submit"
+              name="intent"
+              value="published"
+              className="!bg-fleetSignal hover:!bg-blue-700"
+              disabled={isPending}
+            >
+              {isPending ? "Saving…" : "Publish"}
+            </Button>
+          </div>
+          <p className="text-xs leading-relaxed text-neutral-500">
+            Draft stays private and still appears in the admin card grid. Publish
+            or Go live puts it on the Research page. Take down removes it from
+            the website without deleting it.
+          </p>
+        </>
+      )}
     </form>
   );
 }

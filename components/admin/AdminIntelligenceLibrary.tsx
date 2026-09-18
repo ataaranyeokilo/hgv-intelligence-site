@@ -1,22 +1,32 @@
-import { AdminLibrarySection } from "@/components/admin/AdminLibrarySection";
-import { adminPreviewIntelligenceSample } from "@/lib/admin/preview";
+import { AdminLibraryCards } from "@/components/admin/AdminLibraryCards";
+import { AdminLibraryIntro } from "@/components/admin/AdminLibraryIntro";
+import type { AdminReportListItem } from "@/lib/admin/reports";
 
-export function AdminIntelligenceLibrary() {
+type AdminIntelligenceLibraryProps = {
+  items: AdminReportListItem[];
+  preview?: boolean;
+  newHref?: string;
+};
+
+export function AdminIntelligenceLibrary({
+  items,
+  preview = false,
+  newHref = "/admin/intelligence/new",
+}: AdminIntelligenceLibraryProps) {
   return (
-    <AdminLibrarySection
-      heading="Intelligence"
-      description="Paid Intelligence files. This is separate from Research reports. Upload a file to add a card below."
-      gridHeading="Uploaded files"
-      currentLabel="Current sample"
-      currentHint="This is the Excel file visitors receive after they verify their email."
-      chooseHint="Excel or CSV only. This does not appear in Reports."
-      accept=".xlsx,.xls,.csv"
-      footerNote="Visitors still verify their work email before the download starts."
-      initialFileName={adminPreviewIntelligenceSample.fileName}
-      initialItems={[]}
-      emptyMessage="No Intelligence files uploaded yet. Choose a file above to add one."
-      uploadedBadge="Intelligence"
-      uploadedSummary="Uploaded from Admin. This is a paid Intelligence file, not a Research report."
-    />
+    <>
+      <AdminLibraryIntro
+        heading="Intelligence"
+        description="Paid Intelligence cards. Save one, then use Go live to show it on Research with a Subscribe pill that sends visitors to request a quote."
+        newHref={newHref}
+        newLabel="New intelligence"
+      />
+      <AdminLibraryCards
+        items={items}
+        kind="intelligence"
+        preview={preview}
+        newHref={newHref}
+      />
+    </>
   );
 }

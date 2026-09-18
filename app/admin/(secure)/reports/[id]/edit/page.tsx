@@ -3,13 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ReportEditor } from "@/components/admin/ReportEditor";
-import {
-  getAdminPreviewReport,
-  isAdminUiPreview,
-} from "@/lib/admin/preview";
 import { getAdminReport } from "@/lib/admin/reports";
 import type { SpreadsheetPreview } from "@/lib/reports/spreadsheet-preview";
-import { isReportStatus } from "@/lib/reports/types";
+import { kindFromRow, isReportStatus } from "@/lib/reports/types";
 
 type EditReportPageProps = {
   params: Promise<{ id: string }>;
@@ -22,32 +18,8 @@ export const metadata: Metadata = {
 
 export default async function AdminEditReportPage({ params }: EditReportPageProps) {
   const { id } = await params;
-
-  if (isAdminUiPreview()) {
-    const previewReport = getAdminPreviewReport(id);
-    if (!previewReport) {
-      notFound();
-    }
-
-    return (
-      <EditReportLayout>
-        <ReportEditor
-          reportId={id}
-          initial={{
-            title: previewReport.title,
-            summary: previewReport.summary,
-            publishedAt: previewReport.published_at,
-            status: previewReport.status,
-            downloadStoragePath: previewReport.fileName ?? "",
-            fileName: previewReport.fileName ?? undefined,
-          }}
-        />
-      </EditReportLayout>
-    );
-  }
-
   const report = await getAdminReport(id);
-  if (!report) {
+  if (!report || kindFromRow(report.kind, report.category) !== "research") {
     notFound();
   }
 
@@ -61,6 +33,7 @@ export default async function AdminEditReportPage({ params }: EditReportPageProp
     <EditReportLayout>
       <ReportEditor
         reportId={id}
+        kind="research"
         initial={{
           slug: report.slug,
           title: report.title,
@@ -73,6 +46,7 @@ export default async function AdminEditReportPage({ params }: EditReportPageProp
             : report.published
               ? "published"
               : "draft",
+          kind: "research",
           introduction: content.introduction ?? "",
           keyFindings: content.key_findings ?? [""],
           downloadStoragePath: report.download_storage_path ?? "",
@@ -94,7 +68,7 @@ function EditReportLayout({ children }: { children: React.ReactNode }) {
         Edit report
       </h1>
       <p className="mt-3 max-w-xl text-sm leading-relaxed text-neutral-600 sm:text-base">
-        Changes only appear on the website after you publish.
+        Changes only appear on the website after you publish or press Go live.
       </p>
       <p className="mt-4">
         <Link

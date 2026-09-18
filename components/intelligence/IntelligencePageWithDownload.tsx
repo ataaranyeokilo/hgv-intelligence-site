@@ -22,7 +22,7 @@ export function IntelligencePageWithDownload({
   return (
     <IntelligenceDownloadProvider>
       <ExploreAllIntelligenceReports
-        generalReports={generalReports}
+        items={generalReports}
         showPlaceholders={showPlaceholders}
       />
       <WeeklyReportsPitchSection latestWeekly={weeklyLatest} />

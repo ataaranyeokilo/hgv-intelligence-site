@@ -3,7 +3,10 @@ import type { Metadata } from "next";
 import { ExploreAllIntelligenceReports } from "@/components/intelligence/ExploreAllIntelligenceReports";
 import { IntelligenceDownloadProvider } from "@/components/intelligence/IntelligenceDownloadProvider";
 import { ResearchHero } from "@/components/sections/ResearchHero";
-import { partitionPublishedReports } from "@/lib/reports/classify";
+import {
+  isIntelligenceLibraryItem,
+  isWeeklyReport,
+} from "@/lib/reports/classify";
 import { listPublishedReports } from "@/lib/reports/queries";
 
 export const metadata: Metadata = {
@@ -14,22 +17,25 @@ export const metadata: Metadata = {
 
 export default async function ResearchPage() {
   const reports = await listPublishedReports();
-  const { general } = partitionPublishedReports(reports);
+  const items = reports.filter(
+    (report) =>
+      isIntelligenceLibraryItem(report) || !isWeeklyReport(report.category),
+  );
 
   return (
     <>
       <ResearchHero />
-      {reports.length === 0 ? (
+      {items.length === 0 ? (
         <IntelligenceDownloadProvider>
           <ExploreAllIntelligenceReports
-            generalReports={general}
+            items={items}
             headingAs="h2"
             showPlaceholders
           />
         </IntelligenceDownloadProvider>
       ) : (
         <ExploreAllIntelligenceReports
-          generalReports={general}
+          items={items}
           headingAs="h2"
           showPlaceholders={false}
         />

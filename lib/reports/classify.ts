@@ -1,4 +1,8 @@
-import type { IntelligenceReportListItem } from "@/lib/reports/types";
+import {
+  asReportKind,
+  type IntelligenceReportListItem,
+  type ReportKind,
+} from "@/lib/reports/types";
 
 /**
  * Temporary presentation-layer classification until a controlled report_type / frequency field exists.
@@ -16,6 +20,24 @@ export function isWeeklyReport(category: string | null | undefined): boolean {
   return normalised.includes("weekly");
 }
 
+export function libraryKind(
+  report: Pick<IntelligenceReportListItem, "kind">,
+): ReportKind {
+  return asReportKind(report.kind);
+}
+
+export function isResearchLibraryItem(
+  report: Pick<IntelligenceReportListItem, "kind">,
+): boolean {
+  return libraryKind(report) === "research";
+}
+
+export function isIntelligenceLibraryItem(
+  report: Pick<IntelligenceReportListItem, "kind">,
+): boolean {
+  return libraryKind(report) === "intelligence";
+}
+
 export function partitionPublishedReports(
   reports: IntelligenceReportListItem[],
 ): {
@@ -26,6 +48,7 @@ export function partitionPublishedReports(
   const weekly: IntelligenceReportListItem[] = [];
 
   for (const report of reports) {
+    if (!isResearchLibraryItem(report)) continue;
     if (isWeeklyReport(report.category)) {
       weekly.push(report);
     } else {

@@ -1,4 +1,4 @@
-import { ButtonLink } from "@/components/ui/Button";
+import { AdminLibraryIntro } from "@/components/admin/AdminLibraryIntro";
 
 type AdminReportsIntroProps = {
   newReportHref: string;
@@ -6,25 +6,11 @@ type AdminReportsIntroProps = {
 
 export function AdminReportsIntro({ newReportHref }: AdminReportsIntroProps) {
   return (
-    <>
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
-        Admin
-      </p>
-      <h1 className="mt-3 text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl">
-        Reports
-      </h1>
-      <p className="mt-3 max-w-xl text-sm leading-relaxed text-neutral-600 sm:text-base">
-        Research reports on the website. Create a report, attach the file, and
-        publish it to add a card on Research.
-      </p>
-      <div className="mt-10">
-        <ButtonLink
-          href={newReportHref}
-          className="!bg-fleetSignal !text-white hover:!bg-blue-700"
-        >
-          New report
-        </ButtonLink>
-      </div>
-    </>
+    <AdminLibraryIntro
+      heading="Reports"
+      description="Research reports on the website. Create a report, attach the file, then use Go live to add a card on Research."
+      newHref={newReportHref}
+      newLabel="New report"
+    />
   );
 }

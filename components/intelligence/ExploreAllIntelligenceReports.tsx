@@ -1,17 +1,19 @@
 import { IntelligenceReportCard } from "@/components/reports/IntelligenceReportCard";
 import { IntelligenceReportPlaceholderCard } from "@/components/reports/IntelligenceReportPlaceholderCard";
+import { IntelligenceSubscribeCard } from "@/components/reports/IntelligenceSubscribeCard";
 import { reportLibraryPlaceholders } from "@/lib/intelligence/report-library-placeholders";
 import { pageContainerClass } from "@/lib/layout";
+import { isIntelligenceLibraryItem } from "@/lib/reports/classify";
 import type { IntelligenceReportListItem } from "@/lib/reports/types";
 
 type ExploreAllIntelligenceReportsProps = {
-  generalReports: IntelligenceReportListItem[];
+  items: IntelligenceReportListItem[];
   headingAs?: "h1" | "h2";
   showPlaceholders: boolean;
 };
 
 export function ExploreAllIntelligenceReports({
-  generalReports,
+  items,
   headingAs: Heading = "h1",
   showPlaceholders,
 }: ExploreAllIntelligenceReportsProps) {
@@ -31,10 +33,9 @@ export function ExploreAllIntelligenceReports({
           <p className="mt-2 text-xs text-neutral-500">
             Preview cards below — live reports will appear here once published.
           </p>
-        ) : generalReports.length === 0 ? (
+        ) : items.length === 0 ? (
           <p className="mt-6 text-sm text-neutral-600">
-            General intelligence reports will appear here when published. Weekly
-            operator reports are described below.
+            Reports and Intelligence cards will appear here when they are live.
           </p>
         ) : null}
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -42,9 +43,13 @@ export function ExploreAllIntelligenceReports({
             ? reportLibraryPlaceholders.map((item) => (
                 <IntelligenceReportPlaceholderCard key={item.title} item={item} />
               ))
-            : generalReports.map((report) => (
-                <IntelligenceReportCard key={report.id} report={report} />
-              ))}
+            : items.map((item) =>
+                isIntelligenceLibraryItem(item) ? (
+                  <IntelligenceSubscribeCard key={item.id} item={item} />
+                ) : (
+                  <IntelligenceReportCard key={item.id} report={item} />
+                ),
+              )}
         </div>
       </div>
     </section>
