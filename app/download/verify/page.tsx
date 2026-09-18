@@ -51,8 +51,8 @@ export default async function VerifyDownloadPage({
         title="Email verified"
         description={
           downloadHref
-            ? "Your download should start automatically. If it does not, use the button below."
-            : "Your email is confirmed. You can download your file below."
+            ? "Your email is confirmed. Your download has started."
+            : "Your email is confirmed. If the file did not start downloading, contact support."
         }
       />
       <Section bordered={false}>
