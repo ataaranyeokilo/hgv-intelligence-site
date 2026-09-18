@@ -37,7 +37,7 @@ export function IntelligenceSubscribeCard({
         </span>
       </span>
       <Link
-        href="/contact"
+        href={`/quote?interest=${encodeURIComponent(item.title)}`}
         className={reportCardHitTargetClassName}
         aria-label={`Request a quote for ${item.title}`}
       >

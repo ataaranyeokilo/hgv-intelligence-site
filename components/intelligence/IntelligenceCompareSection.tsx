@@ -63,7 +63,7 @@ export function IntelligenceCompareSection() {
               ))}
             </ul>
             <ButtonLink
-              href="/contact"
+              href="/quote"
               className="mt-8 w-full !bg-fleetSignal !text-white shadow-soft hover:!bg-blue-700"
             >
               Request a quote
