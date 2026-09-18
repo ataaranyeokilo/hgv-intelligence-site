@@ -271,12 +271,12 @@ export function ReportEditor({
       ) : null}
       {isIntelligence ? (
         <>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Button
               type="submit"
               name="intent"
               value="draft"
-              className="!bg-fleetSignal hover:!bg-blue-700"
+              className="w-full !bg-fleetSignal hover:!bg-blue-700 sm:w-auto"
               disabled={isPending}
             >
               {isPending ? "Saving…" : "Save"}
@@ -289,12 +289,13 @@ export function ReportEditor({
         </>
       ) : (
         <>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Button
               type="submit"
               name="intent"
               value="draft"
               variant="secondary"
+              className="w-full sm:w-auto"
               disabled={isPending}
             >
               {isPending ? "Saving…" : "Save as draft"}
@@ -303,7 +304,7 @@ export function ReportEditor({
               type="submit"
               name="intent"
               value="published"
-              className="!bg-fleetSignal hover:!bg-blue-700"
+              className="w-full !bg-fleetSignal hover:!bg-blue-700 sm:w-auto"
               disabled={isPending}
             >
               {isPending ? "Saving…" : "Publish"}

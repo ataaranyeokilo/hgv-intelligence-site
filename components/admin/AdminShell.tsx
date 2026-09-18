@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { signOutAdmin } from "@/lib/admin/reports";
 import { isAdminUiPreview } from "@/lib/admin/preview";
@@ -32,63 +33,89 @@ export function AdminShell({
   preview,
 }: AdminShellProps) {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
   const isPreview = preview ?? isAdminUiPreview();
   const adminNav = defaultNav.map((item) => ({
     ...item,
     href: item.href === "/admin" ? basePath : `${basePath}${item.href.slice("/admin".length)}`,
   }));
 
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
   return (
     <div className="min-h-screen bg-white">
-      <header className="sticky top-0 z-40 bg-fleetSignal">
+      <header className="relative sticky top-0 z-40 bg-fleetSignal">
         <div
-          className={`${pageContainerClass} flex flex-col gap-4 py-5 sm:flex-row sm:items-center sm:justify-between`}
+          className={`${pageContainerClass} flex items-center justify-between gap-3 py-3 sm:py-5`}
         >
-          <div className="flex flex-wrap items-center gap-x-10 gap-y-3">
-            <Link href={basePath} className="leading-none">
-              <span className="block text-base font-semibold tracking-tight text-white">
-                Fleet Signal
-              </span>
-              <span className="mt-0.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-blue-100">
-                Admin
-              </span>
-            </Link>
-            <nav aria-label="Admin" className="flex gap-8 text-sm sm:text-base">
+          <Link href={basePath} className="min-w-0 leading-none">
+            <span className="block text-base font-semibold tracking-tight text-white">
+              Fleet Signal
+            </span>
+            <span className="mt-0.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-blue-100">
+              Admin
+            </span>
+          </Link>
+          <button
+            type="button"
+            className="inline-flex shrink-0 items-center justify-center rounded-sm border border-white/30 px-3 py-2 text-sm font-medium text-white sm:hidden"
+            aria-expanded={menuOpen}
+            aria-controls="admin-navigation"
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            Menu
+          </button>
+          <nav
+            id="admin-navigation"
+            aria-label="Admin"
+            className={`${
+              menuOpen ? "flex" : "hidden"
+            } absolute left-0 right-0 top-full flex-col border-b border-blue-800 bg-fleetSignal px-6 py-4 sm:static sm:flex sm:flex-1 sm:flex-row sm:items-center sm:justify-between sm:border-0 sm:bg-transparent sm:p-0`}
+          >
+            <ul className="flex flex-col gap-3 text-sm sm:flex-row sm:flex-wrap sm:gap-x-8 sm:gap-y-2 sm:text-base">
               {adminNav.map((item) => {
                 const active = pathname
                   ? isActive(pathname, item.href, basePath)
                   : false;
                 return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={
-                      active
-                        ? "font-medium text-white underline decoration-white decoration-2 underline-offset-4"
-                        : "text-blue-100 hover:text-white"
-                    }
-                  >
-                    {item.label}
-                  </Link>
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={
+                        active
+                          ? "font-medium text-white underline decoration-white decoration-2 underline-offset-4"
+                          : "text-blue-100 hover:text-white"
+                      }
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
                 );
               })}
-            </nav>
-          </div>
-          <div className="flex items-center gap-6 text-sm">
-            <Link href="/" className="text-blue-100 hover:text-white">
-              View website
-            </Link>
-            {isPreview ? null : (
-              <form action={signOutAdmin}>
-                <button
-                  type="submit"
-                  className="font-medium text-blue-100 hover:text-white"
-                >
-                  Sign out
-                </button>
-              </form>
-            )}
-          </div>
+            </ul>
+            <div className="mt-4 flex flex-col gap-3 border-t border-white/20 pt-4 text-sm sm:mt-0 sm:flex-row sm:items-center sm:gap-6 sm:border-0 sm:pt-0">
+              <Link
+                href="/"
+                className="text-blue-100 hover:text-white"
+                onClick={() => setMenuOpen(false)}
+              >
+                View website
+              </Link>
+              {isPreview ? null : (
+                <form action={signOutAdmin}>
+                  <button
+                    type="submit"
+                    className="font-medium text-blue-100 hover:text-white"
+                  >
+                    Sign out
+                  </button>
+                </form>
+              )}
+            </div>
+          </nav>
         </div>
       </header>
       {isPreview ? (
@@ -96,7 +123,7 @@ export function AdminShell({
           UI preview with sample data. Saving is not connected yet.
         </p>
       ) : null}
-      <div className={`${pageContainerClass} py-10 sm:py-14`}>{children}</div>
+      <div className={`${pageContainerClass} py-6 sm:py-14`}>{children}</div>
     </div>
   );
 }

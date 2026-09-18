@@ -27,7 +27,7 @@ export function AdminLibraryIntro({
       <div className="mt-10">
         <ButtonLink
           href={newHref}
-          className="!bg-fleetSignal !text-white hover:!bg-blue-700"
+          className="w-full !bg-fleetSignal !text-white hover:!bg-blue-700 sm:w-auto"
         >
           {newLabel}
         </ButtonLink>
