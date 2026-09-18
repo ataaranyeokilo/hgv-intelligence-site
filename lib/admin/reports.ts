@@ -112,7 +112,8 @@ export async function listAdminReports(
     query = query.eq("kind", kind);
   }
 
-  let { data, error } = await query;
+  const { data, error: queryError } = await query;
+  let error = queryError;
   let rows = (data ?? null) as Record<string, unknown>[] | null;
 
   if (error) {
@@ -180,7 +181,7 @@ export async function saveAdminReport(
       };
     }
 
-    const payload = {
+    const payloadWithoutKind = {
       slug: input.slug.trim(),
       title: input.title.trim(),
       category: input.category.trim(),
@@ -189,7 +190,6 @@ export async function saveAdminReport(
       published_at: input.publishedAt,
       status,
       published: status === "published",
-      kind,
       download_storage_path: downloadStoragePath,
       hero_image_path: input.heroImagePath.trim() || null,
       content: {
@@ -200,8 +200,7 @@ export async function saveAdminReport(
       },
       updated_at: new Date().toISOString(),
     };
-
-    const { kind: _kind, ...payloadWithoutKind } = payload;
+    const payload = { ...payloadWithoutKind, kind };
 
     async function write(
       body: typeof payload | typeof payloadWithoutKind,
