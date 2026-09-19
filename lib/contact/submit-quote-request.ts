@@ -2,7 +2,7 @@
 
 import { getNotifyEmail } from "@/lib/env";
 import { sendResendEmail } from "@/lib/email/resend-client";
-import { createClient } from "@/lib/supabase/server";
+import { createFormInsertClient } from "@/lib/supabase/form-insert";
 
 export type SubmitQuoteRequestResult = "success" | "error";
 
@@ -18,48 +18,85 @@ export async function submitQuoteRequest(input: {
   notes: string;
   interest: string;
 }): Promise<SubmitQuoteRequestResult> {
-  const supabase = await createClient();
-  const fullName = input.fullName.trim();
-  const email = input.email.trim().toLowerCase();
-  const company = input.company.trim();
+  try {
+    const fullName = input.fullName.trim();
+    const email = input.email.trim().toLowerCase();
+    const company = input.company.trim();
+    const phone = input.phone.trim();
+    const role = input.role.trim();
+    const sector = input.sector.trim() || "Not specified";
+    const region = input.region.trim() || "Not specified";
+    const volume = input.volume.trim() || "Not specified";
+    const notes = input.notes.trim();
+    const interest = input.interest.trim();
 
-  if (!fullName || !email || !company) {
-    return "error";
-  }
+    if (!fullName || !email || !company) {
+      return "error";
+    }
 
-  const message = [
-    "Quote request — Fleet Signal Intelligence",
-    input.interest.trim() ? `Interest: ${input.interest.trim()}` : null,
-    `Company: ${company}`,
-    input.role.trim() ? `Role: ${input.role.trim()}` : null,
-    `Sector: ${input.sector.trim() || "Not specified"}`,
-    `Coverage: ${input.region.trim() || "Not specified"}`,
-    `Volume: ${input.volume.trim() || "Not specified"}`,
-    input.phone.trim() ? `Phone: ${input.phone.trim()}` : null,
-    "",
-    input.notes.trim() || "No extra notes.",
-  ]
-    .filter((line) => line !== null)
-    .join("\n");
+    const supabase = createFormInsertClient();
+    const extraNotes = [
+      interest ? `Interest: ${interest}` : null,
+      role ? `Role: ${role}` : null,
+      phone ? `Phone: ${phone}` : null,
+      notes || null,
+    ]
+      .filter((line) => line !== null)
+      .join("\n");
 
-  const { error } = await supabase.from("contact_messages").insert({
-    full_name: fullName,
-    email,
-    message,
-  });
-
-  if (error) {
-    return "error";
-  }
-
-  const notifyTo = getNotifyEmail();
-  if (notifyTo) {
-    await sendResendEmail({
-      to: notifyTo,
-      subject: `New quote request — ${company}`,
-      text: `From: ${fullName} <${email}>\n\n${message}`,
+    const { error: quoteError } = await supabase.from("quote_enquiries").insert({
+      full_name: fullName,
+      work_email: email,
+      company,
+      industry: sector,
+      regions_of_interest: region,
+      reports_required: volume,
+      additional_information: extraNotes || null,
     });
-  }
 
-  return "success";
+    const message = [
+      "Quote request — Fleet Signal Intelligence",
+      interest ? `Interest: ${interest}` : null,
+      `Company: ${company}`,
+      role ? `Role: ${role}` : null,
+      `Sector: ${sector}`,
+      `Coverage: ${region}`,
+      `Volume: ${volume}`,
+      phone ? `Phone: ${phone}` : null,
+      "",
+      notes || "No extra notes.",
+    ]
+      .filter((line) => line !== null)
+      .join("\n");
+
+    const { error: contactError } = await supabase.from("contact_messages").insert({
+      full_name: fullName,
+      email,
+      message,
+    });
+
+    if (quoteError) {
+      console.error("[submitQuoteRequest] quote_enquiries:", quoteError.message);
+    }
+    if (contactError) {
+      console.error("[submitQuoteRequest] contact_messages:", contactError.message);
+    }
+    if (quoteError && contactError) {
+      return "error";
+    }
+
+    const notifyTo = getNotifyEmail();
+    if (notifyTo) {
+      await sendResendEmail({
+        to: notifyTo,
+        subject: `New quote request — ${company}`,
+        text: `From: ${fullName} <${email}>\n\n${message}`,
+      });
+    }
+
+    return "success";
+  } catch (cause) {
+    console.error("[submitQuoteRequest] uncaught:", cause);
+    return "error";
+  }
 }
