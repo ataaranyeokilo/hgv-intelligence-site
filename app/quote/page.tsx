@@ -27,7 +27,7 @@ export default async function QuotePage({ searchParams }: QuotePageProps) {
               What you get
             </p>
             <h2 className="mt-3 text-2xl font-semibold tracking-tight text-neutral-900">
-              We'll quote you for your market
+              We&apos;ll quote you for your market
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-neutral-600 sm:text-base">
               Price depends on who you sell to, where you cover, and how many
