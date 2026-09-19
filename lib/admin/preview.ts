@@ -1,3 +1,4 @@
+import type { AdminLeadPerson } from "@/lib/admin/leads";
 import type { AdminOverviewMetrics } from "@/lib/admin/metrics";
 import type { AdminReportListItem } from "@/lib/admin/reports";
 import type { ReportStatus } from "@/lib/reports/types";
@@ -124,6 +125,39 @@ export const adminPreviewMetrics: AdminOverviewMetrics = {
   mostClickedTitle: "UK HGV Market Outlook Q2 2026",
   mostDownloadedTitle: "UK Operator Insights Report 2026",
 };
+
+export const adminPreviewLeads: AdminLeadPerson[] = [
+  {
+    email: "alex@northfleetfuels.example",
+    name: "Alex Taylor",
+    lastSeenAt: "2026-09-18T22:10:00.000Z",
+    sources: ["quote", "download"],
+    quotes: [
+      {
+        createdAt: "2026-09-18T22:10:00.000Z",
+        company: "North Fleet Fuels",
+        role: "Sales director",
+        sector: "Fuel suppliers",
+        region: "North of England",
+        volume: "50–200 new operators a week",
+        phone: "0161 000 0000",
+        interest: "New Operator Contact Enrichment",
+        notes: "Looking at mixed fleets in Greater Manchester.",
+      },
+    ],
+    latestContactMessage: null,
+    downloadLabel: "Sample download (verified)",
+  },
+  {
+    email: "sam@example.com",
+    name: null,
+    lastSeenAt: "2026-09-12T09:00:00.000Z",
+    sources: ["download"],
+    quotes: [],
+    latestContactMessage: null,
+    downloadLabel: "Sample download",
+  },
+];
 
 export function getAdminPreviewReport(
   id: string,

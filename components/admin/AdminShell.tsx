@@ -10,6 +10,7 @@ import { pageContainerClass } from "@/lib/layout";
 
 const defaultNav = [
   { href: "/admin", label: "Overview" },
+  { href: "/admin/leads", label: "Leads" },
   { href: "/admin/reports", label: "Reports" },
   { href: "/admin/intelligence", label: "Intelligence" },
 ];
