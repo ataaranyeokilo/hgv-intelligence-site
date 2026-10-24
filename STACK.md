@@ -20,7 +20,7 @@
 
 **Email**
 
-- Resend (download verification links, contact form notifications)
+- Resend (download welcome emails, contact form notifications)
 
 # Environment configuration
 
@@ -30,10 +30,11 @@ Where each variable belongs for local dev, Worker preview, and Cloudflare produc
 | -------- | -------- | ---------------------------- | ------------------------------- | ------------------ | --------------------- | ---------------------------------------- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Client + server Supabase | Yes | Yes | Yes | — | No |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Client + server Supabase | Yes | Yes | Yes | — | No |
-| `NEXT_PUBLIC_SITE_URL` | Verification links, canonical URL | Yes (e.g. `http://localhost:3000`) | Yes (e.g. `http://localhost:8787`) | Yes (production URL) | — | Yes (production URL; keep in sync with dashboard) |
+| `NEXT_PUBLIC_SITE_URL` | Personal links in emails, canonical URL | Yes (e.g. `http://localhost:3000`) | Yes (e.g. `http://localhost:8787`) | Yes (production URL) | — | Yes (production URL; keep in sync with dashboard) |
 | `SUPABASE_SERVICE_ROLE_KEY` | Signed downloads, admin server ops | Yes | Yes | — | Yes | No |
 | `RESEND_API_KEY` | Email | Yes | Yes | — | Yes | No |
 | `EMAIL_FROM` | Email | Yes | Yes | Yes | — | No |
+| `RESEND_WEBHOOK_SECRET` | Verifies Resend delivery webhooks (`/api/webhooks/resend`) | Optional | Optional | — | Yes | No |
 | `NOTIFY_EMAIL` | Contact-form staff notifications | Optional | Optional | Optional (recommended) | — | No |
 | `ADMIN_EMAIL` | `/admin` gate | Yes | Yes | Yes | — | No |
 | `NEXTJS_ENV` | Wrangler preview | No | Yes (`development`) | No | No | No |
@@ -65,11 +66,12 @@ Next.js inlines `NEXT_PUBLIC_*` at **build** time. Git-connected Workers Builds 
 
 See [MIGRATION-DECISIONS.md](MIGRATION-DECISIONS.md) for build/deploy commands and checklists.
 
-### Resend (download verification + contact notify)
+### Resend (download emails + contact notify)
 
 The app reads **`RESEND_API_KEY`** and **`EMAIL_FROM`** only (via [`lib/email/resend-client.ts`](lib/email/resend-client.ts)). There is no `FROM_EMAIL` alias.
 
-- **Production downloads:** both must be set on the Worker at **runtime**. Missing either causes download submit to fail in production (local dev can still succeed without email when `NODE_ENV` is `development`).
+- **Production downloads:** both must be set on the Worker at **runtime** for the welcome email. A failed email never blocks the download.
+- **Delivery webhook:** in Resend → Webhooks, add `https://<site>/api/webhooks/resend` for `email.delivered`, `email.bounced` and `email.complained`, and set its signing secret as `RESEND_WEBHOOK_SECRET`. Each event updates `download_contacts.email_status`, shown in the admin leads table.
 - **Onboarding sender:** `onboarding@resend.dev` (or `Name <onboarding@resend.dev>`) is fine for Resend test rules; replace with a **verified-domain** address in `EMAIL_FROM` on Cloudflare before go-live, then redeploy.
 - **Contact form:** messages always save to Supabase; a staff copy is sent only when **`NOTIFY_EMAIL`** is also set (plus Resend vars above).
 
@@ -77,9 +79,9 @@ The app reads **`RESEND_API_KEY`** and **`EMAIL_FROM`** only (via [`lib/email/re
 
 - Marketing pages are Server Components where practical; forms use Server Actions.
 - `/intelligence` — weekly pitch + free report library; sample section uses `#sample-download`. `/weekly-reports` redirects to that anchor (legacy).
-- Report downloads use one **email verification modal** on `/intelligence` and on `/intelligence/[slug]`; `/download/intelligence/[slug]` redirects to the article with `?download=1`.
+- Report downloads use one **email download modal** on `/intelligence` and on `/intelligence/[slug]`; `/download/intelligence/[slug]` redirects to the article with `?download=1`.
 - Published intelligence reports are read with the Supabase **anon** key and RLS (`status = 'published'`).
-- Download flow: email → Postgres lead + token → Resend verification link → verify RPC → **signed Storage URL** (service role, server-only) auto-starts in the browser, with a Download now fallback.
+- Download flow (one step, no verification): email → `record_download` RPC (contact + lead) → `hgv_download_contact` cookie with the contact's access token (1 year) → **signed Storage URL** (service role, server-only) starts in the browser. New emails get one welcome email with personal `/access/[token]` links that remember any device they are opened on. Remembered browsers skip the form (`record_remembered_download` RPC).
 - Report analytics: anonymous `report_events` rows (`viewed`, `clicked`, `download_started`). No personal data. Admin reads via service role.
 
 # Admin behaviour

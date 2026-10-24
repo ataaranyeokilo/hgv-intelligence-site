@@ -82,14 +82,32 @@ function parseQuoteMessage(message: string, createdAt: string): AdminQuoteDetail
   };
 }
 
-function downloadLabel(source: string, verified: boolean): string {
+type ContactStatusRow = {
+  email: string;
+  email_status: string;
+};
+
+const EMAIL_STATUS_LABELS: Record<string, string> = {
+  delivered: "email delivered",
+  bounced: "email bounced",
+  complained: "marked as spam",
+};
+
+function downloadLabel(
+  source: string,
+  verified: boolean,
+  emailStatus: string | undefined,
+): string {
   const kind =
     source === "intelligence_report"
       ? "Report download"
       : source === "weekly_sample"
         ? "Weekly sample"
         : "Sample download";
-  return verified ? `${kind} (verified)` : kind;
+  const status =
+    (emailStatus && EMAIL_STATUS_LABELS[emailStatus]) ||
+    (verified ? "verified" : null);
+  return status ? `${kind} (${status})` : kind;
 }
 
 function normaliseEmail(email: string): string {
@@ -171,22 +189,29 @@ export async function listAdminLeads(): Promise<AdminLeadPerson[]> {
   await requireAdminUser();
   const supabase = createServiceClient();
 
-  const [leadsResult, contactsResult, quotesResult] = await Promise.all([
-    supabase
-      .from("leads")
-      .select("email, source, status, created_at")
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("contact_messages")
-      .select("full_name, email, message, created_at")
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("quote_enquiries")
-      .select(
-        "full_name, work_email, company, industry, regions_of_interest, reports_required, additional_information, created_at",
-      )
-      .order("created_at", { ascending: false }),
-  ]);
+  const [leadsResult, contactsResult, quotesResult, downloadContactsResult] =
+    await Promise.all([
+      supabase
+        .from("leads")
+        .select("email, source, status, created_at")
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("contact_messages")
+        .select("full_name, email, message, created_at")
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("quote_enquiries")
+        .select(
+          "full_name, work_email, company, industry, regions_of_interest, reports_required, additional_information, created_at",
+        )
+        .order("created_at", { ascending: false }),
+      supabase.from("download_contacts").select("email, email_status"),
+    ]);
+
+  const emailStatusByEmail = new Map<string, string>();
+  for (const row of (downloadContactsResult.data ?? []) as ContactStatusRow[]) {
+    emailStatusByEmail.set(normaliseEmail(row.email), row.email_status);
+  }
 
   const byEmail = new Map<string, AdminLeadPerson>();
 
@@ -194,7 +219,11 @@ export async function listAdminLeads(): Promise<AdminLeadPerson[]> {
     mergePerson(byEmail, row.email, {
       at: row.created_at,
       source: "download",
-      downloadLabel: downloadLabel(row.source, row.status === "verified"),
+      downloadLabel: downloadLabel(
+        row.source,
+        row.status === "verified",
+        emailStatusByEmail.get(normaliseEmail(row.email)),
+      ),
     });
   }
 

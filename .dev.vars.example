@@ -10,5 +10,6 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 RESEND_API_KEY=
 # Resend onboarding: onboarding@resend.dev — production: verified-domain sender (see .env.local.example)
 EMAIL_FROM=
+RESEND_WEBHOOK_SECRET=
 NOTIFY_EMAIL=
 ADMIN_EMAIL=admin@example.com

@@ -15,7 +15,7 @@ export const devMasterReport: IntelligenceReport = {
   title: "UK HGV Operator Master 2025",
   category: "Operator data",
   summary:
-    "Newly licensed UK HGV operators from 2025, with fleet size, region and licence type. Company names, addresses and licence numbers are hidden until you verify your email.",
+    "Newly licensed UK HGV operators from 2025, with fleet size, region and licence type. Company names, addresses and licence numbers are hidden until you enter your email.",
   reading_time_minutes: 5,
   published_at: "2025-12-01T09:00:00.000Z",
   published: true,

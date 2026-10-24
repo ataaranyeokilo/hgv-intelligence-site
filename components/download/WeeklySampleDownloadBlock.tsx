@@ -5,7 +5,6 @@ import { useEffect, useState, useTransition } from "react";
 import { DownloadEmailForm } from "@/components/download/DownloadEmailForm";
 import { Button } from "@/components/ui/Button";
 import { startBrowserDownload } from "@/lib/download/start-browser-download";
-import { WEEKLY_SAMPLE_EMAIL_SUBJECT } from "@/lib/download/constants";
 import {
   hasRememberedDownload,
   startRememberedDownload,
@@ -77,7 +76,6 @@ export function WeeklySampleDownloadBlock({
     <div className={className}>
       <DownloadEmailForm
         source="weekly_sample"
-        emailSubject={WEEKLY_SAMPLE_EMAIL_SUBJECT}
         submitLabel={submitLabel}
         variant={variant}
         layout={layout}
@@ -88,7 +86,7 @@ export function WeeklySampleDownloadBlock({
             variant === "dark" ? "text-neutral-400" : "text-neutral-500"
           }`}
         >
-          We&apos;ll email a verification link before your download starts.
+          Your download starts straight away. We&apos;ll remember you next time.
         </p>
       ) : null}
       {error ? <p className="mt-3 text-sm text-red-600">{error}</p> : null}

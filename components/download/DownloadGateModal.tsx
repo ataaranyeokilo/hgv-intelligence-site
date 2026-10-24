@@ -9,7 +9,6 @@ export type DownloadGateModalContent = {
   description?: string;
   source: "weekly_sample" | "intelligence_report";
   reportId?: string;
-  emailSubject: string;
   submitLabel?: string;
 };
 
@@ -85,14 +84,14 @@ export function DownloadGateModal({
             key={`${content.source}-${content.reportId ?? "sample"}`}
             source={content.source}
             reportId={content.reportId}
-            emailSubject={content.emailSubject}
-            submitLabel={content.submitLabel ?? "Continue"}
+            submitLabel={content.submitLabel ?? "Download"}
             variant="light"
             layout="stack"
+            onDownloadStarted={() => window.setTimeout(onClose, 1500)}
           />
         </div>
         <p className="mt-4 text-xs leading-relaxed text-neutral-500">
-          We&apos;ll email a verification link before your download starts.
+          Your download starts straight away. We&apos;ll remember you next time.
         </p>
       </div>
     </div>

@@ -219,7 +219,7 @@ export function ReportEditor({
         hint={
           isIntelligence
             ? "Optional. Intelligence cards on Research send visitors to request a quote, not to a download."
-            : "PDF, Word, Excel, or CSV. Spreadsheets show a redacted 25-row preview on the public page. Visitors download the full file after verifying their email."
+            : "PDF, Word, Excel, or CSV. Spreadsheets show a redacted 25-row preview on the public page. Visitors download the full file after entering their email."
         }
       >
         {fileName || downloadStoragePath ? (

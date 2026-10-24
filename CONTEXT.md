@@ -21,7 +21,7 @@ Live **Intelligence** items (`kind = intelligence`) also appear on **`/research`
 
 Weekly vs general split uses the admin **category** field (contains `weekly`) until a dedicated report type exists in the schema. Intelligence items are a separate `kind`, not a weekly category.
 
-Published library cards link to the article page. Spreadsheet reports show a **redacted 25-row snippet** (company name, address, licence and similar identity columns are never stored in that preview). **Download** (header and below the table) opens the **email verification modal**. PDF reports keep the article + key findings layout. Placeholder cards and the weekly sample CTA open the same modal.
+Published library cards link to the article page. Spreadsheet reports show a **redacted 25-row snippet** (company name, address, licence and similar identity columns are never stored in that preview). **Download** (header and below the table) opens the **email download modal** (one step, no verification; known visitors skip it). PDF reports keep the article + key findings layout. Placeholder cards and the weekly sample CTA open the same modal.
 
 Legacy URL `/download/intelligence/[slug]` redirects to `/intelligence/[slug]?download=1` (opens the modal).
 
@@ -39,7 +39,9 @@ Weekly Excel files with new UK HGV operator leads (company, fleet, licence, enri
 | `/intelligence/[slug]` | Report article or redacted spreadsheet preview; download via modal (`?download=1` auto-opens modal) |
 | `/weekly-reports` | Redirects to `/intelligence#sample-download` (legacy URL) |
 | `/download/sample` | Legacy: token → verify; else → `/intelligence#sample-download` |
-| `/download/verify` | Email verification → signed file download starts automatically |
+| `/download/verify` | Legacy: old verification links → signed file download starts automatically |
+| `/access/[token]` | Personal link from download emails: remembers this device, then redirects to `?next=` |
+| `/api/webhooks/resend` | Resend delivery webhook → `download_contacts.email_status` (delivered / bounced / complained) |
 | `/about` | Trust |
 | `/faqs` | Frequently asked questions |
 | `/contact` | Contact form |
@@ -48,7 +50,7 @@ Weekly Excel files with new UK HGV operator leads (company, fleet, licence, enri
 
 # Customer journey
 
-Home → Research library → Report detail (`/intelligence/[slug]`) → redacted spreadsheet snippet (if uploaded) → Download (email modal) → Verification email → Click link → File download starts → Contact / sales follow-up.
+Home → Research library → Report detail (`/intelligence/[slug]`) → redacted spreadsheet snippet (if uploaded) → Download (email modal, first time on a device only) → File download starts → Welcome email with personal links (new emails only) → Contact / sales follow-up.
 
 Sample Excel: **`/about`** (`#weekly-reports`) and **`/intelligence`** (`#sample-download`).
 

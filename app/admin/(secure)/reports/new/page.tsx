@@ -19,7 +19,7 @@ export default function AdminNewReportPage() {
       </h1>
       <p className="mt-3 max-w-xl text-sm leading-relaxed text-neutral-600 sm:text-base">
         Spreadsheet uploads show a redacted 25-row preview on the public page.
-        The full file stays behind email verification.
+        The full file downloads after the visitor enters their email.
       </p>
       <p className="mt-4">
         <Link

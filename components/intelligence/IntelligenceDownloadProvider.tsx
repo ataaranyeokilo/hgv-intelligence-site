@@ -14,10 +14,6 @@ import {
   type DownloadGateModalContent,
 } from "@/components/download/DownloadGateModal";
 import { startBrowserDownload } from "@/lib/download/start-browser-download";
-import {
-  intelligenceReportEmailSubject,
-  WEEKLY_SAMPLE_EMAIL_SUBJECT,
-} from "@/lib/download/constants";
 import { startRememberedDownload } from "@/lib/leads/remember-download";
 
 type IntelligenceDownloadContextValue = {
@@ -41,9 +37,8 @@ export function useIntelligenceDownload(): IntelligenceDownloadContextValue {
 const weeklySampleContent: DownloadGateModalContent = {
   title: "Download sample report",
   description:
-    "Enter your work email to receive a verification link for the redacted weekly operator sample.",
+    "Enter a valid email address and your download will start straight away.",
   source: "weekly_sample",
-  emailSubject: WEEKLY_SAMPLE_EMAIL_SUBJECT,
   submitLabel: "Download sample report",
 };
 
@@ -88,11 +83,10 @@ export function IntelligenceDownloadProvider({
         }
         setContent({
           title: "Download full report",
-          description: `Enter your work email to receive a verification link for “${input.title}”.`,
+          description: "Enter a valid email address and your download will start straight away.",
           source: "intelligence_report",
           reportId: input.reportId,
-          emailSubject: intelligenceReportEmailSubject(input.title),
-          submitLabel: "Send verification email",
+          submitLabel: "Download report",
         });
         setOpen(true);
       })();

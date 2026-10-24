@@ -78,7 +78,7 @@ export function ReportSpreadsheetPreview({
           <IconLock className="h-4 w-4" />
         </span>
         <p className="mt-2 text-sm font-semibold text-neutral-900">
-          Full file after email verification
+          Full file with your work email
         </p>
         <p className="mt-1 max-w-sm text-xs leading-relaxed text-neutral-600">
           Company names, addresses and licence numbers are hidden in this

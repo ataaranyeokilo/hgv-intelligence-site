@@ -1,6 +1,6 @@
 # Supabase Storage (manual setup)
 
-Create these **private** buckets in the Supabase dashboard before using verified downloads or admin uploads:
+Create these **private** buckets in the Supabase dashboard before using downloads or admin uploads:
 
 | Bucket | Purpose |
 | ------ | ------- |
@@ -9,7 +9,7 @@ Create these **private** buckets in the Supabase dashboard before using verified
 
 Signed download URLs require `SUPABASE_SERVICE_ROLE_KEY` on the Worker / `.env.local`.
 
-Apply SQL migrations in order (`001`–`010`) via the Supabase SQL editor or CLI. **Required:** run `009_fix_verify_download_token_ambiguous.sql` if email verification links fail or `verify_download_token` errors with ambiguous `storage_path`. Run `010_report_status_and_events.sql` before using report draft/archive statuses or admin overview metrics.
+Apply SQL migrations in order (`001`–`012`) via the Supabase SQL editor or CLI. **Required:** run `009_fix_verify_download_token_ambiguous.sql` if email verification links fail or `verify_download_token` errors with ambiguous `storage_path`. Run `010_report_status_and_events.sql` before using report draft/archive statuses or admin overview metrics. Run `012_one_step_downloads.sql` before deploying one-step downloads (the download form calls `record_download`).
 
 Create a single admin user in **Authentication → Users** (disable public sign-up in Auth settings).
 

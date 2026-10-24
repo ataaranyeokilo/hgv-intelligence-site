@@ -1,5 +1,5 @@
 /**
- * Baseline check: Supabase RPC path used by download lead flows.
+ * Baseline check: Supabase RPC path used by one-step download flows.
  * Run: node --env-file=.env.local scripts/verify-baseline-flow.mjs
  */
 import { createClient } from "@supabase/supabase-js";
@@ -15,36 +15,53 @@ if (!url || !anonKey) {
 
 const supabase = createClient(url, anonKey);
 const testEmail = `baseline-${Date.now()}@example.com`;
-const token = randomBytes(32).toString("base64url");
-const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+const newToken = randomBytes(32).toString("base64url");
 
-const { error: upsertError } = await supabase.rpc("upsert_download_lead", {
-  p_email: testEmail,
-  p_token: token,
-  p_expires_at: expiresAt,
-  p_source: "weekly_sample",
-  p_report_id: null,
-});
+async function recordDownload(token) {
+  const { data, error } = await supabase.rpc("record_download", {
+    p_email: testEmail,
+    p_new_token: token,
+    p_source: "weekly_sample",
+    p_report_id: null,
+  });
+  if (error) {
+    console.error("record_download failed:", error.message);
+    process.exit(1);
+  }
+  return Array.isArray(data) ? data[0] : null;
+}
 
-if (upsertError) {
-  console.error("upsert_download_lead failed:", upsertError.message);
+const first = await recordDownload(newToken);
+if (!first?.is_new || first.token !== newToken) {
+  console.error("record_download (new email) returned:", first);
   process.exit(1);
 }
 
-const { data: verifyData, error: verifyError } = await supabase.rpc(
-  "verify_download_token",
-  { p_token: token },
+// A known email keeps its original token; the new one passed here is ignored.
+const again = await recordDownload(randomBytes(32).toString("base64url"));
+if (again?.is_new !== false || again.token !== newToken) {
+  console.error("record_download (known email) returned:", again);
+  process.exit(1);
+}
+
+const { data: email, error: rememberedError } = await supabase.rpc(
+  "record_remembered_download",
+  { p_token: newToken, p_source: "weekly_sample", p_report_id: null },
 );
-
-if (verifyError) {
-  console.error("verify_download_token failed:", verifyError.message);
+if (rememberedError || email !== testEmail) {
+  console.error("record_remembered_download returned:", rememberedError?.message ?? email);
   process.exit(1);
 }
 
-const row = Array.isArray(verifyData) ? verifyData[0] : null;
-if (!row?.success) {
-  console.error("verify_download_token returned:", verifyData);
+const { data: known, error: knownError } = await supabase.rpc(
+  "is_download_contact_token",
+  { p_token: newToken },
+);
+if (knownError || known !== true) {
+  console.error("is_download_contact_token returned:", knownError?.message ?? known);
   process.exit(1);
 }
 
-console.log("Baseline flow OK: upsert_download_lead → verify_download_token");
+console.log(
+  "Baseline flow OK: record_download (new → known) → record_remembered_download → is_download_contact_token",
+);

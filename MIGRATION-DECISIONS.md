@@ -57,7 +57,7 @@ These must be available when OpenNext runs the Next production build so client b
 
 | Topic | Decision | Rationale |
 | ----- | -------- | ----------- |
-| Resend / email | **Add before public launch** (not blocking CF deploy) | Verification links for downloads; enquiry notifications. |
+| Resend / email | **Add before public launch** (not blocking CF deploy) | Download welcome emails; enquiry notifications. |
 | Turnstile | **Post-MVP** unless abuse appears | No CAPTCHA in repo. |
 | Auth / admin | **In scope (Phase 2)** | Single Supabase Auth admin; protected `/admin` routes. |
 
