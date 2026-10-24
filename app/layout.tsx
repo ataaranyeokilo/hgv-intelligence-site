@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { SITE_NAME } from "@/lib/brand";
 
 import "./globals.css";
 
@@ -11,13 +12,30 @@ const inter = Inter({
   display: "swap",
 });
 
+const siteTitle = `${SITE_NAME} | Stay Ahead Of The Market`;
+const siteDescription =
+  "UK HGV industry reports and weekly operator lead data for fuel, insurance, finance, and fleet sales teams.";
+
 export const metadata: Metadata = {
   title: {
-    default: "HGV Intelligence",
-    template: "%s | HGV Intelligence",
+    default: siteTitle,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "UK HGV industry reports and weekly operator lead data for fuel, insurance, finance, and fleet sales teams.",
+  description: siteDescription,
+  applicationName: SITE_NAME,
+  // Link previews in WhatsApp, iMessage and social apps read these.
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: siteTitle,
+    description: siteDescription,
+    locale: "en_GB",
+  },
+  twitter: {
+    card: "summary",
+    title: siteTitle,
+    description: siteDescription,
+  },
 };
 
 export default function RootLayout({

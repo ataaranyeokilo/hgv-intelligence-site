@@ -29,7 +29,7 @@ export async function submitContactMessage(input: {
     if (notifyTo) {
       await sendResendEmail({
         to: notifyTo,
-        subject: "New contact message — HGV Intelligence",
+        subject: "New contact message — Fleet Signal",
         text: `From: ${input.fullName} <${input.email}>\n\n${input.message}`,
       });
     }

@@ -15,7 +15,7 @@ const sectionGradient = [
 const unlocks = [
   {
     title: "Direct phone number",
-    description: "Landline and mobile where available, so calls actually connect.",
+    description: "Landline and mobile, so calls actually connect.",
     Icon: IconPhone,
   },
   {

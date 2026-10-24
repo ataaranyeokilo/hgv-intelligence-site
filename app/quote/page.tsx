@@ -46,7 +46,7 @@ export default async function QuotePage({ searchParams }: QuotePageProps) {
                   Direct contacts
                 </span>
                 {" — "}
-                phone numbers where available, ready for CRM or dialler.
+                phone numbers, ready for CRM or dialler.
               </li>
               <li>
                 <span className="font-medium text-neutral-900">

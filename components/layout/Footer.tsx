@@ -49,7 +49,7 @@ export function Footer() {
           ))}
         </div>
         <p className="mt-12 border-t border-neutral-200 pt-8 text-xs text-neutral-500">
-          © {currentYear} HGV Intelligence. All rights reserved.
+          © {currentYear} Fleet Signal. All rights reserved.
         </p>
       </div>
     </footer>

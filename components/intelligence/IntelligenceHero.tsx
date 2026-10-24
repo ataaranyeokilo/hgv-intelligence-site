@@ -43,7 +43,7 @@ export function IntelligenceHero() {
           Paid product
         </p>
         <h1 className="mt-3 max-w-xl text-3xl font-semibold leading-[1.1] tracking-tight text-white sm:text-4xl">
-          Newly licensed operators — and the people to call
+          Be the first voice they hear
         </h1>
         <p className="mt-4 max-w-xl text-base font-medium leading-relaxed text-white sm:text-lg">
           Fleet Signal Intelligence — stay ahead of the market.

@@ -10,7 +10,7 @@ const checklistItems = [
   "Registration dates",
   "Fleet size",
   "Region & postcode",
-  "Contact details where available",
+  "Contact details",
   "CRM-friendly format",
 ];
 

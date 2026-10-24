@@ -32,7 +32,7 @@ function escapeHtml(value: string): string {
 export function downloadEmailSubject(reportTitle: string | null): string {
   return reportTitle
     ? `Your report — ${reportTitle}`
-    : "Your HGV Intelligence sample report";
+    : "Your Fleet Signal sample report";
 }
 
 /** Sent once, the first time an email is used to download. */
@@ -55,7 +55,7 @@ export async function sendDownloadEmail({
     to,
     subject: downloadEmailSubject(reportTitle),
     html: [
-      `<p>Thanks for downloading ${what} from HGV Intelligence. Your download started on the site.</p>`,
+      `<p>Thanks for downloading ${what} from Fleet Signal. Your download started on the site.</p>`,
       `<p><a href="${againUrl}">Download it again</a></p>`,
       `<p>Open any of our links from this email on another device and your downloads will start straight away there too.</p>`,
       `<p><a href="${browseUrl}">Browse all reports</a></p>`,

@@ -33,7 +33,7 @@ export function WeeklyReportsPitchSection({
             Each week we publish a structured report of newly registered
             HGV operators from the previous seven days — companies whose operator
             licence applications have been approved, enriched with contact details
-            where available so your team can reach them directly.
+            so your team can reach them directly.
           </p>
           <p>
             We source the information through our data pipelines, organise it

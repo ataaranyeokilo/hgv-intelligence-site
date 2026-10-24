@@ -53,11 +53,11 @@ export function Hero() {
         <div className="max-w-[800px]">
           <h1 className="text-[1.875rem] font-semibold leading-tight text-white sm:text-[2.125rem] lg:text-[2.75rem]">
             Welcome to{" "}
-            <span className="font-bold text-fleetSignal">Fleet Signal,</span>
+            <span className="font-bold text-fleetSignal">Fleet Signal</span>
           </h1>
           <p className="mt-2 max-w-[34rem] text-xl leading-snug text-white sm:text-[1.375rem] lg:mt-3">
             The leading source of intelligence and insight into the UK&apos;s
-            transport industry.
+            road transport industry.
           </p>
 
           <hr className="mt-6 border-t border-white sm:mt-7" />

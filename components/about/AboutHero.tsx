@@ -21,7 +21,7 @@ const sideFeatures = [
   {
     title: "Accurate & enriched",
     description:
-      "Direct-dial numbers where available, deduplicated records and consistent formatting.",
+      "Direct-dial numbers, deduplicated records and consistent formatting.",
     Icon: IconShield,
   },
   {
@@ -65,7 +65,7 @@ export function AboutHero() {
               About us
             </p>
             <h1 className="mt-3 max-w-xl text-3xl font-semibold leading-[1.1] tracking-tight text-white sm:text-4xl">
-              HGV operator data built for commercial teams
+              Timing is everything
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-blue-100/85 sm:text-lg">
               Fleet Signal turns official UK HGV operator information into

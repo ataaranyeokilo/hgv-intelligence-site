@@ -1,7 +1,7 @@
 import { pageContainerClass } from "@/lib/layout";
 
 const widerMarketAudiences = [
-  "Credit risk bureau",
+  "Credit risk bureaus",
   "Market researchers",
   "Transport newsletters and publications",
   "Other hauliers",
@@ -15,10 +15,19 @@ export function AboutStorySection() {
         <div className="max-w-3xl">
           <h2 className="text-xl font-semibold text-neutral-900">Who we are</h2>
           <p className="mt-4 text-base leading-relaxed text-neutral-600">
-            Fleet Signal helps businesses monitoring and selling into the UK
-            transport industry discover newly registered operators, growing
-            operators and the detailed information behind them through
-            structured commercial data.
+            Fleet Signal captures growing and changing UK HGV operator licence
+            information in real time, when it matters the most.
+          </p>
+          <p className="mt-3 text-base leading-relaxed text-neutral-600">
+            Newly approved or growing operator licence holders have an immediate
+            requirement for services: fuel cards, vehicle insurance, vehicle
+            finance and much more.
+          </p>
+          <p className="mt-3 text-base leading-relaxed text-neutral-600">
+            Fleet Signal captures the movement signals at the vital second they
+            happen, structuring the data into enriched reports. This helps the
+            people who need to contact them do so before they appear on generic
+            databases, and usually before the competition even knows they exist.
           </p>
         </div>
 
@@ -27,19 +36,18 @@ export function AboutStorySection() {
         </h2>
         <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-12 lg:divide-x lg:divide-neutral-200">
           <div className="lg:pr-12">
-            <h3 className="text-base font-semibold text-neutral-900">
-              Save sales teams time
-            </h3>
-            <p className="mt-3 text-base font-medium text-neutral-800">
-              Time is money.
-            </p>
-            <p className="mt-3 text-base leading-relaxed text-neutral-600">
+            <p className="text-base leading-relaxed text-neutral-600">
               Sales teams currently spend too much time collecting, cleaning and
-              organising operator information.
+              organising their leads. That time is better spent calling.
             </p>
             <p className="mt-3 text-base leading-relaxed text-neutral-600">
-              Fleet Signal reduces that manual work by providing clean weekly
-              reports ready for prospecting.
+              Also, the majority of leads that sales teams are calling appear on
+              100 databases and get 100 calls per day. The same regurgitated
+              businesses go around and around.
+            </p>
+            <p className="mt-3 text-base leading-relaxed text-neutral-600">
+              Our reports provide time-critical leads, right at the pivotal moment
+              when they are in need of something you provide. Perfect timing.
             </p>
           </div>
           <div className="lg:pl-12">
