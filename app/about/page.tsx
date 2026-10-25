@@ -4,7 +4,7 @@ import { AboutCustomersReceiveSection } from "@/components/about/AboutCustomersR
 import { AboutDataSourcesSection } from "@/components/about/AboutDataSourcesSection";
 import { AboutHero } from "@/components/about/AboutHero";
 import { AboutStorySection } from "@/components/about/AboutStorySection";
-import { HomeSampleCta } from "@/components/sections/home/HomeSampleCta";
+import { LeadFinderQuiz } from "@/components/quote/LeadFinderQuiz";
 import {
   aboutHowItWorksSteps,
   HowItWorks,
@@ -26,7 +26,7 @@ export default function AboutPage() {
       <HowItWorks steps={aboutHowItWorksSteps} id="about-how-it-works" />
       <WhoItsFor />
       <AboutCustomersReceiveSection />
-      <HomeSampleCta />
+      <LeadFinderQuiz />
     </>
   );
 }

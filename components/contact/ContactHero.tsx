@@ -1,3 +1,4 @@
+import { ButtonLink } from "@/components/ui/Button";
 import { pageContainerClass } from "@/lib/layout";
 
 /** Same near-black navy bloom as the Research, About, and FAQs heroes. */
@@ -37,6 +38,14 @@ export function ContactHero() {
           <p className="mt-3 max-w-lg text-sm leading-relaxed text-white sm:text-base">
             Questions about reports or weekly lead data? We are here to help.
           </p>
+          <div className="mt-6">
+            <ButtonLink
+              href="/quote"
+              className="w-full !bg-fleetSignal !text-white shadow-soft hover:!bg-blue-700 sm:w-auto"
+            >
+              Request a quote
+            </ButtonLink>
+          </div>
         </div>
       </div>
     </section>

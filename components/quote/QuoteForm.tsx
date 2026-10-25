@@ -7,42 +7,29 @@ import {
   submitQuoteRequest,
   type SubmitQuoteRequestResult,
 } from "@/lib/contact/submit-quote-request";
+import {
+  quoteRegions,
+  quoteSectors,
+  quoteVolumes,
+} from "@/lib/quote/options";
 
 const inputClassName =
   "w-full rounded-sm border border-neutral-300 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400";
 
-const sectors = [
-  "Fuel suppliers",
-  "Commercial insurers",
-  "Finance & leasing",
-  "Fleet service suppliers",
-  "Transport recruiters",
-  "Other",
-];
-
-const regions = [
-  "UK-wide",
-  "North of England",
-  "Midlands",
-  "South of England",
-  "Scotland",
-  "Wales",
-  "Northern Ireland",
-  "Specific regions — I will note below",
-];
-
-const volumes = [
-  "Exploring options",
-  "Under 50 new operators a week",
-  "50–200 new operators a week",
-  "200+ new operators a week",
-];
-
 type QuoteFormProps = {
   interest?: string;
+  /** Answers carried over from the lead-finder quiz. */
+  sector?: string;
+  region?: string;
+  volume?: string;
 };
 
-export function QuoteForm({ interest = "" }: QuoteFormProps) {
+export function QuoteForm({
+  interest = "",
+  sector = "",
+  region = "",
+  volume = "",
+}: QuoteFormProps) {
   const [result, setResult] = useState<SubmitQuoteRequestResult | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -146,31 +133,49 @@ export function QuoteForm({ interest = "" }: QuoteFormProps) {
         />
       </Field>
       <Field label="Who do you sell to?" htmlFor="sector">
-        <select id="sector" name="sector" required className={inputClassName}>
+        <select
+          id="sector"
+          name="sector"
+          required
+          defaultValue={sector}
+          className={inputClassName}
+        >
           <option value="">Select a market</option>
-          {sectors.map((sector) => (
-            <option key={sector} value={sector}>
-              {sector}
+          {quoteSectors.map(({ value }) => (
+            <option key={value} value={value}>
+              {value}
             </option>
           ))}
         </select>
       </Field>
       <Field label="Where do you cover?" htmlFor="region">
-        <select id="region" name="region" required className={inputClassName}>
+        <select
+          id="region"
+          name="region"
+          required
+          defaultValue={region}
+          className={inputClassName}
+        >
           <option value="">Select coverage</option>
-          {regions.map((region) => (
-            <option key={region} value={region}>
-              {region}
+          {quoteRegions.map(({ value }) => (
+            <option key={value} value={value}>
+              {value}
             </option>
           ))}
         </select>
       </Field>
       <Field label="How many new operators do you want to reach?" htmlFor="volume">
-        <select id="volume" name="volume" required className={inputClassName}>
+        <select
+          id="volume"
+          name="volume"
+          required
+          defaultValue={volume}
+          className={inputClassName}
+        >
           <option value="">Select volume</option>
-          {volumes.map((volume) => (
-            <option key={volume} value={volume}>
-              {volume}
+          {quoteVolumes.map(({ value }) => (
+            <option key={value} value={value}>
+              {value}
             </option>
           ))}
         </select>

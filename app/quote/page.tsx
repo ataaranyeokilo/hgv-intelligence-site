@@ -3,6 +3,12 @@ import type { Metadata } from "next";
 import { QuoteForm } from "@/components/quote/QuoteForm";
 import { QuoteHero } from "@/components/quote/QuoteHero";
 import { Section } from "@/components/layout/Section";
+import {
+  asQuoteOption,
+  quoteRegions,
+  quoteSectors,
+  quoteVolumes,
+} from "@/lib/quote/options";
 
 export const metadata: Metadata = {
   title: "Request a quote",
@@ -11,11 +17,16 @@ export const metadata: Metadata = {
 };
 
 type QuotePageProps = {
-  searchParams: Promise<{ interest?: string }>;
+  searchParams: Promise<{
+    interest?: string;
+    sector?: string;
+    region?: string;
+    volume?: string;
+  }>;
 };
 
 export default async function QuotePage({ searchParams }: QuotePageProps) {
-  const { interest } = await searchParams;
+  const { interest, sector, region, volume } = await searchParams;
 
   return (
     <>
@@ -74,7 +85,12 @@ export default async function QuotePage({ searchParams }: QuotePageProps) {
               These details help us quote the right slice of the operator file.
             </p>
             <div className="mt-6">
-              <QuoteForm interest={interest?.trim() ?? ""} />
+              <QuoteForm
+                interest={interest?.trim() ?? ""}
+                sector={asQuoteOption(quoteSectors, sector)}
+                region={asQuoteOption(quoteRegions, region)}
+                volume={asQuoteOption(quoteVolumes, volume)}
+              />
             </div>
           </div>
         </div>
