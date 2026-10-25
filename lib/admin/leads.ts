@@ -15,6 +15,11 @@ export type AdminQuoteDetails = {
   notes: string | null;
 };
 
+export type AdminDownload = {
+  title: string;
+  downloadedAt: string;
+};
+
 export type AdminLeadPerson = {
   email: string;
   name: string | null;
@@ -22,14 +27,19 @@ export type AdminLeadPerson = {
   sources: AdminLeadSource[];
   quotes: AdminQuoteDetails[];
   latestContactMessage: string | null;
-  downloadLabel: string | null;
+  downloads: AdminDownload[];
 };
 
 type LeadRow = {
   email: string;
   source: string;
-  status: string | null;
+  report_id: string | null;
   created_at: string;
+};
+
+type ReportTitleRow = {
+  id: string;
+  title: string;
 };
 
 type ContactRow = {
@@ -82,32 +92,17 @@ function parseQuoteMessage(message: string, createdAt: string): AdminQuoteDetail
   };
 }
 
-type ContactStatusRow = {
-  email: string;
-  email_status: string;
-};
-
-const EMAIL_STATUS_LABELS: Record<string, string> = {
-  delivered: "email delivered",
-  bounced: "email bounced",
-  complained: "marked as spam",
-};
-
-function downloadLabel(
-  source: string,
-  verified: boolean,
-  emailStatus: string | undefined,
+function downloadTitle(
+  row: LeadRow,
+  titleByReportId: Map<string, string>,
 ): string {
-  const kind =
-    source === "intelligence_report"
-      ? "Report download"
-      : source === "weekly_sample"
-        ? "Weekly sample"
-        : "Sample download";
-  const status =
-    (emailStatus && EMAIL_STATUS_LABELS[emailStatus]) ||
-    (verified ? "verified" : null);
-  return status ? `${kind} (${status})` : kind;
+  if (row.source === "intelligence_report") {
+    return (
+      (row.report_id && titleByReportId.get(row.report_id)) ||
+      "Report (since removed)"
+    );
+  }
+  return "Weekly sample report";
 }
 
 function normaliseEmail(email: string): string {
@@ -123,7 +118,7 @@ function mergePerson(
     source: AdminLeadSource;
     quote?: AdminQuoteDetails;
     contactMessage?: string;
-    downloadLabel?: string;
+    download?: AdminDownload;
   },
 ) {
   const key = normaliseEmail(email);
@@ -140,7 +135,7 @@ function mergePerson(
       sources: [patch.source],
       quotes: patch.quote ? [patch.quote] : [],
       latestContactMessage: patch.contactMessage ?? null,
-      downloadLabel: patch.downloadLabel ?? null,
+      downloads: patch.download ? [patch.download] : [],
     });
     return;
   }
@@ -168,8 +163,13 @@ function mergePerson(
       existing.quotes.push(patch.quote);
     }
   }
-  if (patch.downloadLabel && !existing.downloadLabel) {
-    existing.downloadLabel = patch.downloadLabel;
+  if (patch.download) {
+    const already = existing.downloads.some(
+      (download) => download.title === patch.download?.title,
+    );
+    if (!already) {
+      existing.downloads.push(patch.download);
+    }
   }
 }
 
@@ -189,11 +189,11 @@ export async function listAdminLeads(): Promise<AdminLeadPerson[]> {
   await requireAdminUser();
   const supabase = createServiceClient();
 
-  const [leadsResult, contactsResult, quotesResult, downloadContactsResult] =
+  const [leadsResult, contactsResult, quotesResult, reportsResult] =
     await Promise.all([
       supabase
         .from("leads")
-        .select("email, source, status, created_at")
+        .select("email, source, report_id, created_at")
         .order("created_at", { ascending: false }),
       supabase
         .from("contact_messages")
@@ -205,12 +205,12 @@ export async function listAdminLeads(): Promise<AdminLeadPerson[]> {
           "full_name, work_email, company, industry, regions_of_interest, reports_required, additional_information, created_at",
         )
         .order("created_at", { ascending: false }),
-      supabase.from("download_contacts").select("email, email_status"),
+      supabase.from("intelligence_reports").select("id, title"),
     ]);
 
-  const emailStatusByEmail = new Map<string, string>();
-  for (const row of (downloadContactsResult.data ?? []) as ContactStatusRow[]) {
-    emailStatusByEmail.set(normaliseEmail(row.email), row.email_status);
+  const titleByReportId = new Map<string, string>();
+  for (const row of (reportsResult.data ?? []) as ReportTitleRow[]) {
+    titleByReportId.set(row.id, row.title);
   }
 
   const byEmail = new Map<string, AdminLeadPerson>();
@@ -219,11 +219,10 @@ export async function listAdminLeads(): Promise<AdminLeadPerson[]> {
     mergePerson(byEmail, row.email, {
       at: row.created_at,
       source: "download",
-      downloadLabel: downloadLabel(
-        row.source,
-        row.status === "verified",
-        emailStatusByEmail.get(normaliseEmail(row.email)),
-      ),
+      download: {
+        title: downloadTitle(row, titleByReportId),
+        downloadedAt: row.created_at,
+      },
     });
   }
 
@@ -276,6 +275,9 @@ export async function listAdminLeads(): Promise<AdminLeadPerson[]> {
       quotes: [...person.quotes]
         .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
         .slice(0, 1),
+      downloads: [...person.downloads].sort((a, b) =>
+        a.downloadedAt < b.downloadedAt ? 1 : -1,
+      ),
       sources: [...person.sources].sort((a, b) => {
         const order: AdminLeadSource[] = ["quote", "download", "contact"];
         return order.indexOf(a) - order.indexOf(b);

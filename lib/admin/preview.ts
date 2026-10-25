@@ -146,7 +146,16 @@ export const adminPreviewLeads: AdminLeadPerson[] = [
       },
     ],
     latestContactMessage: null,
-    downloadLabel: "Sample download (verified)",
+    downloads: [
+      {
+        title: "Weekly sample report",
+        downloadedAt: "2026-09-17T14:02:00.000Z",
+      },
+      {
+        title: "New HGV operator licences: September 2026",
+        downloadedAt: "2026-09-15T08:30:00.000Z",
+      },
+    ],
   },
   {
     email: "sam@example.com",
@@ -155,7 +164,12 @@ export const adminPreviewLeads: AdminLeadPerson[] = [
     sources: ["download"],
     quotes: [],
     latestContactMessage: null,
-    downloadLabel: "Sample download",
+    downloads: [
+      {
+        title: "Weekly sample report",
+        downloadedAt: "2026-09-12T09:00:00.000Z",
+      },
+    ],
   },
 ];
 

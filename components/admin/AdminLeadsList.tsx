@@ -23,6 +23,10 @@ export function AdminLeadsList({ people }: AdminLeadsListProps) {
             <th className="whitespace-nowrap px-3 py-2 font-medium">Date</th>
             <th className="whitespace-nowrap px-3 py-2 font-medium">Email</th>
             <th className="whitespace-nowrap px-3 py-2 font-medium">Name</th>
+            <th className="whitespace-nowrap px-3 py-2 font-medium">Quote</th>
+            <th className="min-w-[14rem] px-3 py-2 font-medium">
+              Downloaded
+            </th>
             <th className="whitespace-nowrap px-3 py-2 font-medium">Company</th>
             <th className="whitespace-nowrap px-3 py-2 font-medium">Sells to</th>
             <th className="whitespace-nowrap px-3 py-2 font-medium">Coverage</th>
@@ -47,6 +51,25 @@ export function AdminLeadsList({ people }: AdminLeadsListProps) {
                 </td>
                 <td className="whitespace-nowrap px-3 py-2">
                   {person.name ?? "—"}
+                </td>
+                <td className="whitespace-nowrap px-3 py-2">
+                  {quote ? `Yes, ${formatLeadSeenAt(quote.createdAt)}` : "No"}
+                </td>
+                <td className="px-3 py-2">
+                  {person.downloads.length === 0 ? (
+                    "None"
+                  ) : (
+                    <ul className="space-y-1">
+                      {person.downloads.map((download) => (
+                        <li key={download.title}>
+                          {download.title}{" "}
+                          <span className="whitespace-nowrap text-neutral-500">
+                            ({formatLeadSeenAt(download.downloadedAt)})
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </td>
                 <td className="whitespace-nowrap px-3 py-2">
                   {quote?.company ?? "—"}
