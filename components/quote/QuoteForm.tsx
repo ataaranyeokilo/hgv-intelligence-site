@@ -132,7 +132,7 @@ export function QuoteForm({
           className={inputClassName}
         />
       </Field>
-      <Field label="Who do you sell to?" htmlFor="sector">
+      <Field label="What industry are you in?" htmlFor="sector">
         <select
           id="sector"
           name="sector"
@@ -140,7 +140,7 @@ export function QuoteForm({
           defaultValue={sector}
           className={inputClassName}
         >
-          <option value="">Select a market</option>
+          <option value="">Select an industry</option>
           {quoteSectors.map(({ value }) => (
             <option key={value} value={value}>
               {value}
