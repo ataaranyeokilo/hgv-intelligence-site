@@ -51,10 +51,13 @@ function RedactedCell() {
 
 type WeeklySampleSpreadsheetPreviewProps = {
   className?: string;
+  /** Report name shown in the header; falls back to the generic weekly sample. */
+  title?: string;
 };
 
 export function WeeklySampleSpreadsheetPreview({
   className = "",
+  title = "Weekly HGV Operator Leads",
 }: WeeklySampleSpreadsheetPreviewProps) {
   return (
     <div
@@ -62,7 +65,7 @@ export function WeeklySampleSpreadsheetPreview({
     >
       <p className="flex items-center gap-2 border-b border-neutral-200 bg-neutral-50 px-4 py-2 text-xs font-medium text-neutral-600">
         <IconFile className="h-4 w-4 shrink-0 text-neutral-500" />
-        Weekly HGV Operator Leads – Sample (Redacted)
+        {title} – Sample (Redacted)
       </p>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[640px] border-collapse text-left text-xs">

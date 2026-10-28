@@ -1,7 +1,9 @@
+import { AboutSampleDownloadButton } from "@/components/about/AboutSampleDownloadButton";
 import { ButtonLink } from "@/components/ui/Button";
 import { IconCheck } from "@/components/ui/icons";
 import { WeeklySampleSpreadsheetPreview } from "@/components/reports/WeeklySampleSpreadsheetPreview";
 import { pageContainerClass } from "@/lib/layout";
+import { listLatestPublishedReports } from "@/lib/reports/queries";
 
 const checklistItems = [
   "Company details",
@@ -14,7 +16,10 @@ const checklistItems = [
   "CRM-friendly format",
 ];
 
-export function AboutCustomersReceiveSection() {
+export async function AboutCustomersReceiveSection() {
+  const [latest] = await listLatestPublishedReports(1);
+  const latestReport = latest ? { id: latest.id, title: latest.title } : null;
+
   return (
     <section className="border-b border-neutral-200">
       <div className={`${pageContainerClass} py-14 sm:py-16`}>
@@ -35,7 +40,10 @@ export function AboutCustomersReceiveSection() {
             </ul>
           </div>
 
-          <WeeklySampleSpreadsheetPreview className="min-w-0" />
+          <WeeklySampleSpreadsheetPreview
+            className="min-w-0"
+            title={latestReport?.title}
+          />
 
           <div className="rounded-sm border border-neutral-200 bg-white p-6 shadow-sm lg:sticky lg:top-24">
             <h3 className="text-lg font-semibold text-neutral-900">
@@ -52,13 +60,7 @@ export function AboutCustomersReceiveSection() {
               >
                 View Intelligence
               </ButtonLink>
-              <ButtonLink
-                href="#weekly-reports"
-                variant="secondary"
-                className="w-full text-center shadow-soft"
-              >
-                Download Sample Report
-              </ButtonLink>
+              <AboutSampleDownloadButton latestReport={latestReport} />
             </div>
           </div>
         </div>
